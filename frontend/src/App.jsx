@@ -96,6 +96,29 @@ function AppShell() {
     writeUrlState({ page: clampPageForRole(activePage, role), sub, filter });
   }, [activePage, sub, filter, role]);
 
+  // Lang nghe Back/Forward va thay doi hash URL de dieu huong khong can F5 (US-02 / F04)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const next = readUrlState();
+      if (next.page && next.page !== activePage) {
+        setActivePage(clampPageForRole(next.page, role));
+      }
+      if (next.sub !== undefined && next.sub !== sub) {
+        setSub(next.sub);
+      }
+      if (next.filter && JSON.stringify(next.filter) !== JSON.stringify(filter)) {
+        setFilter(next.filter);
+      }
+    };
+    window.addEventListener("hashchange", handleHashChange);
+    window.addEventListener("popstate", handleHashChange);
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+      window.removeEventListener("popstate", handleHashChange);
+    };
+  }, [activePage, sub, filter, role]);
+
+
   if (!role) {
     return (
       <RolePickerScreen

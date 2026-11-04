@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Biên bản họp Daily Scrum Sprint 2 - Nhóm 2</title>
+<style>
+@page {
+    size: A4 portrait;
+    margin: 16mm 14mm 16mm 14mm;
+    @bottom-right {
+        content: counter(page);
+    }
+}
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.5;
+    font-size: 13.5px;
+    margin: 0;
+    padding: 0;
+}
+.header-box {
+    border-bottom: 2px solid #b91c1c;
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+}
+.header-top {
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.5px;
+}
+.header-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #b91c1c;
+    margin: 4px 0;
+    text-transform: uppercase;
+}
+.header-sub {
+    font-size: 13px;
+    color: #334155;
+    font-weight: 600;
+}
+.meta-grid {
+    display: table;
+    width: 100%;
+    margin-bottom: 15px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+.meta-row {
+    display: table-row;
+}
+.meta-cell {
+    display: table-cell;
+    padding: 4px 10px;
+    font-size: 12.5px;
+}
+.meta-cell strong {
+    color: #0f172a;
+}
+h2 {
+    color: #991b1b;
+    font-size: 16px;
+    border-left: 4px solid #b91c1c;
+    padding-left: 8px;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+h3 {
+    color: #1e293b;
+    font-size: 14px;
+    margin-top: 12px;
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+p, ul, ol {
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+li {
+    margin-bottom: 4px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 16px 0;
+    font-size: 12px;
+}
+th, td {
+    border: 1px solid #cbd5e1;
+    padding: 7px 9px;
+    vertical-align: top;
+    text-align: left;
+}
+th {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    font-weight: 700;
+    border-bottom: 2px solid #94a3b8;
+}
+tr:nth-child(even) td {
+    background-color: #fafbfc;
+}
+.badge {
+    display: inline-block;
+    padding: 2px 7px;
+    font-size: 10.5px;
+    font-weight: 700;
+    border-radius: 4px;
+}
+.badge-done { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.badge-prog { background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+.badge-open { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.badge-pass { background: #e0e7ff; color: #3730a3; border: 1px solid #a5b4fc; }
+.badge-epic { background: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe; }
+.badge-sprint { background: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
+
+.callout {
+    background-color: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    padding: 8px 12px;
+    margin: 10px 0;
+    font-size: 12.5px;
+    border-radius: 0 4px 4px 0;
+}
+.callout-warning {
+    background-color: #fffbeb;
+    border-left-color: #f59e0b;
+}
+.callout-success {
+    background-color: #f0fdf4;
+    border-left-color: #22c55e;
+}
+.page-break {
+    page-break-after: always;
+    break-after: page;
+}
+.sign-box {
+    margin-top: 25px;
+    display: table;
+    width: 100%;
+}
+.sign-col {
+    display: table-cell;
+    width: 50%;
+    text-align: center;
+    font-size: 13px;
+}
+</style>
+</head>
+<body>
+<div class="header-box">
+  <div class="header-top">TRƯỜNG ĐẠI HỌC VIỆT NHẬT (VJU) • HỌC PHẦN ĐẢM BẢO CHẤT LƯỢNG PHẦN MỀM THEO HƯỚNG SCRUM</div>
+  <div class="header-title">BIÊN BẢN CÁC CUỘC HỌP SCRUM HẰNG NGÀY (DAILY SCRUM)</div>
+  <div class="header-sub">Sprint 2 (28/10/2026 – 04/11/2026) • Nhóm số: 2 • Tên sản phẩm: VJU-Calendar</div>
+</div>
+
+<div class="meta-grid">
+  <div class="meta-row">
+    <div class="meta-cell"><strong>Khung giờ họp cố định:</strong> 21:00 – 21:15 hằng ngày (Time-box: 15 phút)</div>
+    <div class="meta-cell"><strong>Hình thức:</strong> Google Meet nhóm kết hợp kiểm tra bảng Jira/Git</div>
+  </div>
+  <div class="meta-row">
+    <div class="meta-cell"><strong>Chủ trì:</strong> Nguyễn Hoàng Minh (ScrumMaster)</div>
+    <div class="meta-cell"><strong>Thư ký:</strong> Nguyễn Hoàng Minh (ScrumMaster)</div>
+  </div>
+  <div class="meta-row">
+    <div class="meta-cell" colspan="2"><strong>Thành phần tham dự đầy đủ:</strong> Chử Đình Huy (PO), Nguyễn Hoàng Minh (SM-DevOps), Trần Quang Minh (QA), Hoàng Đức Minh (BE), Nguyễn Vũ Trường (FE).</div>
+  </div>
+</div>
+
+<h2>1. Biên bản cuộc họp Sprint Planning Sprint 2 (20:00 – 21:00, 28/10/2026)</h2>
+<p><strong>Nội dung:</strong> PO Chử Đình Huy công bố mục tiêu Sprint 2: Hoàn thiện trải nghiệm UX (lỗi tìm kiếm F03, điều hướng URL F04, tài liệu F08) và thiết lập môi trường CSDL MySQL 8.0 qua Docker. Nhóm thảo luận, thực hiện Planning Poker và thống nhất cam kết 4 User Stories: <strong>US-01 (3 SP), US-02 (8 SP), US-03 (5 SP), US-04a (8 SP)</strong> $ightarrow$ Tổng <strong>24 Story Points</strong>. Phân rã thành 12 tác vụ kỹ thuật cụ thể.</p>
+
+<h2>2. Biên bản Daily Scrum Ngày 1 (Thứ Tư, 28/10/2026 • 21:00 – 21:15)</h2>
+<ul>
+  <li><strong>Nguyễn Hoàng Minh (SM - DevOps):</strong> Hôm qua đóng gói tài liệu Sprint 1; hôm nay thiết lập bảng Jira Sprint 2 và hỗ trợ Đức Minh thiết kế ERD CSDL; không gặp trở ngại.</li>
+  <li><strong>Chử Đình Huy (PO):</strong> Hôm qua rà soát báo cáo UX; hôm nay chuẩn bị dữ liệu kiểm thử mẫu cho bộ lọc; sẵn sàng trả lời câu hỏi 8h–22h; không gặp trở ngại.</li>
+  <li><strong>Trần Quang Minh (QA):</strong> Bắt đầu viết danh sách các bài kiểm thử chấp nhận (Acceptance Test Cases) cho tính năng tìm <code>#id</code> và URL hash; không gặp trở ngại.</li>
+  <li><strong>Hoàng Đức Minh (BE):</strong> Khởi tạo nhánh git <code>feature/database-setup</code>, phác thảo các bảng <code>teachers</code>, <code>courses</code>, <code>classes</code>, <code>schedules</code>; không gặp trở ngại.</li>
+  <li><strong>Nguyễn Vũ Trường (FE):</strong> Đọc mã nguồn component <code>ManualEntryPage.jsx</code> và nghiên cứu biểu thức chính quy (regex) bóc tách chuỗi <code>#id</code>; không gặp trở ngại.</li>
+</ul>
+
+<h2>3. Biên bản Daily Scrum Ngày 2 (Thứ Năm, 29/10/2026 • 21:00 – 21:15)</h2>
+<ul>
+  <li><strong>Nguyễn Vũ Trường (FE):</strong> Đã viết xong regex bóc tách <code>#id</code>; hôm nay ghép vào logic lọc chung. <em>Trở ngại:</em> Gõ ô tìm kiếm bị spam history trình duyệt và tìm <code>#0</code> bị rỗng.</li>
+  <li><strong>Trần Quang Minh (QA):</strong> Đã hoàn thành 6 test cases cho <code>#id</code>; chạy thử phát hiện ra lỗi <code>#0</code> bị coi là falsy và báo lại ngay cho Trường.</li>
+  <li><strong>Hoàng Đức Minh (BE):</strong> Hoàn tất cấu trúc các bảng CSDL; hôm nay viết script SQL migration và cấu hình kết nối trong Flask.</li>
+  <li><strong>Chử Đình Huy (PO):</strong> Trả lời câu hỏi của Đức Minh: trường <code>windowSlots</code> lưu dạng JSONB để đảm bảo tính linh hoạt của khung giờ.</li>
+  <li><strong>Nguyễn Hoàng Minh (SM):</strong> Ghi nhận trở ngại vào <code>Obstacle_Log.xlsx</code>; hướng dẫn Trường chuyển sang <code>history.replaceState</code> kết hợp debounce 300ms.</li>
+</ul>
+
+<h2>4. Biên bản Daily Scrum Ngày 3 (Thứ Sáu, 30/10/2026 • 21:00 – 21:15)</h2>
+<ul>
+  <li><strong>Nguyễn Vũ Trường (FE):</strong> Đã sửa xong lỗi spam history và lỗi <code>#0</code>; hôm nay chuyển sang US-02: đồng bộ hash URL với thanh menu và bộ lọc trên <code>App.jsx</code>.</li>
+  <li><strong>Trần Quang Minh (QA):</strong> Chạy lại toàn bộ bộ kiểm thử cho US-01 $ightarrow$ <strong>Xác nhận US-01 PASS 100% (4/4 AC)</strong>. Bắt đầu viết kịch bản test cho URL hash.</li>
+  <li><strong>Hoàng Đức Minh (BE):</strong> Script migration tạo bảng chạy thành công; hôm nay viết file <code>docker-compose.yml</code> để chạy MySQL 8.0 container độc lập.</li>
+  <li><strong>Chử Đình Huy (PO):</strong> Nghiệm thu chính thức <strong>US-01 (3 Story Points)</strong> chuyển sang trạng thái <strong>Done</strong>.</li>
+  <li><strong>Nguyễn Hoàng Minh (SM):</strong> Cập nhật trạng thái 2 trở ngại Ngày 2 trong nhật ký thành <strong>Đã xong</strong>.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h2>5. Biên bản Daily Scrum Ngày 4 (Thứ Bảy, 31/10/2026 • 21:00 – 21:15)</h2>
+<ul>
+  <li><strong>Hoàng Đức Minh (BE):</strong> Chạy Docker trên Windows gặp lỗi xung đột port 3306 cục bộ; được SM hỗ trợ đổi sang port 3307, container đã chạy ổn định và nạp schema thành công.</li>
+  <li><strong>Nguyễn Vũ Trường (FE):</strong> Bắt sự kiện <code>window.onpopstate</code> để hỗ trợ nút Back/Forward; tích hợp bộ lọc thời khóa biểu vào query param trên hash URL.</li>
+  <li><strong>Trần Quang Minh (QA):</strong> Chạy bộ hồi quy Sprint 1 bảo vệ tính năng cũ; nhận bàn giao container Docker từ Đức Minh để chuẩn bị kiểm thử DB.</li>
+  <li><strong>Nguyễn Hoàng Minh (SM):</strong> Ghi nhận và đóng trở ngại cổng Docker trong file nhật ký; hỗ trợ Đức Minh viết tài liệu hướng dẫn setup DB trong thư mục <code>doc/</code>.</li>
+  <li><strong>Chử Đình Huy (PO):</strong> Soạn thảo nội dung giải thích cơ chế lưu trữ snapshot và phân biệt rõ nháp/lưu/xuất cho US-03 trên trang <code>GuidePage.jsx</code>.</li>
+</ul>
+<p><em>Kết luận ngày 4:</em> <strong>US-04a hoàn thành giai đoạn lập trình</strong>, chuyển giao sang môi trường QA kiểm thử.</p>
+
+<h2>6. Biên bản Daily Scrum Ngày 5 (Chủ Nhật, 01/11/2026 • 21:00 – 21:15)</h2>
+<ul>
+  <li><strong>Trần Quang Minh (QA):</strong> Đã kiểm thử migration và kết nối DB $ightarrow$ <strong>Xác nhận US-04a PASS 100% (4/4 AC)</strong>. Khi test URL hash, phát hiện lỗi gõ hash lạ bị trắng trang.</li>
+  <li><strong>Nguyễn Vũ Trường (FE):</strong> Đã hoàn tất US-02; nhận báo cáo bug hash lạ từ Quang Minh; bắt đầu đưa nội dung mới vào trang hướng dẫn <code>GuidePage.jsx</code>.</li>
+  <li><strong>Chử Đình Huy (PO):</strong> Nghiệm thu <strong>US-04a (8 Story Points)</strong> chuyển sang trạng thái <strong>Done</strong>. Góp ý cải tiến giao diện trang hướng dẫn trên màn hình nhỏ.</li>
+  <li><strong>Hoàng Đức Minh (BE):</strong> Hỗ trợ SM viết tài liệu kiểm thử và nghiên cứu trước bài toán xác thực JWT cho Sprint 3.</li>
+  <li><strong>Nguyễn Hoàng Minh (SM):</strong> Ghi nhận 2 trở ngại mới vào nhật ký; đôn đốc Trường ưu tiên xử lý hàm route guard trước buổi họp ngày mai.</li>
+</ul>
+<p><em>Kết luận ngày 5:</em> Nhóm đã hoàn thành 11/24 SP Done. Còn lại 13 SP đang trong giai đoạn nghiệm thu và hoàn thiện biên.</p>
+
+<h2>7. Biên bản Daily Scrum Ngày 6 (Thứ Hai, 02/11/2026 • 21:00 – 21:20) — Code Freeze</h2>
+<ul>
+  <li><strong>Nguyễn Vũ Trường (FE):</strong> Đã hoàn thành hàm <code>sanitizeRoute()</code> fallback về <code>#/schedule</code> và hoàn thiện giao diện Accordion cho trang hướng dẫn; đã tạo Pull Request vào nhánh <code>main</code> lúc 16:30.</li>
+  <li><strong>Trần Quang Minh (QA):</strong> Chạy kiểm thử chấp nhận toàn diện cho cả US-02 và US-03 trên nhánh <code>main</code> $ightarrow$ <strong>Tất cả test cases đều PASS</strong>.</li>
+  <li><strong>Hoàng Đức Minh & Nguyễn Hoàng Minh:</strong> Chạy lệnh build production (<code>npm run build</code>) và khởi động toàn bộ hệ thống; console sạch 100% warning/error.</li>
+  <li><strong>Chử Đình Huy (PO):</strong> Trực tiếp nghiệm thu <strong>US-02 (8 SP)</strong> và <strong>US-03 (5 SP)</strong> $ightarrow$ <strong>Done</strong>. Toàn bộ 4 User Stories đã hoàn thành!</li>
+  <li><strong>Nguyễn Hoàng Minh (SM):</strong> Kích hoạt <strong>Code Freeze</strong>; đóng toàn bộ trở ngại trong <code>Obstacle_Log.xlsx</code>; phân công chuẩn bị bài thuyết trình Sprint Review.</li>
+</ul>
+
+<h2>8. Biên bản Sprint Review & Retrospective Ngày 7 (Thứ Ba, 03/11/2026 • 19:30 – 21:30)</h2>
+<ul>
+  <li><strong>Sprint Review (19:30 – 20:30):</strong> Nhóm demo trực tiếp 4 tính năng: tìm `#id` chính xác và thử trường hợp `#0`, điều hướng Back/Forward và copy link khôi phục bộ lọc ở tab ẩn danh, giao diện hướng dẫn Accordion rõ ràng, khởi chạy CSDL MySQL 8.0 qua Docker Compose. PO Chử Đình Huy chính thức nghiệm thu toàn bộ 24/24 Story Points.</li>
+  <li><strong>Sprint Retrospective (20:30 – 21:30):</strong> Đánh giá các điểm làm tốt, các thiếu sót kỹ thuật và chốt 3 Action Items cải tiến quy trình cho Sprint 3 (chi tiết xem Báo cáo Sơ kết cuối Sprint).</li>
+</ul>
+
+<div class="sign-box">
+  <div class="sign-col">
+    <strong>THƯ KÝ / SCRUMMASTER</strong><br><br><br>
+    <strong>Nguyễn Hoàng Minh</strong>
+  </div>
+  <div class="sign-col">
+    <strong>ĐẠI DIỆN PRODUCT OWNER</strong><br><br><br>
+    <strong>Chử Đình Huy</strong>
+  </div>
+</div>
+</body>
+</html>

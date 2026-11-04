@@ -173,19 +173,28 @@ export function buildScheduleView({ data, guestResult, residentResult, inbox, fi
     if (f.onlyProblems && !l.hasProblem) return false;
     return true;
   });
-  const matchesSearch = (l) => !q || (
-    String(l.id) === q ||
-    (l.classCode ?? "").toLowerCase().includes(q) ||
-    (l.courseName ?? "").toLowerCase().includes(q) ||
-    (l.teacherName ?? "").toLowerCase().includes(q) ||
-    (l.programLabel ?? "").toLowerCase().includes(q) ||
-    l.cohortParts.some((k) => k.toLowerCase().includes(q)) ||
-    (l.hocChung?.members ?? []).some(
-      (m) => String(m.id) === q
-        || (m.courseName ?? "").toLowerCase().includes(q)
-        || (m.classCode ?? "").toLowerCase().includes(q),
-    )
-  );
+  const isHashId = q.startsWith("#");
+  const hashIdVal = isHashId ? q.slice(1).trim() : null;
+  const matchesSearch = (l) => {
+    if (!q) return true;
+    if (isHashId) {
+      if (!hashIdVal) return false;
+      return String(l.id) === hashIdVal || (l.hocChung?.members ?? []).some((m) => String(m.id) === hashIdVal);
+    }
+    return (
+      String(l.id) === q ||
+      (l.classCode ?? "").toLowerCase().includes(q) ||
+      (l.courseName ?? "").toLowerCase().includes(q) ||
+      (l.teacherName ?? "").toLowerCase().includes(q) ||
+      (l.programLabel ?? "").toLowerCase().includes(q) ||
+      l.cohortParts.some((k) => k.toLowerCase().includes(q)) ||
+      (l.hocChung?.members ?? []).some(
+        (m) => String(m.id) === q
+          || (m.courseName ?? "").toLowerCase().includes(q)
+          || (m.classCode ?? "").toLowerCase().includes(q),
+      )
+    );
+  };
   const lessons = q ? gridLessons.filter(matchesSearch) : gridLessons;
   const searchMatchIds = new Set(q ? lessons.map((lesson) => lesson.id) : []);
 

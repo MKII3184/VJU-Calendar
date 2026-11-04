@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Product Backlog & Definition of Done - Nhóm 2</title>
+<style>
+@page {
+    size: A4 portrait;
+    margin: 16mm 14mm 16mm 14mm;
+    @bottom-right {
+        content: counter(page);
+    }
+}
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.5;
+    font-size: 13.5px;
+    margin: 0;
+    padding: 0;
+}
+.header-box {
+    border-bottom: 2px solid #b91c1c;
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+}
+.header-top {
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.5px;
+}
+.header-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #b91c1c;
+    margin: 4px 0;
+    text-transform: uppercase;
+}
+.header-sub {
+    font-size: 13px;
+    color: #334155;
+    font-weight: 600;
+}
+.meta-grid {
+    display: table;
+    width: 100%;
+    margin-bottom: 15px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+.meta-row {
+    display: table-row;
+}
+.meta-cell {
+    display: table-cell;
+    padding: 4px 10px;
+    font-size: 12.5px;
+}
+.meta-cell strong {
+    color: #0f172a;
+}
+h2 {
+    color: #991b1b;
+    font-size: 16px;
+    border-left: 4px solid #b91c1c;
+    padding-left: 8px;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+h3 {
+    color: #1e293b;
+    font-size: 14px;
+    margin-top: 12px;
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+p, ul, ol {
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+li {
+    margin-bottom: 4px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 16px 0;
+    font-size: 12px;
+}
+th, td {
+    border: 1px solid #cbd5e1;
+    padding: 7px 9px;
+    vertical-align: top;
+    text-align: left;
+}
+th {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    font-weight: 700;
+    border-bottom: 2px solid #94a3b8;
+}
+tr:nth-child(even) td {
+    background-color: #fafbfc;
+}
+.badge {
+    display: inline-block;
+    padding: 2px 7px;
+    font-size: 10.5px;
+    font-weight: 700;
+    border-radius: 4px;
+}
+.badge-done { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.badge-prog { background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+.badge-open { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.badge-pass { background: #e0e7ff; color: #3730a3; border: 1px solid #a5b4fc; }
+.badge-epic { background: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe; }
+.badge-sprint { background: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
+
+.callout {
+    background-color: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    padding: 8px 12px;
+    margin: 10px 0;
+    font-size: 12.5px;
+    border-radius: 0 4px 4px 0;
+}
+.callout-warning {
+    background-color: #fffbeb;
+    border-left-color: #f59e0b;
+}
+.callout-success {
+    background-color: #f0fdf4;
+    border-left-color: #22c55e;
+}
+.page-break {
+    page-break-after: always;
+    break-after: page;
+}
+.sign-box {
+    margin-top: 25px;
+    display: table;
+    width: 100%;
+}
+.sign-col {
+    display: table-cell;
+    width: 50%;
+    text-align: center;
+    font-size: 13px;
+}
+</style>
+</head>
+<body>
+<div class="header-box">
+  <div class="header-top">TRƯỜNG ĐẠI HỌC VIỆT NHẬT (VJU) • HỌC PHẦN ĐẢM BẢO CHẤT LƯỢNG PHẦN MỀM THEO HƯỚNG SCRUM</div>
+  <div class="header-title">PRODUCT BACKLOG & DEFINITION OF DONE (DoD)</div>
+  <div class="header-sub">Dự án: Hệ thống quản lý và tự động sắp xếp thời khóa biểu (VJU-Calendar) • Nhóm số: 2</div>
+</div>
+
+<div class="meta-grid">
+  <div class="meta-row">
+    <div class="meta-cell"><strong>Học kỳ:</strong> Học kỳ 1, Năm học 2026 – 2027</div>
+    <div class="meta-cell"><strong>Giai đoạn:</strong> Sprint 2 (28/10/2026 – 04/11/2026)</div>
+  </div>
+  <div class="meta-row">
+    <div class="meta-cell"><strong>Product Owner:</strong> Chử Đình Huy (MSSV: 24110233)</div>
+    <div class="meta-cell"><strong>ScrumMaster:</strong> Nguyễn Hoàng Minh (MSSV: 24110903)</div>
+  </div>
+  <div class="meta-row">
+    <div class="meta-cell"><strong>Nhóm phát triển:</strong> Trần Quang Minh (Tester - 24110383), Hoàng Đức Minh (Backend - 24110251), Nguyễn Vũ Trường (Frontend - 24110277)</div>
+    <div class="meta-cell"><strong>Velocity cam kết Sprint 2:</strong> 24 Story Points</div>
+  </div>
+</div>
+
+<h2>Mục 1. Đánh giá hiện trạng Backlog (backlog2.xlsx) & Kế hoạch chuẩn hóa</h2>
+<div class="callout callout-warning">
+  <strong>Phát hiện chuyên môn của môn ĐBCLPM:</strong> File <code>backlog2.xlsx</code> ban đầu có cấu trúc rất tốt và độ truy vết cao, nhưng tồn tại 2 vấn đề kỹ thuật cần chuẩn hóa trước khi nộp:
+  <ol style="margin-top: 4px; padding-left: 20px;">
+    <li><strong>Thang điểm chưa chuẩn Fibonacci:</strong> Các mốc điểm 15, 16, 26, 31, 41 không thuộc dãy Fibonacci chuẩn Scrum (1, 2, 3, 5, 8, 13, 20, 40).</li>
+    <li><strong>Kích thước Story quá lớn (Vi phạm tiêu chuẩn INVEST - Small):</strong> Các mục &gt; 13 điểm thực chất là các <em>EPIC</em>. Tổng điểm backlog là 145 điểm, không thể đưa hết vào một Sprint 1 tuần (nhóm 5 người chỉ có Velocity an toàn khoảng 20 - 28 điểm).</li>
+  </ol>
+  <strong>Giải pháp chuẩn hóa:</strong> Giữ nguyên Product Backlog tổng thể, chuẩn hóa điểm theo Fibonacci, quy các mục lớn thành Epic và chọn ra 4 User Stories ưu tiên cao nhất (tổng 24 SP) đưa vào <strong>Sprint 2 Backlog</strong>.
+</div>
+
+<h2>Mục 2. Bảng Product Backlog chuẩn hóa (Tổng thể dự án)</h2>
+<table>
+  <thead>
+    <tr>
+      <th style="width: 7%;">Mã</th>
+      <th style="width: 10%;">Loại</th>
+      <th style="width: 32%;">User Story</th>
+      <th style="width: 25%;">Nguồn truy vết trong đặc tả</th>
+      <th style="width: 10%; text-align: center;">Điểm cũ</th>
+      <th style="width: 8%; text-align: center;">Điểm mới</th>
+      <th style="width: 13%;">Phân bổ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>US-01</strong></td>
+      <td>Lỗi</td>
+      <td>Là giáo vụ, tôi muốn tìm chính xác lớp bằng <code>#id</code> để mở đúng lớp cần xử lý.</td>
+      <td>Báo cáo UX F03; <code>ManualEntryPage.jsx</code></td>
+      <td style="text-align: center;">3</td>
+      <td style="text-align: center;"><strong>3</strong></td>
+      <td><span class="badge badge-sprint">Sprint 2</span></td>
+    </tr>
+    <tr>
+      <td><strong>US-02</strong></td>
+      <td>Lỗi</td>
+      <td>Là người dùng, tôi muốn URL và Back/Forward phản ánh đúng màn hình để điều hướng mà không cần tải lại trang.</td>
+      <td>Báo cáo UX F04; <code>App.jsx</code>; <code>urlState.js</code></td>
+      <td style="text-align: center;">8</td>
+      <td style="text-align: center;"><strong>8</strong></td>
+      <td><span class="badge badge-sprint">Sprint 2</span></td>
+    </tr>
+    <tr>
+      <td><strong>US-03</strong></td>
+      <td>Tài liệu</td>
+      <td>Là giáo vụ, tôi muốn biết dữ liệu nào được giữ lại và cách phục hồi để tránh hiểu nhầm hoặc mất dữ liệu.</td>
+      <td>Báo cáo UX F08; <code>GuidePage.jsx</code>; <code>snapshot.py</code></td>
+      <td style="text-align: center;">5</td>
+      <td style="text-align: center;"><strong>5</strong></td>
+      <td><span class="badge badge-sprint">Sprint 2</span></td>
+    </tr>
+    <tr>
+      <td><strong>US-04a</strong></td>
+      <td>Kỹ thuật</td>
+      <td>Là nhóm phát triển, tôi muốn có mô hình CSDL và môi trường Docker thống nhất để xây hệ thống nhiều người dùng.</td>
+      <td>Yêu cầu CSDL; <code>state.py</code>; Docker compose</td>
+      <td style="text-align: center;">15</td>
+      <td style="text-align: center;"><strong>8</strong></td>
+      <td><span class="badge badge-sprint">Sprint 2</span></td>
+    </tr>
+    <tr>
+      <td><strong>US-04b</strong></td>
+      <td>Kỹ thuật</td>
+      <td>Là nhóm phát triển, tôi muốn có pipeline migration tự động và quản lý phiên bản tham số solver.</td>
+      <td>Hạ tầng đa môi trường DEV/TEST/PROD</td>
+      <td style="text-align: center;">—</td>
+      <td style="text-align: center;"><strong>8</strong></td>
+      <td><span class="badge badge-epic">Sprint 3</span></td>
+    </tr>
+    <tr>
+      <td><strong>US-05</strong></td>
+      <td>Tính năng</td>
+      <td>Là chủ hệ thống, tôi muốn mỗi người dùng có tài khoản và quyền riêng (RBAC) để bảo vệ dữ liệu dùng chung.</td>
+      <td>Yêu cầu bảo mật; Mở rộng PB-28</td>
+      <td style="text-align: center;">16</td>
+      <td style="text-align: center;"><strong>13</strong></td>
+      <td><span class="badge badge-epic">Sprint 3 (Epic)</span></td>
+    </tr>
+    <tr>
+      <td><strong>US-06</strong></td>
+      <td>Tính năng</td>
+      <td>Là giáo vụ, tôi muốn dữ liệu nghiệp vụ được lưu tập trung theo học kỳ trên CSDL MySQL 8.0.</td>
+      <td>Yêu cầu CSDL; PB-01..PB-12/18/20; <code>state.py</code></td>
+      <td style="text-align: center;">31</td>
+      <td style="text-align: center;"><strong>20</strong></td>
+      <td><span class="badge badge-epic">Sprint 3 (Epic)</span></td>
+    </tr>
+    <tr>
+      <td><strong>US-07</strong></td>
+      <td>Tính năng</td>
+      <td>Là giáo vụ, tôi muốn lưu, sửa và trao đổi lịch an toàn khi nhiều người cùng thao tác (Optimistic locking).</td>
+      <td>Yêu cầu concurrency; PB-04/05/14..21; API solver</td>
+      <td style="text-align: center;">41</td>
+      <td style="text-align: center;"><strong>40</strong></td>
+      <td><span class="badge badge-epic">Sprint 4 (Epic)</span></td>
+    </tr>
+    <tr>
+      <td><strong>US-08</strong></td>
+      <td>Kỹ thuật</td>
+      <td>Là chủ dữ liệu, tôi muốn chuyển đổi và vận hành hệ thống có kiểm chứng, backup/restore tự động và RPO/RTO.</td>
+      <td>Yêu cầu vận hành; PB-35; Regression test</td>
+      <td style="text-align: center;">26</td>
+      <td style="text-align: center;"><strong>20</strong></td>
+      <td><span class="badge badge-epic">Sprint 4 (Epic)</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<h2>Mục 3. Chi tiết Sprint 2 Backlog & Tiêu chí chấp nhận (Acceptance Criteria)</h2>
+<p><strong>Mục tiêu Sprint 2 (Sprint Goal):</strong> <em>"Khắc phục triệt để lỗi tra cứu #id (F03), hoàn thiện điều hướng URL trạng thái (F04), chuẩn hóa hướng dẫn lưu trữ snapshot (F08) và thiết lập môi trường CSDL MySQL 8.0 qua Docker (US-04a)."</em></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 10%;">Mã</th>
+      <th style="width: 28%;">User Story</th>
+      <th style="width: 52%;">Tiêu chí chấp nhận (Acceptance Criteria - Trả lời Có/Không)</th>
+      <th style="width: 10%; text-align: center;">Điểm (SP)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>US-01</strong></td>
+      <td><strong>Tìm chính xác lớp bằng #id</strong><br><em>(ManualEntryPage)</em></td>
+      <td>
+        1. Nhập <code>#19</code> chỉ trả lớp có ID đúng bằng 19; nhập <code>#0</code> vẫn tìm được lớp có ID 0.<br>
+        2. ID không tồn tại trả về 0 kết quả; cú pháp sai không làm treo ứng dụng.<br>
+        3. Tìm mã lớp, mã môn, tên giảng viên và số thuần vẫn hoạt động như cũ.<br>
+        4. Kết quả tìm kiếm <code>#id</code> tuân thủ nghiêm ngặt các bộ lọc chương trình/khoa đang chọn.
+      </td>
+      <td style="text-align: center;"><strong>3</strong></td>
+    </tr>
+    <tr>
+      <td><strong>US-02</strong></td>
+      <td><strong>Điều hướng URL & Back/Forward</strong><br><em>(App.jsx, urlState.js)</em></td>
+      <td>
+        1. Đổi hash URL hợp lệ cập nhật ngay nội dung, tiêu đề và menu tương ứng mà không cần F5.<br>
+        2. Mở link trực tiếp hoặc F5 khôi phục chính xác trang, trang con và bộ lọc đang xem.<br>
+        3. Nút Back/Forward của trình duyệt di chuyển đúng thứ tự các màn hình đã thao tác.<br>
+        4. URL sai hoặc trỏ tới trang không hợp lệ được chuyển hướng an toàn về <code>#/schedule</code>.<br>
+        5. Đổi từ khóa bộ lọc dùng <code>replaceState</code> để không tạo rác lịch sử trình duyệt.
+      </td>
+      <td style="text-align: center;"><strong>8</strong></td>
+    </tr>
+    <tr>
+      <td><strong>US-03</strong></td>
+      <td><strong>Chuẩn hóa tài liệu lưu trữ F08</strong><br><em>(GuidePage.jsx)</em></td>
+      <td>
+        1. Hướng dẫn nêu rõ dữ liệu nhập được tự động ghi vào JSON snapshot; bỏ cảnh báo sai về tắt backend.<br>
+        2. Phân biệt rạch ròi 3 khái niệm: Dữ liệu nháp, Lưu thời khóa biểu và Mốc Hủy thay đổi.<br>
+        3. Nêu rõ tính năng xuất Excel chỉ tải file cục bộ, không tạo bản sao lưu khôi phục trên server.<br>
+        4. Bổ sung tài liệu giải thích kiến trúc CSDL và cơ chế đồng bộ mới.
+      </td>
+      <td style="text-align: center;"><strong>5</strong></td>
+    </tr>
+    <tr>
+      <td><strong>US-04a</strong></td>
+      <td><strong>Mô hình CSDL & Docker DB</strong><br><em>(MySQL 8.0, docker-compose)</em></td>
+      <td>
+        1. Bản thiết kế ERD và schema DDL các bảng được PO và nhóm kỹ thuật phê duyệt.<br>
+        2. Lệnh <code>docker compose up -d</code> khởi chạy container MySQL 8.0 thành công trên máy dev.<br>
+        3. Migration script khởi tạo thành công toàn bộ bảng và quan hệ khóa ngoại không lỗi.<br>
+        4. Biến môi trường kết nối database được cấu hình qua file <code>.env</code>, không hardcode trong code.
+      </td>
+      <td style="text-align: center;"><strong>8</strong></td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th colspan="3" style="text-align: right;">TỔNG ĐIỂM STORY POINTS CAM KẾT SPRINT 2:</th>
+      <th style="text-align: center; color: #b91c1c; font-size: 14px;">24 SP</th>
+    </tr>
+  </tfoot>
+</table>
+
+<h2>Mục 4. Bản Definition of Done (DoD) chuẩn hóa của Nhóm 2</h2>
+<div class="callout callout-success">
+  <strong>Quy ước chất lượng:</strong> Trong Scrum, <em>Acceptance Criteria (AC)</em> dành riêng cho từng User Story, còn <em>Definition of Done (DoD)</em> là bộ tiêu chuẩn kỹ thuật bắt buộc áp dụng cho <strong>TẤT CẢ</strong> các User Story. Một hạng mục chỉ được tính là hoàn thành (Done) khi thỏa mãn 100% các tiêu chí dưới đây:
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 25%;">Tầng chất lượng</th>
+      <th style="width: 55%;">Tiêu chí bắt buộc (Checklist Có/Không)</th>
+      <th style="width: 20%;">Người phụ trách</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1. Chuẩn mực Mã nguồn<br>(Coding Standards)</strong></td>
+      <td>
+        • Mã nguồn tuân thủ ESLint/Prettier (Frontend) và PEP8 (Backend).<br>
+        • Không để sót <code>console.log</code> debug, biến rác, hoặc hardcode thông tin nhạy cảm.<br>
+        • Đã được ít nhất một thành viên khác kiểm tra (Peer Review) qua Pull Request trước khi merge.
+      </td>
+      <td>Nhóm phát triển<br><em>(Trường, Đức Minh)</em></td>
+    </tr>
+    <tr>
+      <td><strong>2. Tiêu chuẩn Kiểm thử<br>(Testing & QA)</strong></td>
+      <td>
+        • Đạt 100% Tiêu chí chấp nhận (Acceptance Criteria) được mô tả trong Story.<br>
+        • Viết Unit Test / Integration Test bổ sung (Vitest/Pytest) cho các tính năng mới.<br>
+        • Toàn bộ Test Suite chạy tự động và PASS 100%, không làm phát sinh lỗi hồi quy (regression bugs).
+      </td>
+      <td>Tester / QA<br><em>(Trần Quang Minh)</em></td>
+    </tr>
+    <tr>
+      <td><strong>3. Tích hợp & Môi trường<br>(CI/CD & Environment)</strong></td>
+      <td>
+        • Nhánh tính năng được merge sạch sẽ vào nhánh <code>main</code>, không có merge conflicts.<br>
+        • Lệnh build production (<code>npm run build</code>) chạy thành công không có warning nghiêm trọng.<br>
+        • Hệ thống khởi chạy ổn định trên container Docker cục bộ (đối với backend/database).
+      </td>
+      <td>DevOps & SM<br><em>(Nguyễn Hoàng Minh)</em></td>
+    </tr>
+    <tr>
+      <td><strong>4. Tài liệu & Truy vết<br>(Documentation)</strong></td>
+      <td>
+        • Commit message tuân thủ quy chuẩn Conventional Commits (<code>feat:</code>, <code>fix:</code>, <code>docs:</code>).<br>
+        • Cập nhật các tài liệu hướng dẫn sử dụng và file đặc tả kỹ thuật tương ứng trong thư mục <code>doc/</code>.<br>
+        • Cập nhật trạng thái thẻ việc trên bảng quản trị Scrum (Trello/Jira).
+      </td>
+      <td>Cả nhóm thực hiện</td>
+    </tr>
+    <tr>
+      <td><strong>5. Nghiệm thu Product Owner<br>(PO Acceptance)</strong></td>
+      <td>
+        • Tính năng được demo trực tiếp và kiểm chứng trên môi trường chạy thực tế.<br>
+        • Product Owner xác nhận nghiệm thu "Accepted" và chính thức đóng Story.
+      </td>
+      <td>Product Owner<br><em>(Chử Đình Huy)</em></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="sign-box">
+  <div class="sign-col">
+    <strong>XÁC NHẬN CỦA SCRUMMASTER</strong><br><br><br>
+    <strong>Nguyễn Hoàng Minh</strong><br>
+    <em>Ngày 28 tháng 10 năm 2026</em>
+  </div>
+  <div class="sign-col">
+    <strong>PHÊ DUYỆT CỦA PRODUCT OWNER</strong><br><br><br>
+    <strong>Chử Đình Huy</strong><br>
+    <em>Ngày 28 tháng 10 năm 2026</em>
+  </div>
+</div>
+</body>
+</html>
