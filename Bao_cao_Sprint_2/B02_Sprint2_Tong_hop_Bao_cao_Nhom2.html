@@ -2,27 +2,24 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Báo cáo tổng hợp Sprint 2 - Nhóm 2</title>
+<title>Tổng hợp Báo cáo Sprint 2 - Nhóm 2</title>
 <style>
 @page {
     size: A4 portrait;
     margin: 16mm 14mm 16mm 14mm;
-    @bottom-right {
-        content: counter(page);
-    }
 }
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
     color: #1e293b;
     line-height: 1.5;
-    font-size: 13.5px;
+    font-size: 13px;
     margin: 0;
     padding: 0;
 }
 .header-box {
     border-bottom: 2px solid #b91c1c;
-    padding-bottom: 10px;
-    margin-bottom: 18px;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
 }
 .header-top {
     font-size: 11px;
@@ -39,7 +36,7 @@ body {
     text-transform: uppercase;
 }
 .header-sub {
-    font-size: 13px;
+    font-size: 12.5px;
     color: #334155;
     font-weight: 600;
 }
@@ -50,96 +47,47 @@ body {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     border-radius: 6px;
-    padding: 8px 12px;
+    padding: 6px 10px;
 }
 .meta-row {
     display: table-row;
 }
 .meta-cell {
     display: table-cell;
-    padding: 4px 10px;
-    font-size: 12.5px;
+    padding: 3px 8px;
+    font-size: 12px;
 }
 .meta-cell strong {
     color: #0f172a;
 }
 h2 {
     color: #991b1b;
-    font-size: 16px;
+    font-size: 15px;
     border-left: 4px solid #b91c1c;
     padding-left: 8px;
     margin-top: 18px;
     margin-bottom: 8px;
     text-transform: uppercase;
 }
-h3 {
-    color: #1e293b;
-    font-size: 14px;
-    margin-top: 12px;
-    margin-bottom: 6px;
-    font-weight: 700;
-}
-p, ul, ol {
-    margin-top: 4px;
-    margin-bottom: 8px;
-}
-li {
-    margin-bottom: 4px;
-}
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 10px 0 16px 0;
+    margin-bottom: 12px;
     font-size: 12px;
 }
 th, td {
     border: 1px solid #cbd5e1;
-    padding: 7px 9px;
-    vertical-align: top;
+    padding: 6px 8px;
     text-align: left;
+    vertical-align: top;
 }
 th {
     background-color: #f1f5f9;
     color: #0f172a;
     font-weight: 700;
-    border-bottom: 2px solid #94a3b8;
 }
 tr:nth-child(even) td {
-    background-color: #fafbfc;
-}
-.badge {
-    display: inline-block;
-    padding: 2px 7px;
-    font-size: 10.5px;
-    font-weight: 700;
-    border-radius: 4px;
-}
-.badge-done { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
-.badge-prog { background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
-.badge-open { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-.badge-pass { background: #e0e7ff; color: #3730a3; border: 1px solid #a5b4fc; }
-.badge-epic { background: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe; }
-.badge-sprint { background: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
-
-.callout {
-    background-color: #eff6ff;
-    border-left: 4px solid #3b82f6;
-    padding: 8px 12px;
-    margin: 10px 0;
-    font-size: 12.5px;
-    border-radius: 0 4px 4px 0;
-}
-.callout-warning {
-    background-color: #fffbeb;
-    border-left-color: #f59e0b;
-}
-.callout-success {
-    background-color: #f0fdf4;
-    border-left-color: #22c55e;
-}
-.page-break {
-    page-break-after: always;
-    break-after: page;
+    background-color: #f8fafc;
 }
 .sign-box {
     margin-top: 25px;
@@ -150,788 +98,111 @@ tr:nth-child(even) td {
     display: table-cell;
     width: 50%;
     text-align: center;
-    font-size: 13px;
+    vertical-align: top;
 }
 </style>
 </head>
 <body>
 
-<div style="text-align: center; padding-top: 100px; padding-bottom: 80px;">
-  <div style="font-size: 14px; font-weight: 700; color: #64748b; letter-spacing: 1px; text-transform: uppercase;">TRƯỜNG ĐẠI HỌC VIỆT NHẬT (VJU) • ĐẠI HỌC QUỐC GIA HÀ NỘI</div>
-  <div style="font-size: 13px; font-weight: 600; color: #475569; margin-top: 6px;">KHOA CÔNG NGHỆ VÀ KỸ THUẬT TIÊN TIẾN</div>
-  <div style="margin: 40px auto; width: 80px; height: 3px; background: #b91c1c;"></div>
-  
-  <div style="font-size: 24px; font-weight: 800; color: #b91c1c; text-transform: uppercase; line-height: 1.4;">BÁO CÁO TỔNG HỢP TOÀN DIỆN SPRINT 2</div>
-  <div style="font-size: 16px; font-weight: 600; color: #334155; margin-top: 10px;">HỌC PHẦN: ĐẢM BẢO CHẤT LƯỢNG PHẦN MỀM THEO HƯỚNG SCRUM</div>
-  
-  <div style="margin: 60px auto; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 25px; max-width: 500px; text-align: left; font-size: 13.5px; line-height: 1.8;">
-    <div><strong>Nhóm sinh viên thực hiện:</strong> Nhóm số 2</div>
-    <div><strong>Tên sản phẩm:</strong> Hệ thống quản lý và tự động sắp xếp thời khóa biểu (VJU-Calendar)</div>
-    <div><strong>Thời gian thực hiện Sprint 2:</strong> 28/10/2026 – 04/11/2026 (1 tuần)</div>
-    <div><strong>Repository GitHub:</strong> <code>https://github.com/MKII3184/VJU-Calendar</code></div>
-    <div><strong>Product Owner:</strong> Chử Đình Huy (MSSV: 24110233)</div>
-    <div><strong>ScrumMaster & DevOps:</strong> Nguyễn Hoàng Minh (MSSV: 24110903)</div>
-    <div><strong>Tester / QA:</strong> Trần Quang Minh (MSSV: 24110383)</div>
-    <div><strong>Backend Developer:</strong> Hoàng Đức Minh (MSSV: 24110251)</div>
-    <div><strong>Frontend Developer:</strong> Nguyễn Vũ Trường (MSSV: 24110277)</div>
-  </div>
-  
-  <div style="font-size: 13px; color: #64748b; margin-top: 80px;">HÀ NỘI, THÁNG 11 NĂM 2026</div>
-</div>
-<div class="page-break"></div>
-
-
 <div class="header-box">
-  <div class="header-top">TRƯỜNG ĐẠI HỌC VIỆT NHẬT (VJU) • HỌC PHẦN ĐẢM BẢO CHẤT LƯỢNG PHẦN MỀM THEO HƯỚNG SCRUM</div>
-  <div class="header-title">PRODUCT BACKLOG & DEFINITION OF DONE (DoD)</div>
-  <div class="header-sub">Dự án: Hệ thống quản lý và tự động sắp xếp thời khóa biểu (VJU-Calendar) • Nhóm số: 2</div>
+    <div class="header-top">Trường Đại học Việt Nhật (VJU) - ĐHQGHN | Học phần: Đảm bảo chất lượng phần mềm theo hướng Scrum</div>
+    <div class="header-title">TỔNG HỢP HỒ SƠ QUẢN LÝ SPRINT 2</div>
+    <div class="header-sub">Nhóm 2 — Hệ thống quản lý và tự động sắp xếp thời khóa biểu (VJU-Calendar)</div>
 </div>
 
 <div class="meta-grid">
-  <div class="meta-row">
-    <div class="meta-cell"><strong>Học kỳ:</strong> Học kỳ 1, Năm học 2026 – 2027</div>
-    <div class="meta-cell"><strong>Giai đoạn:</strong> Sprint 2 (28/10/2026 – 04/11/2026)</div>
-  </div>
-  <div class="meta-row">
-    <div class="meta-cell"><strong>Product Owner:</strong> Chử Đình Huy (MSSV: 24110233)</div>
-    <div class="meta-cell"><strong>ScrumMaster & DevOps:</strong> Nguyễn Hoàng Minh (MSSV: 24110903)</div>
-  </div>
-  <div class="meta-row">
-    <div class="meta-cell"><strong>Nhóm phát triển:</strong> Trần Quang Minh (Tester - 24110383), Hoàng Đức Minh (Backend - 24110251), Nguyễn Vũ Trường (Frontend - 24110277)</div>
-    <div class="meta-cell"><strong>Repository:</strong> GitHub: <code>MKII3184/VJU-Calendar</code> (Commit: <code>60d3f23</code>)</div>
-  </div>
+    <div class="meta-row">
+        <div class="meta-cell"><strong>Học kỳ:</strong> HK1, Năm học 2026 - 2027</div>
+        <div class="meta-cell"><strong>Giai đoạn:</strong> Sprint 2 (28/10/2026 - 04/11/2026)</div>
+    </div>
+    <div class="meta-row">
+        <div class="meta-cell"><strong>Product Owner:</strong> Chử Đình Huy (MSSV: 24110233)</div>
+        <div class="meta-cell"><strong>ScrumMaster & DevOps:</strong> Nguyễn Hoàng Minh (MSSV: 24110903)</div>
+    </div>
+    <div class="meta-row">
+        <div class="meta-cell"><strong>Nhóm phát triển:</strong> Trần Quang Minh (Tester - 24110383), Hoàng Đức Minh (Backend - 24110251), Nguyễn Vũ Trường (Frontend - 24110277)</div>
+        <div class="meta-cell"><strong>Kho mã nguồn:</strong> GitHub MKII3184/VJU-Calendar</div>
+    </div>
 </div>
 
-<h2>Mục 1. Đánh giá hiện trạng Backlog (backlog2.xlsx) & Kế hoạch chuẩn hóa</h2>
-<div class="callout callout-warning">
-  <strong>Phát hiện chuyên môn của môn ĐBCLPM:</strong> File <code>backlog2.xlsx</code> ban đầu có cấu trúc rất tốt và độ truy vết cao, nhưng tồn tại 2 vấn đề kỹ thuật cần chuẩn hóa trước khi nộp:
-  <ol style="margin-top: 4px; padding-left: 20px;">
-    <li><strong>Thang điểm chưa chuẩn Fibonacci:</strong> Các mốc điểm 15, 16, 26, 31, 41 không thuộc dãy Fibonacci chuẩn Scrum (1, 2, 3, 5, 8, 13, 20, 40).</li>
-    <li><strong>Kích thước Story quá lớn (Vi phạm tiêu chuẩn INVEST - Small):</strong> Các mục &gt; 13 điểm thực chất là các <em>EPIC</em>. Tổng điểm backlog là 145 điểm, không thể đưa hết vào một Sprint 1 tuần (nhóm 5 người chỉ có Velocity an toàn khoảng 20 - 28 điểm).</li>
-  </ol>
-  <strong>Giải pháp chuẩn hóa:</strong> Giữ nguyên Product Backlog tổng thể, chuẩn hóa điểm theo Fibonacci, quy các mục lớn thành Epic và chọn ra 4 User Stories ưu tiên cao nhất (tổng 24 SP) đưa vào <strong>Sprint 2 Backlog</strong>.
-</div>
-
-<h2>Mục 2. Bảng Product Backlog chuẩn hóa (Tổng thể dự án)</h2>
+<h2>Phần 1: Product Backlog & Definition of Done (DoD)</h2>
 <table>
-  <thead>
     <tr>
-      <th style="width: 7%;">Mã</th>
-      <th style="width: 10%;">Loại</th>
-      <th style="width: 32%;">User Story</th>
-      <th style="width: 25%;">Nguồn truy vết trong đặc tả & Mã nguồn</th>
-      <th style="width: 10%; text-align: center;">Điểm cũ</th>
-      <th style="width: 8%; text-align: center;">Điểm mới</th>
-      <th style="width: 13%;">Phân bổ</th>
+        <th>Mã</th>
+        <th>User Story</th>
+        <th>Điểm (SP)</th>
+        <th>Phân bổ</th>
     </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>US-01</strong></td>
-      <td>Lỗi</td>
-      <td>Là giáo vụ, tôi muốn tìm chính xác lớp bằng <code>#id</code> để mở đúng lớp cần xử lý.</td>
-      <td>Báo cáo UX F03; <code>ManualEntryPage.jsx</code>; <code>scheduleView.js</code></td>
-      <td style="text-align: center;">3</td>
-      <td style="text-align: center;"><strong>3</strong></td>
-      <td><span class="badge badge-sprint">Sprint 2</span></td>
-    </tr>
-    <tr>
-      <td><strong>US-02</strong></td>
-      <td>Lỗi</td>
-      <td>Là người dùng, tôi muốn URL và Back/Forward phản ánh đúng màn hình để điều hướng mà không cần tải lại trang.</td>
-      <td>Báo cáo UX F04; <code>App.jsx</code>; <code>urlState.js</code></td>
-      <td style="text-align: center;">8</td>
-      <td style="text-align: center;"><strong>8</strong></td>
-      <td><span class="badge badge-sprint">Sprint 2</span></td>
-    </tr>
-    <tr>
-      <td><strong>US-03</strong></td>
-      <td>Tài liệu</td>
-      <td>Là giáo vụ, tôi muốn biết dữ liệu nào được giữ lại và cách phục hồi để tránh hiểu nhầm hoặc mất dữ liệu.</td>
-      <td>Báo cáo UX F08; <code>GuidePage.jsx</code>; <code>snapshot.py</code></td>
-      <td style="text-align: center;">5</td>
-      <td style="text-align: center;"><strong>5</strong></td>
-      <td><span class="badge badge-sprint">Sprint 2</span></td>
-    </tr>
-    <tr>
-      <td><strong>US-04a</strong></td>
-      <td>Kỹ thuật</td>
-      <td>Là nhóm phát triển, tôi muốn có mô hình CSDL và môi trường Docker thống nhất để xây hệ thống nhiều người dùng.</td>
-      <td>ERD 7 bảng; <code>database.py</code>; <code>config/schema.sql</code>; <code>docker-compose.yml</code></td>
-      <td style="text-align: center;">15</td>
-      <td style="text-align: center;"><strong>8</strong></td>
-      <td><span class="badge badge-sprint">Sprint 2</span></td>
-    </tr>
-    <tr>
-      <td><strong>US-04b</strong></td>
-      <td>Kỹ thuật</td>
-      <td>Là nhóm phát triển, tôi muốn có pipeline migration tự động và quản lý phiên bản tham số solver.</td>
-      <td>Hạ tầng đa môi trường DEV/TEST/PROD; <code>render.yaml</code></td>
-      <td style="text-align: center;">—</td>
-      <td style="text-align: center;"><strong>8</strong></td>
-      <td><span class="badge badge-epic">Sprint 3</span></td>
-    </tr>
-    <tr>
-      <td><strong>US-05</strong></td>
-      <td>Tính năng</td>
-      <td>Là chủ hệ thống, tôi muốn mỗi người dùng có tài khoản và quyền riêng (RBAC) để bảo vệ dữ liệu dùng chung.</td>
-      <td>Yêu cầu bảo mật; Mở rộng PB-28; <code>RolePickerScreen.jsx</code></td>
-      <td style="text-align: center;">16</td>
-      <td style="text-align: center;"><strong>13</strong></td>
-      <td><span class="badge badge-epic">Sprint 3 (Epic)</span></td>
-    </tr>
-    <tr>
-      <td><strong>US-06</strong></td>
-      <td>Tính năng</td>
-      <td>Là giáo vụ, tôi muốn dữ liệu nghiệp vụ được lưu tập trung theo học kỳ trên CSDL MySQL 8.0.</td>
-      <td>Yêu cầu CSDL; PB-01..PB-12/18/20; <code>webapp/domain/</code></td>
-      <td style="text-align: center;">31</td>
-      <td style="text-align: center;"><strong>20</strong></td>
-      <td><span class="badge badge-epic">Sprint 3 (Epic)</span></td>
-    </tr>
-    <tr>
-      <td><strong>US-07</strong></td>
-      <td>Tính năng</td>
-      <td>Là giáo vụ, tôi muốn lưu, sửa và trao đổi lịch an toàn khi nhiều người cùng thao tác (Optimistic locking).</td>
-      <td>Yêu cầu concurrency; PB-04/05/14..21; <code>webapp/api/solve.py</code></td>
-      <td style="text-align: center;">41</td>
-      <td style="text-align: center;"><strong>40</strong></td>
-      <td><span class="badge badge-epic">Sprint 4 (Epic)</span></td>
-    </tr>
-    <tr>
-      <td><strong>US-08</strong></td>
-      <td>Kỹ thuật</td>
-      <td>Là chủ dữ liệu, tôi muốn chuyển đổi và vận hành hệ thống có kiểm chứng, backup/restore tự động và RPO/RTO.</td>
-      <td>Yêu cầu vận hành; PB-35; <code>test/runtests.py</code></td>
-      <td style="text-align: center;">26</td>
-      <td style="text-align: center;"><strong>20</strong></td>
-      <td><span class="badge badge-epic">Sprint 4 (Epic)</span></td>
-    </tr>
-  </tbody>
+    <tr><td>US-01</td><td>Tìm chính xác lớp bằng #id (ManualEntryPage, scheduleView)</td><td>3</td><td>Sprint 2 (Done)</td></tr>
+    <tr><td>US-02</td><td>Điều hướng URL & Back/Forward (App.jsx, urlState.js)</td><td>8</td><td>Sprint 2 (Done)</td></tr>
+    <tr><td>US-03</td><td>Chuẩn hóa tài liệu lưu trữ F08 (GuidePage.jsx)</td><td>5</td><td>Sprint 2 (Done)</td></tr>
+    <tr><td>US-04a</td><td>Mô hình CSDL MySQL 8.0 & Docker (config/schema.sql)</td><td>8</td><td>Sprint 2 (Done)</td></tr>
+    <tr><td>US-05..08</td><td>Các Epic lớn: Phân quyền RBAC, CSDL nâng cao, Concurrency, Backup</td><td>93</td><td>Sprint 3 & 4</td></tr>
 </table>
 
-<div class="page-break"></div>
-
-<h2>Mục 3. Chi tiết Sprint 2 Backlog & Tiêu chí chấp nhận (Acceptance Criteria)</h2>
-<p><strong>Mục tiêu Sprint 2 (Sprint Goal):</strong> <em>"Khắc phục triệt để lỗi tra cứu #id (F03), hoàn thiện điều hướng URL trạng thái (F04), chuẩn hóa hướng dẫn lưu trữ snapshot (F08) và thiết lập CSDL MySQL 8.0 theo đúng ERD qua file schema.sql & Docker Compose (US-04a)."</em></p>
-
+<h2>Phần 2: Nhật ký trở ngại (Obstacle Log - Mẫu 6 cột chuẩn)</h2>
 <table>
-  <thead>
     <tr>
-      <th style="width: 10%;">Mã</th>
-      <th style="width: 28%;">User Story</th>
-      <th style="width: 52%;">Tiêu chí chấp nhận (Acceptance Criteria - Trả lời Có/Không)</th>
-      <th style="width: 10%; text-align: center;">Điểm (SP)</th>
+        <th>Ngày</th>
+        <th>Trở ngại kỹ thuật</th>
+        <th>Người nêu</th>
+        <th>Giải pháp xử lý</th>
+        <th>Trạng thái</th>
     </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>US-01</strong></td>
-      <td><strong>Tìm chính xác lớp bằng #id</strong><br><em>(ManualEntryPage, scheduleView)</em></td>
-      <td>
-        1. Nhập <code>#19</code> chỉ trả lớp có ID đúng bằng 19; nhập <code>#0</code> vẫn tìm được lớp có ID 0.<br>
-        2. ID không tồn tại trả về 0 kết quả; cú pháp sai không làm treo ứng dụng.<br>
-        3. Tìm mã lớp, mã môn, tên giảng viên và số thuần vẫn hoạt động như cũ.<br>
-        4. Kết quả tìm kiếm <code>#id</code> tuân thủ nghiêm ngặt các bộ lọc chương trình/khoa đang chọn.
-      </td>
-      <td style="text-align: center;"><strong>3</strong></td>
-    </tr>
-    <tr>
-      <td><strong>US-02</strong></td>
-      <td><strong>Điều hướng URL & Back/Forward</strong><br><em>(App.jsx, urlState.js)</em></td>
-      <td>
-        1. Đổi hash URL hợp lệ cập nhật ngay nội dung, tiêu đề và menu tương ứng mà không cần F5.<br>
-        2. Mở link trực tiếp hoặc F5 khôi phục chính xác trang, trang con và bộ lọc đang xem.<br>
-        3. Nút Back/Forward của trình duyệt di chuyển đúng thứ tự các màn hình đã thao tác.<br>
-        4. URL sai hoặc trỏ tới trang không hợp lệ được chuyển hướng an toàn về <code>#/schedule</code>.<br>
-        5. Đổi từ khóa bộ lọc dùng <code>replaceState</code> để không tạo rác lịch sử trình duyệt.
-      </td>
-      <td style="text-align: center;"><strong>8</strong></td>
-    </tr>
-    <tr>
-      <td><strong>US-03</strong></td>
-      <td><strong>Chuẩn hóa tài liệu lưu trữ F08</strong><br><em>(GuidePage.jsx)</em></td>
-      <td>
-        1. Hướng dẫn nêu rõ dữ liệu nhập được tự động ghi vào JSON snapshot và MySQL; bỏ cảnh báo sai về tắt backend.<br>
-        2. Phân biệt rạch ròi 3 khái niệm: Dữ liệu nháp, Lưu thời khóa biểu và Mốc Hủy thay đổi.<br>
-        3. Nêu rõ tính năng xuất Excel chỉ tải file cục bộ, không tạo bản sao lưu khôi phục trên server.<br>
-        4. Bổ sung tài liệu giải thích kiến trúc CSDL 7 bảng và cơ chế đồng bộ snapshot mới.
-      </td>
-      <td style="text-align: center;"><strong>5</strong></td>
-    </tr>
-    <tr>
-      <td><strong>US-04a</strong></td>
-      <td><strong>Mô hình CSDL MySQL & Docker</strong><br><em>(config/schema.sql, database.py)</em></td>
-      <td>
-        1. Bản thiết kế ERD gồm 7 bảng quan hệ chuẩn (coordinators, lecturers, lecturer_availabilities, courses, classes, rooms, schedules) được PO duyệt.<br>
-        2. File <code>config/schema.sql</code> khởi tạo thành công CSDL <code>vju_calendar</code> trên MySQL 8.0.<br>
-        3. <code>docker-compose.yml</code> cấu hình service <code>db</code> MySQL ánh xạ cổng <code>3307:3306</code>.<br>
-        4. Module <code>webapp/database.py</code> kết nối và đồng bộ tự động 2 chiều giữa RAM và CSDL.
-      </td>
-      <td style="text-align: center;"><strong>8</strong></td>
-    </tr>
-  </tbody>
-  <tfoot>
-    <tr>
-      <th colspan="3" style="text-align: right;">TỔNG ĐIỂM STORY POINTS CAM KẾT SPRINT 2:</th>
-      <th style="text-align: center; color: #b91c1c; font-size: 14px;">24 SP</th>
-    </tr>
-  </tfoot>
+    <tr><td>29/10</td><td>Spam history trình duyệt do pushState khi gõ tìm kiếm</td><td>Trường (FE)</td><td>Dùng replaceState + debounce 300ms</td><td>Đã xong</td></tr>
+    <tr><td>29/10</td><td>Tìm #0 bị rỗng do kiểm tra falsy if (!id)</td><td>Quang Minh (QA)</td><td>Sửa điều kiện kiểm tra chặt chẽ ID</td><td>Đã xong</td></tr>
+    <tr><td>31/10</td><td>Xung đột cổng 3306 Docker với MySQL cục bộ Windows</td><td>Đức Minh (BE)</td><td>Ánh xạ cổng host sang 3307:3306</td><td>Đã xong</td></tr>
+    <tr><td>01/11</td><td>Trắng trang khi nhập URL hash không tồn tại và F5</td><td>Quang Minh (QA)</td><td>Thêm fallback an toàn về #/schedule kèm Toast</td><td>Đã xong</td></tr>
+    <tr><td>01/11</td><td>Nội dung GuidePage tràn khung hình laptop 13-inch</td><td>Đình Huy (PO)</td><td>Thiết kế giao diện dạng Accordion 3 khối</td><td>Đã xong</td></tr>
 </table>
 
-<h2>Mục 4. Bản Definition of Done (DoD) chuẩn hóa của Nhóm 2</h2>
-<div class="callout callout-success">
-  <strong>Quy ước chất lượng môn ĐBCLPM:</strong> Trong Scrum, <em>Acceptance Criteria (AC)</em> dành riêng cho từng User Story, còn <em>Definition of Done (DoD)</em> là bộ tiêu chuẩn kỹ thuật bắt buộc áp dụng cho <strong>TẤT CẢ</strong> các User Story. Một hạng mục chỉ được tính là hoàn thành (Done) khi thỏa mãn 100% các tiêu chí dưới đây:
-</div>
+<h2>Phần 3: Biên bản các cuộc họp Daily Scrum</h2>
+<p>Duy trì họp đúng khung giờ 21:00 - 21:15 hàng ngày trong suốt 7 ngày của Sprint 2, 100% thành viên tham gia đầy đủ, thực hiện nghiêm túc 3 câu hỏi Scrum và gỡ bỏ triệt để rào cản kỹ thuật.</p>
 
+<h2>Phần 4: Kết quả Sơ kết cuối Sprint & Retrospective</h2>
+<p>
+• Cam kết 24 SP -> Đạt được 24 SP (100% hoàn thành).<br>
+• Bộ kiểm thử: <strong>97/97 Backend Test Cases PASS</strong> + <strong>10/10 Acceptance Test Cases PASS</strong>.<br>
+• PO Chử Đình Huy nghiệm thu 4/4 User Stories đạt chuẩn Definition of Done.
+</p>
+
+<h2>Phần 5: Biên bản cải tiến Sprint (Khắc phục nhận xét Sprint 1)</h2>
 <table>
-  <thead>
     <tr>
-      <th style="width: 25%;">Tầng chất lượng</th>
-      <th style="width: 55%;">Tiêu chí bắt buộc (Checklist Có/Không)</th>
-      <th style="width: 20%;">Người phụ trách</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>1. Chuẩn mực Mã nguồn<br>(Coding Standards)</strong></td>
-      <td>
-        • Mã nguồn tuân thủ ESLint/Prettier (Frontend) và PEP8 (Backend).<br>
-        • Không để sót <code>console.log</code> debug, biến rác, hoặc hardcode thông tin nhạy cảm.<br>
-        • Đã được ít nhất một thành viên khác kiểm tra (Peer Review) qua Pull Request trước khi merge.
-      </td>
-      <td>Nhóm phát triển<br><em>(Trường, Đức Minh)</em></td>
+        <th>Nội dung nhận xét Sprint 1</th>
+        <th>Hành động khắc phục cụ thể ở Sprint 2</th>
+        <th>Kết quả thực tế</th>
     </tr>
     <tr>
-      <td><strong>2. Tiêu chuẩn Kiểm thử<br>(Testing & QA)</strong></td>
-      <td>
-        • Đạt 100% Tiêu chí chấp nhận (Acceptance Criteria) được mô tả trong Story.<br>
-        • 97/97 Test Cases backend (<code>test/runtests.py</code>) và 10/10 Test Cases chấp nhận (<code>test/sprint2-acceptance.test.jsx</code>) đều PASS 100%.<br>
-        • Không làm phát sinh lỗi hồi quy (regression bugs) trên các tính năng cũ của Sprint 1.
-      </td>
-      <td>Tester / QA<br><em>(Trần Quang Minh)</em></td>
+        <td><strong>Thiếu meeting minutes từng buổi</strong></td>
+        <td>Họp cố định 21:00-21:15, ghi chép đầy đủ 7 biên bản + Nhật ký trở ngại 6 cột</td>
+        <td>Đạt chuẩn 100%</td>
     </tr>
     <tr>
-      <td><strong>3. Tích hợp & Môi trường<br>(CI/CD & Environment)</strong></td>
-      <td>
-        • Nhánh tính năng được merge sạch sẽ vào nhánh <code>main</code>, commit rõ ràng theo Conventional Commits.<br>
-        • Lệnh build production (<code>npm run build</code>) chạy thành công không có warning nghiêm trọng.<br>
-        • Hệ thống khởi chạy ổn định với container MySQL qua <code>docker-compose.yml</code>.
-      </td>
-      <td>DevOps & SM<br><em>(Nguyễn Hoàng Minh)</em></td>
+        <td><strong>DoD còn mù mờ, chưa rõ ràng</strong></td>
+        <td>Ban hành bộ DoD 5 tầng định lượng: 100% test pass, linter sạch, peer review, PO demo</td>
+        <td>Đạt chuẩn 100%</td>
     </tr>
     <tr>
-      <td><strong>4. Tài liệu & Truy vết<br>(Documentation)</strong></td>
-      <td>
-        • Commit message tuân thủ quy chuẩn Conventional Commits (<code>feat:</code>, <code>fix:</code>, <code>docs:</code>).<br>
-        • Cập nhật các tài liệu hướng dẫn sử dụng và file đặc tả kỹ thuật tương ứng trong thư mục <code>doc/</code>.<br>
-        • Đầy đủ 6 cột trong Nhật ký trở ngại và lưu trữ biên bản họp Scrum trên Drive nhóm.
-      </td>
-      <td>Cả nhóm thực hiện</td>
+        <td><strong>Chưa triển khai deploy</strong></td>
+        <td>Đóng gói Docker Compose (MySQL 8.0 port 3307), DDL 7 bảng ERD, kết nối webapp/database.py, cấu hình render.yaml</td>
+        <td>Đạt chuẩn 100%</td>
     </tr>
-    <tr>
-      <td><strong>5. Nghiệm thu Product Owner<br>(PO Acceptance)</strong></td>
-      <td>
-        • Tính năng được demo trực tiếp và kiểm chứng trên môi trường chạy thực tế.<br>
-        • Product Owner xác nhận nghiệm thu "Accepted" và chính thức đóng Story.
-      </td>
-      <td>Product Owner<br><em>(Chử Đình Huy)</em></td>
-    </tr>
-  </tbody>
 </table>
 
 <div class="sign-box">
-  <div class="sign-col">
-    <strong>XÁC NHẬN CỦA SCRUMMASTER</strong><br><br><br>
-    <strong>Nguyễn Hoàng Minh</strong><br>
-    <em>Ngày 28 tháng 10 năm 2026</em>
-  </div>
-  <div class="sign-col">
-    <strong>PHÊ DUYỆT CỦA PRODUCT OWNER</strong><br><br><br>
-    <strong>Chử Đình Huy</strong><br>
-    <em>Ngày 28 tháng 10 năm 2026</em>
-  </div>
-</div>
-
-<div class="page-break"></div>
-
-<div class="header-box">
-  <div class="header-top">TRƯỜNG ĐẠI HỌC VIỆT NHẬT (VJU) • HỌC PHẦN ĐẢM BẢO CHẤT LƯỢNG PHẦN MỀM THEO HƯỚNG SCRUM</div>
-  <div class="header-title">NHẬT KÝ TRỞ NGẠI (OBSTACLE LOG) — SPRINT 2</div>
-  <div class="header-sub">Nhóm số: 2 • Tên sản phẩm: Hệ thống quản lý và tự động sắp xếp thời khóa biểu (VJU-Calendar)</div>
-</div>
-
-<div class="meta-grid">
-  <div class="meta-row">
-    <div class="meta-cell"><strong>Thời gian Sprint 2:</strong> 28/10/2026 – 04/11/2026 (1 tuần)</div>
-    <div class="meta-cell"><strong>Nơi lưu trữ file gốc:</strong> Google Drive nhóm / <code>Obstacle_Log.xlsx</code></div>
-  </div>
-  <div class="meta-row">
-    <div class="meta-cell"><strong>Giờ Scrum Hằng ngày:</strong> 21:00 – 21:15</div>
-    <div class="meta-cell"><strong>Người quản trị nhật ký:</strong> Nguyễn Hoàng Minh (ScrumMaster)</div>
-  </div>
-</div>
-
-<h2>Mục 1. Quy định ghi chép và xử lý trở ngại (Theo Phiếu Hồ sơ Buổi 3)</h2>
-<div class="callout">
-  <strong>Định nghĩa trở ngại trong Scrum:</strong>
-  <em>"Trở ngại là thứ nhóm không tự gỡ được trong ngày — việc khó thì không phải trở ngại, việc bị chặn (blockers) mới là trở ngại."</em><br>
-  Nhật ký được lập đúng theo biểu mẫu chuẩn 6 cột quy định tại <strong>Trang 8 của Phiếu Hồ sơ vai trò nhóm</strong>. Trạng thái sử dụng một trong ba giá trị: <strong>Mở · Đang xử lý · Đã xong</strong>. ScrumMaster có trách nhiệm cập nhật nhật ký ngay sau mỗi buổi Scrum Hằng ngày (21:00 - 21:15) và đôn đốc xử lý dứt điểm.
-</div>
-
-<h2>Mục 2. Bảng theo dõi trở ngại chi tiết trong Sprint 2 (Mẫu 6 cột chuẩn)</h2>
-<table>
-  <thead>
-    <tr>
-      <th style="width: 11%;">Ngày (Sprint 2)</th>
-      <th style="width: 25%;">Trở ngại</th>
-      <th style="width: 20%;">Ảnh hưởng</th>
-      <th style="width: 12%;">Người nêu</th>
-      <th style="width: 22%;">Hướng xử lý</th>
-      <th style="width: 10%; text-align: center;">Trạng thái</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>Ngày 2</strong><br>(29/10/2026)</td>
-      <td>Khi gõ từ khóa tìm kiếm, URL hash cập nhật liên tục bằng <code>window.history.pushState</code> khiến lịch sử trình duyệt bị spam hàng chục mục.</td>
-      <td>Bấm nút Back của trình duyệt không quay lại được màn hình trước; trải nghiệm điều hướng bị vỡ.</td>
-      <td><strong>Trường</strong><br>(Frontend)</td>
-      <td>SM nêu ở Scrum Hằng ngày; Trường dùng <code>history.replaceState</code> cho ô tìm kiếm và thêm debounce 300ms.</td>
-      <td style="text-align: center;"><span class="badge badge-done">Đã xong</span></td>
-    </tr>
-    <tr>
-      <td><strong>Ngày 2</strong><br>(29/10/2026)</td>
-      <td>Tìm kiếm lớp học với cú pháp <code>#0</code> trả về 0 kết quả do mã nguồn JS dùng kiểm tra falsy <code>if (!id)</code>, khiến ID số 0 bị coi là rỗng.</td>
-      <td>Giáo vụ không thể tìm thấy lớp học có ID là 0 trong bảng nhập liệu thủ công.</td>
-      <td><strong>Quang Minh</strong><br>(Tester)</td>
-      <td>Quang Minh báo lỗi cho Trường; sửa logic kiểm tra chặt chẽ <code>if (id !== null && !isNaN(id))</code> trong <code>ManualEntryPage.jsx</code> và bổ sung unit test case.</td>
-      <td style="text-align: center;"><span class="badge badge-done">Đã xong</span></td>
-    </tr>
-    <tr>
-      <td><strong>Ngày 4</strong><br>(31/10/2026)</td>
-      <td>Khởi động container Docker MySQL gặp lỗi xung đột port 3306 do máy tính dev Windows đã có dịch vụ MySQL Server 8.0 cục bộ chạy ngầm.</td>
-      <td>Không thể bind cổng kết nối tới database container để chạy kịch bản khởi tạo tự động.</td>
-      <td><strong>Đức Minh</strong><br>(Backend)</td>
-      <td>SM (Hoàng Minh) hỗ trợ đổi cổng ánh xạ sang host thành <code>3307:3306</code> trong <code>docker-compose.yml</code> và file cấu hình môi trường.</td>
-      <td style="text-align: center;"><span class="badge badge-done">Đã xong</span></td>
-    </tr>
-    <tr>
-      <td><strong>Ngày 5</strong><br>(01/11/2026)</td>
-      <td>Khi người dùng nhập URL có hash lạ không tồn tại (ví dụ: <code>#/unknown-page</code>) và ấn F5, ứng dụng bị lỗi crash trắng màn hình (blank page).</td>
-      <td>Người dùng bị mất phiên làm việc hiện tại, không thể tự phục hồi nếu gõ nhầm URL.</td>
-      <td><strong>Quang Minh</strong><br>(Tester)</td>
-      <td>SM nhắc nhở quy tắc; Trường thêm hook kiểm tra và fallback an toàn trong <code>App.jsx</code> về <code>#/schedule</code> kèm Toast thông báo.</td>
-      <td style="text-align: center;"><span class="badge badge-done">Đã xong</span></td>
-    </tr>
-    <tr>
-      <td><strong>Ngày 5</strong><br>(01/11/2026)</td>
-      <td>Nội dung giải thích cơ chế lưu dữ liệu tại <code>GuidePage.jsx</code> quá dài và bị tràn khung trên màn hình laptop kích thước nhỏ (13-inch).</td>
-      <td>Giáo vụ khó đọc, khó so sánh và dễ nhầm lẫn giữa nút "Lưu thời khóa biểu" và "Xuất Excel".</td>
-      <td><strong>Đình Huy</strong><br>(Product Owner)</td>
-      <td>PO yêu cầu phân nhóm thông tin; Hoàng Minh và Trường thiết kế lại giao diện dạng Accordion (Collapsible FAQ) 3 khối riêng biệt.</td>
-      <td style="text-align: center;"><span class="badge badge-done">Đã xong</span></td>
-    </tr>
-  </tbody>
-</table>
-
-<h2>Mục 3. Thống kê và đánh giá hiệu quả giải quyết trở ngại</h2>
-<table>
-  <thead>
-    <tr>
-      <th>Chỉ số theo dõi</th>
-      <th>Kết quả thực tế</th>
-      <th>Nhận xét đánh giá</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>Tổng số trở ngại ghi nhận</strong></td>
-      <td>05 trở ngại</td>
-      <td>Phản ánh trung thực các vấn đề phát sinh trong quá trình phát triển tính năng và dựng môi trường mới.</td>
-    </tr>
-    <tr>
-      <td><strong>Số trở ngại đã giải quyết</strong></td>
-      <td>05 / 05 (Đạt 100%)</td>
-      <td>Toàn bộ 100% các trở ngại đều được giải quyết dứt điểm trước thời điểm Code Freeze (Ngày 6).</td>
-    </tr>
-    <tr>
-      <td><strong>Thời gian xử lý trung bình</strong></td>
-      <td>Dưới 24 giờ / trở ngại</td>
-      <td>Đạt đúng cam kết hỗ trợ nhanh, không để công việc bị tắc nghẽn kéo dài sang các ngày tiếp theo.</td>
-    </tr>
-    <tr>
-      <td><strong>Số trở ngại tồn đọng sang Sprint sau</strong></td>
-      <td>0 trở ngại</td>
-      <td>Không có nợ tồn đọng kỹ thuật nào chuyển sang Sprint 3.</td>
-    </tr>
-  </tbody>
-</table>
-
-<div class="sign-box">
-  <div class="sign-col">
-    <strong>NGƯỜI LẬP NHẬT KÝ (SCRUMMASTER)</strong><br><br><br>
-    <strong>Nguyễn Hoàng Minh</strong><br>
-    <em>Cập nhật ngày 03 tháng 11 năm 2026</em>
-  </div>
-  <div class="sign-col">
-    <strong>XÁC NHẬN CỦA PRODUCT OWNER</strong><br><br><br>
-    <strong>Chử Đình Huy</strong><br>
-    <em>Cập nhật ngày 03 tháng 11 năm 2026</em>
-  </div>
-</div>
-
-<div class="page-break"></div>
-
-<div class="header-box">
-  <div class="header-top">TRƯỜNG ĐẠI HỌC VIỆT NHẬT (VJU) • HỌC PHẦN ĐẢM BẢO CHẤT LƯỢNG PHẦN MỀM THEO HƯỚNG SCRUM</div>
-  <div class="header-title">BIÊN BẢN CÁC CUỘC HỌP SCRUM HẰNG NGÀY (DAILY SCRUM)</div>
-  <div class="header-sub">Sprint 2 (28/10/2026 – 04/11/2026) • Nhóm số: 2 • Tên sản phẩm: VJU-Calendar</div>
-</div>
-
-<div class="meta-grid">
-  <div class="meta-row">
-    <div class="meta-cell"><strong>Khung giờ họp cố định:</strong> 21:00 – 21:15 hằng ngày (Time-box: 15 phút)</div>
-    <div class="meta-cell"><strong>Hình thức:</strong> Google Meet nhóm kết hợp kiểm tra bảng Jira/Git</div>
-  </div>
-  <div class="meta-row">
-    <div class="meta-cell"><strong>Chủ trì:</strong> Nguyễn Hoàng Minh (ScrumMaster)</div>
-    <div class="meta-cell"><strong>Thư ký:</strong> Nguyễn Hoàng Minh (ScrumMaster)</div>
-  </div>
-  <div class="meta-row">
-    <div class="meta-cell" colspan="2"><strong>Thành phần tham dự đầy đủ:</strong> Chử Đình Huy (PO), Nguyễn Hoàng Minh (SM-DevOps), Trần Quang Minh (QA), Hoàng Đức Minh (BE), Nguyễn Vũ Trường (FE).</div>
-  </div>
-</div>
-
-<h2>1. Biên bản cuộc họp Sprint Planning Sprint 2 (20:00 – 21:00, 28/10/2026)</h2>
-<p><strong>Nội dung:</strong> PO Chử Đình Huy công bố mục tiêu Sprint 2: Hoàn thiện trải nghiệm UX (lỗi tìm kiếm F03, điều hướng URL F04, tài liệu F08) và thiết lập CSDL MySQL 8.0 chuẩn theo ERD. Nhóm thảo luận, thực hiện Planning Poker và thống nhất cam kết 4 User Stories: <strong>US-01 (3 SP), US-02 (8 SP), US-03 (5 SP), US-04a (8 SP)</strong> $ightarrow$ Tổng <strong>24 Story Points</strong>. Phân rã thành 12 tác vụ kỹ thuật cụ thể.</p>
-
-<h2>2. Biên bản Daily Scrum Ngày 1 (Thứ Tư, 28/10/2026 • 21:00 – 21:15)</h2>
-<ul>
-  <li><strong>Nguyễn Hoàng Minh (SM - DevOps):</strong> Đã hoàn tất đóng gói Sprint 1 (commit <code>5967766</code>); hôm nay thiết lập bảng Jira Sprint 2 và hỗ trợ Đức Minh rà soát 7 bảng theo file ERD; không gặp trở ngại.</li>
-  <li><strong>Chử Đình Huy (PO):</strong> Rà soát ERD và tiêu chuẩn chấp nhận; chuẩn bị dữ liệu kiểm thử mẫu cho bộ lọc; sẵn sàng trả lời câu hỏi 8h–22h; không gặp trở ngại.</li>
-  <li><strong>Trần Quang Minh (QA):</strong> Bắt đầu viết danh sách các bài kiểm thử chấp nhận (Acceptance Test Cases) cho tính năng tìm <code>#id</code> và URL hash; không gặp trở ngại.</li>
-  <li><strong>Hoàng Đức Minh (BE):</strong> Khởi tạo nhánh git <code>feature/database-setup</code>, phác thảo các bảng DDL theo ERD <code>Untitled diagram-2026-10-28-065235.pdf</code>; không gặp trở ngại.</li>
-  <li><strong>Nguyễn Vũ Trường (FE):</strong> Đọc mã nguồn component <code>ManualEntryPage.jsx</code> và nghiên cứu biểu thức chính quy (regex) bóc tách chuỗi <code>#id</code>; không gặp trở ngại.</li>
-</ul>
-
-<h2>3. Biên bản Daily Scrum Ngày 2 (Thứ Năm, 29/10/2026 • 21:00 – 21:15)</h2>
-<ul>
-  <li><strong>Nguyễn Vũ Trường (FE):</strong> Đã viết xong regex bóc tách <code>#id</code>; hôm nay ghép vào logic lọc chung. <em>Trở ngại:</em> Gõ ô tìm kiếm bị spam history trình duyệt và tìm <code>#0</code> bị rỗng.</li>
-  <li><strong>Trần Quang Minh (QA):</strong> Đã hoàn thành 6 test cases cho <code>#id</code>; chạy thử phát hiện ra lỗi <code>#0</code> bị coi là falsy và báo lại ngay cho Trường.</li>
-  <li><strong>Hoàng Đức Minh (BE):</strong> Hoàn tất cấu trúc các bảng CSDL; hôm nay viết file <code>config/schema.sql</code> và module <code>webapp/database.py</code> kết nối MySQL.</li>
-  <li><strong>Chử Đình Huy (PO):</strong> Trả lời câu hỏi của Đức Minh: trường <code>available_periods</code> lưu dạng JSON để đảm bảo tính linh hoạt của khung giờ.</li>
-  <li><strong>Nguyễn Hoàng Minh (SM):</strong> Ghi nhận trở ngại vào <code>Obstacle_Log.xlsx</code>; hướng dẫn Trường chuyển sang <code>history.replaceState</code> kết hợp debounce 300ms.</li>
-</ul>
-
-<h2>4. Biên bản Daily Scrum Ngày 3 (Thứ Sáu, 30/10/2026 • 21:00 – 21:15)</h2>
-<ul>
-  <li><strong>Nguyễn Vũ Trường (FE):</strong> Đã sửa xong lỗi spam history và lỗi <code>#0</code>; hôm nay chuyển sang US-02: đồng bộ hash URL với thanh menu và bộ lọc trên <code>App.jsx</code> qua sự kiện <code>hashchange</code>.</li>
-  <li><strong>Trần Quang Minh (QA):</strong> Chạy lại toàn bộ bộ kiểm thử cho US-01 $ightarrow$ <strong>Xác nhận US-01 PASS 100% (4/4 AC)</strong>. Bắt đầu viết kịch bản test cho URL hash.</li>
-  <li><strong>Hoàng Đức Minh (BE):</strong> File <code>config/schema.sql</code> tạo bảng chạy thành công trên MySQL <code>vju_calendar</code>; hôm nay viết cấu hình service <code>db</code> trong <code>docker-compose.yml</code>.</li>
-  <li><strong>Chử Đình Huy (PO):</strong> Nghiệm thu chính thức <strong>US-01 (3 Story Points)</strong> chuyển sang trạng thái <strong>Done</strong>.</li>
-  <li><strong>Nguyễn Hoàng Minh (SM):</strong> Cập nhật trạng thái 2 trở ngại Ngày 2 trong nhật ký thành <strong>Đã xong</strong>.</li>
-</ul>
-
-<div class="page-break"></div>
-
-<h2>5. Biên bản Daily Scrum Ngày 4 (Thứ Bảy, 31/10/2026 • 21:00 – 21:15)</h2>
-<ul>
-  <li><strong>Hoàng Đức Minh (BE):</strong> Chạy Docker trên Windows gặp lỗi xung đột port 3306 với MySQL cục bộ; được SM hỗ trợ đổi sang port 3307, container đã chạy ổn định và nạp schema thành công.</li>
-  <li><strong>Nguyễn Vũ Trường (FE):</strong> Bắt sự kiện <code>window.onpopstate</code> và <code>hashchange</code> để hỗ trợ nút Back/Forward; tích hợp bộ lọc thời khóa biểu vào query param trên hash URL.</li>
-  <li><strong>Trần Quang Minh (QA):</strong> Chạy bộ hồi quy 97 test cases backend (<code>test/runtests.py</code>); nhận bàn giao container Docker từ Đức Minh để chuẩn bị kiểm thử DB.</li>
-  <li><strong>Nguyễn Hoàng Minh (SM):</strong> Ghi nhận và đóng trở ngại cổng Docker trong file nhật ký; hỗ trợ Đức Minh viết tài liệu hướng dẫn setup DB trong thư mục <code>config/</code>.</li>
-  <li><strong>Chử Đình Huy (PO):</strong> Soạn thảo nội dung giải thích cơ chế lưu trữ snapshot và phân biệt rõ nháp/lưu/xuất cho US-03 trên trang <code>GuidePage.jsx</code>.</li>
-</ul>
-<p><em>Kết luận ngày 4:</em> <strong>US-04a hoàn thành giai đoạn lập trình</strong>, chuyển giao sang môi trường QA kiểm thử.</p>
-
-<h2>6. Biên bản Daily Scrum Ngày 5 (Chủ Nhật, 01/11/2026 • 21:00 – 21:15)</h2>
-<ul>
-  <li><strong>Trần Quang Minh (QA):</strong> Đã kiểm thử migration và kết nối DB $ightarrow$ <strong>Xác nhận US-04a PASS 100% (4/4 AC)</strong>. Khi test URL hash, phát hiện lỗi gõ hash lạ bị trắng trang.</li>
-  <li><strong>Nguyễn Vũ Trường (FE):</strong> Đã hoàn tất US-02; nhận báo cáo bug hash lạ từ Quang Minh; bắt đầu đưa nội dung mới vào trang hướng dẫn <code>GuidePage.jsx</code>.</li>
-  <li><strong>Chử Đình Huy (PO):</strong> Nghiệm thu <strong>US-04a (8 Story Points)</strong> chuyển sang trạng thái <strong>Done</strong>. Góp ý cải tiến giao diện trang hướng dẫn trên màn hình nhỏ.</li>
-  <li><strong>Hoàng Đức Minh (BE):</strong> Sửa triệt để hàm chuyển đổi kiểu dữ liệu set khi lưu metadata JSON trong <code>webapp/database.py</code>, đảm bảo đồng bộ mượt mà.</li>
-  <li><strong>Nguyễn Hoàng Minh (SM):</strong> Ghi nhận 2 trở ngại mới vào nhật ký; đôn đốc Trường ưu tiên xử lý hàm route guard trước buổi họp ngày mai.</li>
-</ul>
-<p><em>Kết luận ngày 5:</em> Nhóm đã hoàn thành 11/24 SP Done. Còn lại 13 SP đang trong giai đoạn nghiệm thu và hoàn thiện biên.</p>
-
-<h2>7. Biên bản Daily Scrum Ngày 6 (Thứ Hai, 02/11/2026 • 21:00 – 21:20) — Code Freeze</h2>
-<ul>
-  <li><strong>Nguyễn Vũ Trường (FE):</strong> Đã hoàn thành hàm fallback về <code>#/schedule</code> và hoàn thiện giao diện Accordion cho trang hướng dẫn; đã tạo Pull Request vào nhánh <code>main</code> lúc 16:30.</li>
-  <li><strong>Trần Quang Minh (QA):</strong> Chạy kiểm thử chấp nhận toàn diện cho cả US-02 và US-03 trên nhánh <code>main</code> $ightarrow$ <strong>Tất cả 10 test cases trong <code>test/sprint2-acceptance.test.jsx</code> đều PASS</strong>.</li>
-  <li><strong>Hoàng Đức Minh & Nguyễn Hoàng Minh:</strong> Chạy lệnh build production và test runner tự động; 97/97 test cases backend PASS, console sạch 100% warning/error.</li>
-  <li><strong>Chử Đình Huy (PO):</strong> Trực tiếp nghiệm thu <strong>US-02 (8 SP)</strong> và <strong>US-03 (5 SP)</strong> $ightarrow$ <strong>Done</strong>. Toàn bộ 4 User Stories đã hoàn thành!</li>
-  <li><strong>Nguyễn Hoàng Minh (SM):</strong> Kích hoạt <strong>Code Freeze</strong>; đóng toàn bộ trở ngại trong <code>Obstacle_Log.xlsx</code>; push commit <code>60d3f23</code> lên GitHub repo <code>MKII3184/VJU-Calendar</code>.</li>
-</ul>
-
-<h2>8. Biên bản Sprint Review & Retrospective Ngày 7 (Thứ Ba, 03/11/2026 • 19:30 – 21:30)</h2>
-<ul>
-  <li><strong>Sprint Review (19:30 – 20:30):</strong> Nhóm demo trực tiếp 4 tính năng: tìm `#id` chính xác và thử trường hợp `#0`, điều hướng Back/Forward và copy link khôi phục bộ lọc ở tab ẩn danh, giao diện hướng dẫn Accordion rõ ràng, khởi chạy CSDL MySQL qua Docker Compose và nạp 7 bảng schema. PO Chử Đình Huy chính thức nghiệm thu toàn bộ 24/24 Story Points.</li>
-  <li><strong>Sprint Retrospective (20:30 – 21:30):</strong> Đánh giá các điểm làm tốt, các thiếu sót kỹ thuật và chốt 3 Action Items cải tiến quy trình cho Sprint 3 (chi tiết xem Báo cáo Sơ kết cuối Sprint).</li>
-</ul>
-
-<div class="sign-box">
-  <div class="sign-col">
-    <strong>THƯ KÝ / SCRUMMASTER</strong><br><br><br>
-    <strong>Nguyễn Hoàng Minh</strong>
-  </div>
-  <div class="sign-col">
-    <strong>ĐẠI DIỆN PRODUCT OWNER</strong><br><br><br>
-    <strong>Chử Đình Huy</strong>
-  </div>
-</div>
-
-<div class="page-break"></div>
-
-<div class="header-box">
-  <div class="header-top">TRƯỜNG ĐẠI HỌC VIỆT NHẬT (VJU) • HỌC PHẦN ĐẢM BẢO CHẤT LƯỢNG PHẦN MỀM THEO HƯỚNG SCRUM</div>
-  <div class="header-title">BÁO CÁO SƠ KẾT CUỐI SPRINT 2 (SPRINT REVIEW & RETROSPECTIVE)</div>
-  <div class="header-sub">Dự án: Hệ thống quản lý và tự động sắp xếp thời khóa biểu (VJU-Calendar) • Nhóm số: 2</div>
-</div>
-
-<div class="meta-grid">
-  <div class="meta-row">
-    <div class="meta-cell"><strong>Thời gian thực hiện:</strong> 28/10/2026 – 04/11/2026 (1 tuần)</div>
-    <div class="meta-cell"><strong>Thời gian họp sơ kết:</strong> 19:30 – 21:30, Ngày 03/11/2026</div>
-  </div>
-  <div class="meta-row">
-    <div class="meta-cell"><strong>Product Owner:</strong> Chử Đình Huy (24110233)</div>
-    <div class="meta-cell"><strong>ScrumMaster:</strong> Nguyễn Hoàng Minh (24110903)</div>
-  </div>
-  <div class="meta-row">
-    <div class="meta-cell" colspan="2"><strong>Thành viên tham dự:</strong> Đầy đủ 5/5 thành viên (Chử Đình Huy, Nguyễn Hoàng Minh, Trần Quang Minh, Hoàng Đức Minh, Nguyễn Vũ Trường).</div>
-  </div>
-</div>
-
-<h2>Mục 1. Tổng quan chỉ số Sprint 2 (Sprint Metrics)</h2>
-<table>
-  <thead>
-    <tr>
-      <th style="width: 30%;">Chỉ số theo dõi</th>
-      <th style="width: 25%; text-align: center;">Chỉ tiêu cam kết</th>
-      <th style="width: 25%; text-align: center;">Kết quả thực tế</th>
-      <th style="width: 20%; text-align: center;">Đánh giá</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>Mục tiêu Sprint (Sprint Goal)</strong></td>
-      <td colspan="2">Khắc phục lỗi UX F03, F04, F08 & Dựng CSDL MySQL 8.0 chuẩn ERD</td>
-      <td style="text-align: center;"><span class="badge badge-done">Hoàn thành 100%</span></td>
-    </tr>
-    <tr>
-      <td><strong>Story Points cam kết (Committed)</strong></td>
-      <td style="text-align: center;">24 SP</td>
-      <td style="text-align: center;">24 SP</td>
-      <td style="text-align: center;"><span class="badge badge-done">Đạt</span></td>
-    </tr>
-    <tr>
-      <td><strong>Story Points hoàn thành (Completed)</strong></td>
-      <td style="text-align: center;">24 SP</td>
-      <td style="text-align: center;">24 SP</td>
-      <td style="text-align: center;"><span class="badge badge-done">Đạt 100%</span></td>
-    </tr>
-    <tr>
-      <td><strong>Số User Stories đạt Definition of Done</strong></td>
-      <td style="text-align: center;">4 / 4 Stories</td>
-      <td style="text-align: center;">4 / 4 Stories</td>
-      <td style="text-align: center;"><span class="badge badge-done">100% Đạt DoD</span></td>
-    </tr>
-    <tr>
-      <td><strong>Story Points nợ tồn đọng (Spillover)</strong></td>
-      <td style="text-align: center;">0 SP</td>
-      <td style="text-align: center;">0 SP</td>
-      <td style="text-align: center;"><span class="badge badge-done">Không nợ kỹ thuật</span></td>
-    </tr>
-    <tr>
-      <td><strong>Độ bao phủ kiểm thử tự động</strong></td>
-      <td style="text-align: center;">&ge; 80%</td>
-      <td style="text-align: center;">97/97 TC backend PASS<br>10/10 TC chấp nhận PASS</td>
-      <td style="text-align: center;"><span class="badge badge-done">Xuất sắc</span></td>
-    </tr>
-  </tbody>
-</table>
-
-<h2>Mục 2. Bảng theo dõi tiến độ Burndown (Story Points theo ngày)</h2>
-<table>
-  <thead>
-    <tr>
-      <th style="width: 14%;">Ngày</th>
-      <th style="width: 18%; text-align: center;">Kế hoạch lý tưởng (SP)</th>
-      <th style="width: 18%; text-align: center;">Thực tế còn lại (SP)</th>
-      <th style="width: 50%;">Trạng thái công việc chi tiết</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>Day 1</strong> (28/10)</td>
-      <td style="text-align: center;">24 SP</td>
-      <td style="text-align: center;">24 SP</td>
-      <td>Họp Sprint Planning, phân rã 12 tác vụ kỹ thuật và khởi tạo các nhánh code.</td>
-    </tr>
-    <tr>
-      <td><strong>Day 2</strong> (29/10)</td>
-      <td style="text-align: center;">20 SP</td>
-      <td style="text-align: center;">24 SP</td>
-      <td>Lập trình đồng thời US-01, US-02, US-04a; phát hiện trở ngại spam history và lỗi `#0`.</td>
-    </tr>
-    <tr>
-      <td><strong>Day 3</strong> (30/10)</td>
-      <td style="text-align: center;">16 SP</td>
-      <td style="text-align: center;"><strong>21 SP</strong></td>
-      <td><strong>Hoàn thành US-01 (3 SP)</strong>, PO nghiệm thu. Đang lập trình US-02 và US-04a.</td>
-    </tr>
-    <tr>
-      <td><strong>Day 4</strong> (31/10)</td>
-      <td style="text-align: center;">12 SP</td>
-      <td style="text-align: center;">21 SP</td>
-      <td>Xử lý xong lỗi xung đột port Docker (IMP-03). Hoàn tất lập trình US-04a, chuyển sang QA.</td>
-    </tr>
-    <tr>
-      <td><strong>Day 5</strong> (01/11)</td>
-      <td style="text-align: center;">8 SP</td>
-      <td style="text-align: center;"><strong>13 SP</strong></td>
-      <td><strong>Hoàn thành US-04a (8 SP)</strong>, PO nghiệm thu. QA phát hiện bug URL biên (IMP-04).</td>
-    </tr>
-    <tr>
-      <td><strong>Day 6</strong> (02/11)</td>
-      <td style="text-align: center;">4 SP</td>
-      <td style="text-align: center;"><strong>0 SP</strong></td>
-      <td><strong>Hoàn thành US-02 (8 SP) & US-03 (5 SP)</strong>. Kích hoạt Code Freeze 17:00, QA test Pass.</td>
-    </tr>
-    <tr>
-      <td><strong>Day 7</strong> (03/11)</td>
-      <td style="text-align: center;">0 SP</td>
-      <td style="text-align: center;"><strong>0 SP</strong></td>
-      <td>Tổ chức họp Sprint Review, demo sản phẩm thực tế và họp Sprint Retrospective.</td>
-    </tr>
-  </tbody>
-</table>
-
-<div class="page-break"></div>
-
-<h2>Mục 3. Bảng nghiệm thu tính năng chi tiết theo Acceptance Criteria (Sprint Review)</h2>
-<table>
-  <thead>
-    <tr>
-      <th style="width: 10%;">Mã Story</th>
-      <th style="width: 20%;">Tên User Story</th>
-      <th style="width: 50%;">Tiêu chí chấp nhận (AC) kiểm thử thực tế</th>
-      <th style="width: 10%; text-align: center;">Kết quả</th>
-      <th style="width: 10%; text-align: center;">PO duyệt</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>US-01</strong><br>(3 SP)</td>
-      <td>Tìm chính xác lớp bằng <code>#id</code></td>
-      <td>
-        • Gõ <code>#19</code> chỉ hiện lớp ID 19; gõ <code>#0</code> hiện đúng lớp ID 0.<br>
-        • Gõ ID không tồn tại trả về 0 kết quả, không làm treo ứng dụng.<br>
-        • Tìm kiếm thông thường theo tên môn, giảng viên hoạt động bình thường.<br>
-        • Kết quả tìm kiếm tuân thủ đúng bộ lọc chương trình/khoa.
-      </td>
-      <td style="text-align: center;"><span class="badge badge-pass">PASS 4/4</span></td>
-      <td style="text-align: center;"><span class="badge badge-done">ACCEPTED</span></td>
-    </tr>
-    <tr>
-      <td><strong>US-02</strong><br>(8 SP)</td>
-      <td>URL State & Back/Forward</td>
-      <td>
-        • Đổi hash URL cập nhật đúng màn hình mà không cần reload F5.<br>
-        • Mở link trực tiếp hoặc F5 khôi phục chính xác màn hình và bộ lọc.<br>
-        • Nút Back/Forward của trình duyệt di chuyển chuẩn xác theo lịch sử.<br>
-        • URL sai/lạ tự động fallback về <code>#/schedule</code> kèm Toast thông báo.<br>
-        • Gõ từ khóa bộ lọc không tạo rác lịch sử trình duyệt.
-      </td>
-      <td style="text-align: center;"><span class="badge badge-pass">PASS 5/5</span></td>
-      <td style="text-align: center;"><span class="badge badge-done">ACCEPTED</span></td>
-    </tr>
-    <tr>
-      <td><strong>US-03</strong><br>(5 SP)</td>
-      <td>Tài liệu lưu trữ F08</td>
-      <td>
-        • Nêu đúng dữ liệu nhập tự động ghi vào snapshot JSON và MySQL 8.0, bỏ cảnh báo sai.<br>
-        • Phân biệt rõ dữ liệu nháp, kết quả chưa lưu, Lưu TKB và Hủy thay đổi.<br>
-        • Nêu rõ xuất Excel không tạo bản backup trên server.<br>
-        • Bổ sung kiến trúc CSDL 7 bảng và giao diện Accordion dễ đọc.
-      </td>
-      <td style="text-align: center;"><span class="badge badge-pass">PASS 4/4</span></td>
-      <td style="text-align: center;"><span class="badge badge-done">ACCEPTED</span></td>
-    </tr>
-    <tr>
-      <td><strong>US-04a</strong><br>(8 SP)</td>
-      <td>CSDL MySQL 8.0 & Docker</td>
-      <td>
-        • Bản thiết kế ERD gồm 7 bảng quan hệ chuẩn được duyệt đồng thuận.<br>
-        • File <code>config/schema.sql</code> khởi tạo thành công CSDL <code>vju_calendar</code>.<br>
-        • Lệnh <code>docker compose up -d</code> khởi chạy MySQL container thành công.<br>
-        • Module <code>webapp/database.py</code> đồng bộ tự động 2 chiều an toàn.
-      </td>
-      <td style="text-align: center;"><span class="badge badge-pass">PASS 4/4</span></td>
-      <td style="text-align: center;"><span class="badge badge-done">ACCEPTED</span></td>
-    </tr>
-  </tbody>
-</table>
-
-<h2>Mục 4. Biên bản cải tiến quy trình (Sprint Retrospective)</h2>
-
-<h3>4.1. Điều nhóm đã làm tốt (What Went Well)</h3>
-<ul>
-  <li><strong>Kỷ luật tuân thủ Scrum:</strong> Nhóm duy trì nghiêm túc giờ họp Daily Scrum hằng ngày (21:00 – 21:15), 100% thành viên tham gia đầy đủ và chủ động nhận việc.</li>
-  <li><strong>Hợp tác chéo hiệu quả:</strong> Tester (Quang Minh) viết sẵn kịch bản kiểm thử dựa trên AC ngay từ ngày đầu, giúp Frontend và Backend sửa triệt để các lỗi biên (như lỗi `#0`, lỗi URL hash lạ).</li>
-  <li><strong>Thực hiện đúng cam kết học chéo:</strong> Chử Đình Huy đã kèm cặp Hoàng Đức Minh thiết kế CSDL; Nguyễn Hoàng Minh đã hướng dẫn Nguyễn Vũ Trường xử lý kiến trúc URL State.</li>
-  <li><strong>Chất lượng mã nguồn vượt trội:</strong> Toàn bộ 97 test cases backend và 10 test cases acceptance đều PASS 100%, không phát sinh nợ kỹ thuật.</li>
-</ul>
-
-<h3>4.2. Điều cần cải thiện (What Didn't Go Well)</h3>
-<ul>
-  <li><strong>Tính tương thích môi trường:</strong> Chưa lường trước sự khác biệt giữa các hệ điều hành cá nhân (Windows cài sẵn MySQL làm đụng port 3306).</li>
-  <li><strong>Xử lý trường hợp biên ban đầu còn thiếu:</strong> Khi làm router URL, nhóm quên xử lý route không hợp lệ khiến người dùng bị crash trang khi reload URL lạ.</li>
-  <li><strong>Ước lượng ban đầu quá lớn:</strong> File backlog ban đầu gộp các tính năng thành các mục 31, 41 điểm gây khó khăn cho việc phân rã trong buổi Planning.</li>
-</ul>
-
-<h3>4.3. Kế hoạch hành động cải tiến cụ thể cho Sprint 3 (Action Items)</h3>
-<table>
-  <thead>
-    <tr>
-      <th style="width: 8%;">STT</th>
-      <th style="width: 47%;">Hành động cải tiến cụ thể (Action Item)</th>
-      <th style="width: 25%;">Người chịu trách nhiệm</th>
-      <th style="width: 20%;">Thời hạn (Deadline)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>1</td>
-      <td>Bắt buộc phân rã các User Story thành kích thước $\le 13$ Story Points trước khi đưa vào buổi họp Sprint Planning Sprint 3.</td>
-      <td><strong>Chử Đình Huy</strong> (PO)</td>
-      <td>Trước 04/11/2026</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>Bổ sung bước chạy kiểm thử tự động cục bộ (<code>npm test</code> & <code>pytest</code>) bắt buộc trước khi tạo Pull Request để chặn lỗi biên sớm.</td>
-      <td><strong>Nguyễn Vũ Trường</strong> (FE)<br><strong>Hoàng Đức Minh</strong> (BE)</td>
-      <td>Áp dụng ngay từ Day 1 Sprint 3</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td>Xây dựng script kiểm tra cổng tự động (<code>check_port.bat</code>) và bổ sung file mẫu <code>.env.example</code> để chuẩn hóa môi trường Docker.</td>
-      <td><strong>Nguyễn Hoàng Minh</strong> (SM)</td>
-      <td>Trước 05/11/2026</td>
-    </tr>
-  </tbody>
-</table>
-
-<div class="sign-box">
-  <div class="sign-col">
-    <strong>XÁC NHẬN CỦA SCRUMMASTER</strong><br><br><br>
-    <strong>Nguyễn Hoàng Minh</strong>
-  </div>
-  <div class="sign-col">
-    <strong>PHÊ DUYỆT CỦA PRODUCT OWNER</strong><br><br><br>
-    <strong>Chử Đình Huy</strong>
-  </div>
+    <div class="sign-col">
+        <strong>XÁC NHẬN CỦA SCRUMMASTER</strong><br>
+        <em>(Ký và ghi rõ họ tên)</em><br><br><br><br>
+        <strong>Nguyễn Hoàng Minh</strong><br>
+        <em>Ngày 03 tháng 11 năm 2026</em>
+    </div>
+    <div class="sign-col">
+        <strong>PHÊ DUYỆT CỦA PRODUCT OWNER</strong><br>
+        <em>(Ký và ghi rõ họ tên)</em><br><br><br><br>
+        <strong>Chử Đình Huy</strong><br>
+        <em>Ngày 03 tháng 11 năm 2026</em>
+    </div>
 </div>
 
 </body>

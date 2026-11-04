@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Biên bản cải tiến Sprint 2 - Nhóm 2</title>
+<style>
+@page {
+    size: A4 portrait;
+    margin: 16mm 14mm 16mm 14mm;
+}
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.5;
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+}
+.header-box {
+    border-bottom: 2px solid #b91c1c;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+}
+.header-top {
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.5px;
+}
+.header-title {
+    font-size: 19px;
+    font-weight: 800;
+    color: #b91c1c;
+    margin: 4px 0;
+    text-transform: uppercase;
+}
+.header-sub {
+    font-size: 12.5px;
+    color: #334155;
+    font-weight: 600;
+}
+.meta-grid {
+    display: table;
+    width: 100%;
+    margin-bottom: 15px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 6px 10px;
+}
+.meta-row {
+    display: table-row;
+}
+.meta-cell {
+    display: table-cell;
+    padding: 3px 8px;
+    font-size: 12px;
+}
+.meta-cell strong {
+    color: #0f172a;
+}
+h2 {
+    color: #991b1b;
+    font-size: 15px;
+    border-left: 4px solid #b91c1c;
+    padding-left: 8px;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 12px;
+    font-size: 12px;
+}
+th, td {
+    border: 1px solid #cbd5e1;
+    padding: 6px 8px;
+    text-align: left;
+    vertical-align: top;
+}
+th {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    font-weight: 700;
+}
+tr:nth-child(even) td {
+    background-color: #f8fafc;
+}
+.badge-pass {
+    background: #dcfce7;
+    color: #166534;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+}
+.badge-fixed {
+    background: #e0e7ff;
+    color: #3730a3;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+}
+.sign-box {
+    margin-top: 25px;
+    display: table;
+    width: 100%;
+}
+.sign-col {
+    display: table-cell;
+    width: 50%;
+    text-align: center;
+    vertical-align: top;
+}
+</style>
+</head>
+<body>
+
+<div class="header-box">
+    <div class="header-top">Trường Đại học Việt Nhật (VJU) - ĐHQGHN | Học phần: Đảm bảo chất lượng phần mềm theo hướng Scrum</div>
+    <div class="header-title">BIÊN BẢN CẢI TIẾN SPRINT (SPRINT IMPROVEMENT ACTION PLAN)</div>
+    <div class="header-sub">Nhóm 2 — Báo cáo tiếp thu và khắc phục triệt để các tồn tại của Sprint 1 theo nhận xét của Giảng viên</div>
+</div>
+
+<div class="meta-grid">
+    <div class="meta-row">
+        <div class="meta-cell"><strong>Học kỳ:</strong> HK1, Năm học 2026 - 2027</div>
+        <div class="meta-cell"><strong>Giai đoạn:</strong> Cải tiến Sprint 2 (Khắc phục hạn chế Sprint 1)</div>
+    </div>
+    <div class="meta-row">
+        <div class="meta-cell"><strong>Product Owner:</strong> Chử Đình Huy (MSSV: 24110233)</div>
+        <div class="meta-cell"><strong>ScrumMaster & DevOps:</strong> Nguyễn Hoàng Minh (MSSV: 24110903)</div>
+    </div>
+    <div class="meta-row">
+        <div class="meta-cell"><strong>Nhóm phát triển:</strong> Trần Quang Minh (Tester - 24110383), Hoàng Đức Minh (Backend - 24110251), Nguyễn Vũ Trường (Frontend - 24110277)</div>
+        <div class="meta-cell"><strong>Kho mã nguồn:</strong> GitHub MKII3184/VJU-Calendar</div>
+    </div>
+</div>
+
+<h2>Mục 1. Tiếp thu nhận xét của Giảng viên sau Sprint 1 & Phân tích nguyên nhân</h2>
+<p>Sau Sprint 1, Nhóm 2 đã nghiêm túc họp kiểm điểm (Sprint Retrospective) để tiếp thu các ý kiến đánh giá từ Giảng viên hướng dẫn môn ĐBCLPM. Nhóm đã xác định rõ 3 thiếu sót cốt lõi và phân tích nguyên nhân gốc rễ:</p>
+
+<table>
+    <tr>
+        <th style="width: 6%;">STT</th>
+        <th style="width: 38%;">Nhận xét của Giảng viên (Sprint 1)</th>
+        <th style="width: 56%;">Phân tích nguyên nhân gốc rễ (Root Cause Analysis)</th>
+    </tr>
+    <tr>
+        <td style="text-align: center;"><strong>1</strong></td>
+        <td><strong>Thiếu meeting minute cho từng buổi</strong>, chỉ có mỗi buổi sơ kết cuối sprint.</td>
+        <td>Nhóm có trao đổi kỹ thuật qua chat nhưng chưa thực hiện kỷ luật ghi chép văn bản chính thức sau mỗi buổi họp Daily Scrum 15 phút. Thiếu tài liệu Nhật ký trở ngại (Obstacle Log) 6 cột theo chuẩn của môn học.</td>
+    </tr>
+    <tr>
+        <td style="text-align: center;"><strong>2</strong></td>
+        <td><strong>Definition of Done (DoD) còn mù mờ</strong>, chưa rõ ràng, chưa lượng hóa được chất lượng.</td>
+        <td>Nhóm bị lẫn lộn giữa Acceptance Criteria (AC riêng của từng Story) và Definition of Done (DoD chung của dự án). Bản DoD cũ thiếu các chỉ số đo lường định lượng cụ thể về kiểm thử, chuẩn mã nguồn, quy trình review và kiểm thử hồi quy.</td>
+    </tr>
+    <tr>
+        <td style="text-align: center;"><strong>3</strong></td>
+        <td><strong>Chưa triển khai deploy</strong> hệ thống (thiếu đóng gói môi trường độc lập, cấu hình deploy).</td>
+        <td>Nhóm mới chỉ chạy mã nguồn cục bộ ở chế độ development (<code>npm run dev</code> và <code>python app.py</code>); chưa đóng gói dịch vụ CSDL bằng Docker, chưa cấu hình kịch bản build production và chưa có tệp cấu hình triển khai đa môi trường.</td>
+    </tr>
+</table>
+
+<h2>Mục 2. Kế hoạch và Hành động cải tiến đã thực thi trong Sprint 2</h2>
+<p>Để khắc phục toàn diện 3 vấn đề trên, nhóm đã triển khai kế hoạch hành động chi tiết trong toàn bộ Sprint 2 với sự tham gia của 100% thành viên:</p>
+
+<table>
+    <tr>
+        <th style="width: 22%;">Lĩnh vực cải tiến</th>
+        <th style="width: 44%;">Hành động thực thi cụ thể trong Sprint 2</th>
+        <th style="width: 16%;">Người phụ trách</th>
+        <th style="width: 18%;">Minh chứng kiểm chứng</th>
+    </tr>
+    <tr>
+        <td><strong>1. Kỷ luật Daily Scrum & Biên bản họp chi tiết</strong></td>
+        <td>
+            • Thiết lập khung giờ họp cố định: <strong>21:00 – 21:15 hàng ngày</strong> qua Google Meet (Timebox 15 phút nghiêm ngặt).<br>
+            • Soạn thảo đầy đủ biên bản theo chuẩn 3 câu hỏi Scrum kinh điển cho cả <strong>7 ngày liên tiếp</strong>.<br>
+            • Thiết lập <strong>Nhật ký trở ngại (Obstacle Log) 6 cột chuẩn</strong> theo quy định tại Trang 8 Phiếu hồ sơ Buổi 3, xử lý dứt điểm 5/5 trở ngại dưới 24h.
+        </td>
+        <td>ScrumMaster:<br>Nguyễn Hoàng Minh</td>
+        <td>
+            <span class="badge-fixed">Đã hoàn thành</span><br>
+            • File B02 Bien ban hop Daily Scrum (7 ngày)<br>
+            • File B02 Nhat ky tro ngai (6 cột chuẩn)<br>
+            • Obstacle_Log.xlsx trên Drive
+        </td>
+    </tr>
+    <tr>
+        <td><strong>2. Chuẩn hóa Definition of Done 5 tầng</strong></td>
+        <td>
+            • Tách bạch hoàn toàn giữa AC và DoD.<br>
+            • Ban hành bộ DoD 5 tầng chất lượng định lượng cụ thể:<br>
+            &nbsp;&nbsp;1. Mã nguồn: Chuẩn ESLint, PEP8, sạch debug/hardcode, Peer Review qua PR.<br>
+            &nbsp;&nbsp;2. Kiểm thử: 100% AC đạt; <strong>97/97 TC backend PASS</strong> + <strong>10/10 Acceptance TC PASS</strong>; 0 lỗi hồi quy.<br>
+            &nbsp;&nbsp;3. Tích hợp: <code>npm run build</code> sạch; chạy ổn định với MySQL container.<br>
+            &nbsp;&nbsp;4. Tài liệu: Conventional Commits; cập nhật doc/ và nhật ký trở ngại.<br>
+            &nbsp;&nbsp;5. Nghiệm thu: Demo thực tế và PO xác nhận Accepted.
+        </td>
+        <td>ScrumMaster & PO:<br>Nguyễn Hoàng Minh & Chử Đình Huy</td>
+        <td>
+            <span class="badge-fixed">Đã hoàn thành</span><br>
+            • File B02 Product Backlog va DoD<br>
+            • <code>test/sprint2-acceptance.test.jsx</code> (10 TC)<br>
+            • <code>test/runtests.py</code> (97 TC PASS 100%)
+        </td>
+    </tr>
+    <tr>
+        <td><strong>3. Đóng gói môi trường & Kế hoạch Deploy</strong></td>
+        <td>
+            • Xây dựng file <code>config/schema.sql</code> khởi tạo 7 bảng quan hệ chuẩn theo ERD.<br>
+            • Thiết lập môi trường container hóa với <code>docker-compose.yml</code> (dịch vụ <code>db</code> MySQL 8.0, cấu hình port <code>3307:3306</code> tránh đụng độ MySQL Windows).<br>
+            • Nâng cấp <code>webapp/database.py</code> kết nối và tự động đồng bộ 2 chiều RAM - MySQL.<br>
+            • Xây dựng kịch bản build production và file cấu hình triển khai cloud <code>render.yaml</code>.
+        </td>
+        <td>DevOps & Backend:<br>Nguyễn Hoàng Minh & Hoàng Đức Minh</td>
+        <td>
+            <span class="badge-fixed">Đã hoàn thành</span><br>
+            • <code>config/schema.sql</code> (7 bảng ERD)<br>
+            • <code>docker-compose.yml</code> (port 3307)<br>
+            • <code>webapp/database.py</code><br>
+            • Git commits <code>60d3f23</code> & <code>36294ff</code>
+        </td>
+    </tr>
+</table>
+
+<h2>Mục 3. Bảng đối chiếu kết quả trước và sau cải tiến (Sprint 1 vs Sprint 2)</h2>
+<table>
+    <tr>
+        <th style="width: 22%;">Tiêu chí đánh giá</th>
+        <th style="width: 28%;">Hiện trạng Sprint 1 (Bị nhận xét)</th>
+        <th style="width: 35%;">Kết quả đạt được ở Sprint 2</th>
+        <th style="width: 15%;">Đánh giá</th>
+    </tr>
+    <tr>
+        <td><strong>Họp Daily Scrum & Biên bản</strong></td>
+        <td>Chỉ có 01 biên bản sơ kết cuối sprint; thiếu biên bản họp hàng ngày.</td>
+        <td>Có đầy đủ 07 biên bản Daily Scrum (21:00 - 21:15) + Planning + Review; tỷ lệ tham gia 100%.</td>
+        <td><span class="badge-pass">Khắc phục 100%</span></td>
+    </tr>
+    <tr>
+        <td><strong>Nhật ký trở ngại (Obstacle Log)</strong></td>
+        <td>Chưa lập nhật ký trở ngại; xử lý rào cản kỹ thuật tự phát.</td>
+        <td>Lập bảng theo dõi 6 cột chuẩn; xử lý dứt điểm 5/5 trở ngại trong vòng dưới 24h.</td>
+        <td><span class="badge-pass">Khắc phục 100%</span></td>
+    </tr>
+    <tr>
+        <td><strong>Definition of Done (DoD)</strong></td>
+        <td>Mù mờ, mang tính định tính, lẫn lộn giữa AC và tiêu chuẩn hoàn thành.</td>
+        <td>Bộ chuẩn 5 tầng định lượng rõ ràng: 100% test pass, zero warning, peer review và PO demo.</td>
+        <td><span class="badge-pass">Khắc phục 100%</span></td>
+    </tr>
+    <tr>
+        <td><strong>Độ bao phủ kiểm thử (QA)</strong></td>
+        <td>Chỉ có kiểm thử backend cơ bản; chưa có bộ Acceptance Test riêng cho sprint.</td>
+        <td>Bổ sung 10 Acceptance Test Cases (<code>sprint2-acceptance.test.jsx</code>) + 97 backend TC -> PASS 100%.</td>
+        <td><span class="badge-pass">Nâng cấp vượt bậc</span></td>
+    </tr>
+    <tr>
+        <td><strong>Môi trường CSDL & Deploy</strong></td>
+        <td>Chưa có Docker; lưu dữ liệu tạm bằng file snapshot; chưa có cấu hình deploy.</td>
+        <td>Đóng gói Docker Compose (MySQL 8.0, port 3307); DDL schema 7 bảng; cấu hình <code>render.yaml</code>.</td>
+        <td><span class="badge-pass">Khắc phục 100%</span></td>
+    </tr>
+</table>
+
+<h2>Mục 4. Kế hoạch duy trì và Cải tiến tiếp nối cho Sprint 3</h2>
+<p>
+1. <strong>Tích hợp CI/CD tự động trên GitHub Actions:</strong> Tự động kích hoạt kiểm thử 97 test cases backend và kiểm tra build production mỗi khi tạo Pull Request.<br>
+2. <strong>Triển khai Staging Server trực tuyến:</strong> Kích hoạt dịch vụ cloud thông qua <code>render.yaml</code> để phục vụ demo trực tiếp từ xa cho các bên liên quan.<br>
+3. <strong>Hiện thực hóa US-05 (Phân quyền RBAC):</strong> Tiếp tục áp dụng nghiêm ngặt bộ DoD 5 tầng cho các Epic tính năng lớn trong Sprint 3.
+</p>
+
+<div class="sign-box">
+    <div class="sign-col">
+        <strong>XÁC NHẬN CỦA SCRUMMASTER</strong><br>
+        <em>(Ký và ghi rõ họ tên)</em><br><br><br><br>
+        <strong>Nguyễn Hoàng Minh</strong><br>
+        <em>Ngày 03 tháng 11 năm 2026</em>
+    </div>
+    <div class="sign-col">
+        <strong>PHÊ DUYỆT CỦA PRODUCT OWNER</strong><br>
+        <em>(Ký và ghi rõ họ tên)</em><br><br><br><br>
+        <strong>Chử Đình Huy</strong><br>
+        <em>Ngày 03 tháng 11 năm 2026</em>
+    </div>
+</div>
+
+</body>
+</html>
