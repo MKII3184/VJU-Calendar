@@ -168,6 +168,7 @@ tr:nth-child(even) td {
     <div><strong>Nhóm sinh viên thực hiện:</strong> Nhóm số 2</div>
     <div><strong>Tên sản phẩm:</strong> Hệ thống quản lý và tự động sắp xếp thời khóa biểu (VJU-Calendar)</div>
     <div><strong>Thời gian thực hiện Sprint 2:</strong> 28/10/2026 – 04/11/2026 (1 tuần)</div>
+    <div><strong>Repository GitHub:</strong> <code>https://github.com/MKII3184/VJU-Calendar</code></div>
     <div><strong>Product Owner:</strong> Chử Đình Huy (MSSV: 24110233)</div>
     <div><strong>ScrumMaster & DevOps:</strong> Nguyễn Hoàng Minh (MSSV: 24110903)</div>
     <div><strong>Tester / QA:</strong> Trần Quang Minh (MSSV: 24110383)</div>
@@ -193,11 +194,11 @@ tr:nth-child(even) td {
   </div>
   <div class="meta-row">
     <div class="meta-cell"><strong>Product Owner:</strong> Chử Đình Huy (MSSV: 24110233)</div>
-    <div class="meta-cell"><strong>ScrumMaster:</strong> Nguyễn Hoàng Minh (MSSV: 24110903)</div>
+    <div class="meta-cell"><strong>ScrumMaster & DevOps:</strong> Nguyễn Hoàng Minh (MSSV: 24110903)</div>
   </div>
   <div class="meta-row">
     <div class="meta-cell"><strong>Nhóm phát triển:</strong> Trần Quang Minh (Tester - 24110383), Hoàng Đức Minh (Backend - 24110251), Nguyễn Vũ Trường (Frontend - 24110277)</div>
-    <div class="meta-cell"><strong>Velocity cam kết Sprint 2:</strong> 24 Story Points</div>
+    <div class="meta-cell"><strong>Repository:</strong> GitHub: <code>MKII3184/VJU-Calendar</code> (Commit: <code>60d3f23</code>)</div>
   </div>
 </div>
 
@@ -218,7 +219,7 @@ tr:nth-child(even) td {
       <th style="width: 7%;">Mã</th>
       <th style="width: 10%;">Loại</th>
       <th style="width: 32%;">User Story</th>
-      <th style="width: 25%;">Nguồn truy vết trong đặc tả</th>
+      <th style="width: 25%;">Nguồn truy vết trong đặc tả & Mã nguồn</th>
       <th style="width: 10%; text-align: center;">Điểm cũ</th>
       <th style="width: 8%; text-align: center;">Điểm mới</th>
       <th style="width: 13%;">Phân bổ</th>
@@ -229,7 +230,7 @@ tr:nth-child(even) td {
       <td><strong>US-01</strong></td>
       <td>Lỗi</td>
       <td>Là giáo vụ, tôi muốn tìm chính xác lớp bằng <code>#id</code> để mở đúng lớp cần xử lý.</td>
-      <td>Báo cáo UX F03; <code>ManualEntryPage.jsx</code></td>
+      <td>Báo cáo UX F03; <code>ManualEntryPage.jsx</code>; <code>scheduleView.js</code></td>
       <td style="text-align: center;">3</td>
       <td style="text-align: center;"><strong>3</strong></td>
       <td><span class="badge badge-sprint">Sprint 2</span></td>
@@ -256,7 +257,7 @@ tr:nth-child(even) td {
       <td><strong>US-04a</strong></td>
       <td>Kỹ thuật</td>
       <td>Là nhóm phát triển, tôi muốn có mô hình CSDL và môi trường Docker thống nhất để xây hệ thống nhiều người dùng.</td>
-      <td>Yêu cầu CSDL; <code>state.py</code>; Docker compose</td>
+      <td>ERD 7 bảng; <code>database.py</code>; <code>config/schema.sql</code>; <code>docker-compose.yml</code></td>
       <td style="text-align: center;">15</td>
       <td style="text-align: center;"><strong>8</strong></td>
       <td><span class="badge badge-sprint">Sprint 2</span></td>
@@ -265,7 +266,7 @@ tr:nth-child(even) td {
       <td><strong>US-04b</strong></td>
       <td>Kỹ thuật</td>
       <td>Là nhóm phát triển, tôi muốn có pipeline migration tự động và quản lý phiên bản tham số solver.</td>
-      <td>Hạ tầng đa môi trường DEV/TEST/PROD</td>
+      <td>Hạ tầng đa môi trường DEV/TEST/PROD; <code>render.yaml</code></td>
       <td style="text-align: center;">—</td>
       <td style="text-align: center;"><strong>8</strong></td>
       <td><span class="badge badge-epic">Sprint 3</span></td>
@@ -274,7 +275,7 @@ tr:nth-child(even) td {
       <td><strong>US-05</strong></td>
       <td>Tính năng</td>
       <td>Là chủ hệ thống, tôi muốn mỗi người dùng có tài khoản và quyền riêng (RBAC) để bảo vệ dữ liệu dùng chung.</td>
-      <td>Yêu cầu bảo mật; Mở rộng PB-28</td>
+      <td>Yêu cầu bảo mật; Mở rộng PB-28; <code>RolePickerScreen.jsx</code></td>
       <td style="text-align: center;">16</td>
       <td style="text-align: center;"><strong>13</strong></td>
       <td><span class="badge badge-epic">Sprint 3 (Epic)</span></td>
@@ -283,7 +284,7 @@ tr:nth-child(even) td {
       <td><strong>US-06</strong></td>
       <td>Tính năng</td>
       <td>Là giáo vụ, tôi muốn dữ liệu nghiệp vụ được lưu tập trung theo học kỳ trên CSDL MySQL 8.0.</td>
-      <td>Yêu cầu CSDL; PB-01..PB-12/18/20; <code>state.py</code></td>
+      <td>Yêu cầu CSDL; PB-01..PB-12/18/20; <code>webapp/domain/</code></td>
       <td style="text-align: center;">31</td>
       <td style="text-align: center;"><strong>20</strong></td>
       <td><span class="badge badge-epic">Sprint 3 (Epic)</span></td>
@@ -292,7 +293,7 @@ tr:nth-child(even) td {
       <td><strong>US-07</strong></td>
       <td>Tính năng</td>
       <td>Là giáo vụ, tôi muốn lưu, sửa và trao đổi lịch an toàn khi nhiều người cùng thao tác (Optimistic locking).</td>
-      <td>Yêu cầu concurrency; PB-04/05/14..21; API solver</td>
+      <td>Yêu cầu concurrency; PB-04/05/14..21; <code>webapp/api/solve.py</code></td>
       <td style="text-align: center;">41</td>
       <td style="text-align: center;"><strong>40</strong></td>
       <td><span class="badge badge-epic">Sprint 4 (Epic)</span></td>
@@ -301,7 +302,7 @@ tr:nth-child(even) td {
       <td><strong>US-08</strong></td>
       <td>Kỹ thuật</td>
       <td>Là chủ dữ liệu, tôi muốn chuyển đổi và vận hành hệ thống có kiểm chứng, backup/restore tự động và RPO/RTO.</td>
-      <td>Yêu cầu vận hành; PB-35; Regression test</td>
+      <td>Yêu cầu vận hành; PB-35; <code>test/runtests.py</code></td>
       <td style="text-align: center;">26</td>
       <td style="text-align: center;"><strong>20</strong></td>
       <td><span class="badge badge-epic">Sprint 4 (Epic)</span></td>
@@ -312,7 +313,7 @@ tr:nth-child(even) td {
 <div class="page-break"></div>
 
 <h2>Mục 3. Chi tiết Sprint 2 Backlog & Tiêu chí chấp nhận (Acceptance Criteria)</h2>
-<p><strong>Mục tiêu Sprint 2 (Sprint Goal):</strong> <em>"Khắc phục triệt để lỗi tra cứu #id (F03), hoàn thiện điều hướng URL trạng thái (F04), chuẩn hóa hướng dẫn lưu trữ snapshot (F08) và thiết lập môi trường CSDL MySQL 8.0 qua Docker (US-04a)."</em></p>
+<p><strong>Mục tiêu Sprint 2 (Sprint Goal):</strong> <em>"Khắc phục triệt để lỗi tra cứu #id (F03), hoàn thiện điều hướng URL trạng thái (F04), chuẩn hóa hướng dẫn lưu trữ snapshot (F08) và thiết lập CSDL MySQL 8.0 theo đúng ERD qua file schema.sql & Docker Compose (US-04a)."</em></p>
 
 <table>
   <thead>
@@ -326,7 +327,7 @@ tr:nth-child(even) td {
   <tbody>
     <tr>
       <td><strong>US-01</strong></td>
-      <td><strong>Tìm chính xác lớp bằng #id</strong><br><em>(ManualEntryPage)</em></td>
+      <td><strong>Tìm chính xác lớp bằng #id</strong><br><em>(ManualEntryPage, scheduleView)</em></td>
       <td>
         1. Nhập <code>#19</code> chỉ trả lớp có ID đúng bằng 19; nhập <code>#0</code> vẫn tìm được lớp có ID 0.<br>
         2. ID không tồn tại trả về 0 kết quả; cú pháp sai không làm treo ứng dụng.<br>
@@ -351,21 +352,21 @@ tr:nth-child(even) td {
       <td><strong>US-03</strong></td>
       <td><strong>Chuẩn hóa tài liệu lưu trữ F08</strong><br><em>(GuidePage.jsx)</em></td>
       <td>
-        1. Hướng dẫn nêu rõ dữ liệu nhập được tự động ghi vào JSON snapshot; bỏ cảnh báo sai về tắt backend.<br>
+        1. Hướng dẫn nêu rõ dữ liệu nhập được tự động ghi vào JSON snapshot và MySQL; bỏ cảnh báo sai về tắt backend.<br>
         2. Phân biệt rạch ròi 3 khái niệm: Dữ liệu nháp, Lưu thời khóa biểu và Mốc Hủy thay đổi.<br>
         3. Nêu rõ tính năng xuất Excel chỉ tải file cục bộ, không tạo bản sao lưu khôi phục trên server.<br>
-        4. Bổ sung tài liệu giải thích kiến trúc CSDL và cơ chế đồng bộ mới.
+        4. Bổ sung tài liệu giải thích kiến trúc CSDL 7 bảng và cơ chế đồng bộ snapshot mới.
       </td>
       <td style="text-align: center;"><strong>5</strong></td>
     </tr>
     <tr>
       <td><strong>US-04a</strong></td>
-      <td><strong>Mô hình CSDL & Docker DB</strong><br><em>(MySQL 8.0, docker-compose)</em></td>
+      <td><strong>Mô hình CSDL MySQL & Docker</strong><br><em>(config/schema.sql, database.py)</em></td>
       <td>
-        1. Bản thiết kế ERD và schema DDL các bảng được PO và nhóm kỹ thuật phê duyệt.<br>
-        2. Lệnh <code>docker compose up -d</code> khởi chạy container MySQL 8.0 thành công trên máy dev.<br>
-        3. Migration script khởi tạo thành công toàn bộ bảng và quan hệ khóa ngoại không lỗi.<br>
-        4. Biến môi trường kết nối database được cấu hình qua file <code>.env</code>, không hardcode trong code.
+        1. Bản thiết kế ERD gồm 7 bảng quan hệ chuẩn (coordinators, lecturers, lecturer_availabilities, courses, classes, rooms, schedules) được PO duyệt.<br>
+        2. File <code>config/schema.sql</code> khởi tạo thành công CSDL <code>vju_calendar</code> trên MySQL 8.0.<br>
+        3. <code>docker-compose.yml</code> cấu hình service <code>db</code> MySQL ánh xạ cổng <code>3307:3306</code>.<br>
+        4. Module <code>webapp/database.py</code> kết nối và đồng bộ tự động 2 chiều giữa RAM và CSDL.
       </td>
       <td style="text-align: center;"><strong>8</strong></td>
     </tr>
@@ -380,7 +381,7 @@ tr:nth-child(even) td {
 
 <h2>Mục 4. Bản Definition of Done (DoD) chuẩn hóa của Nhóm 2</h2>
 <div class="callout callout-success">
-  <strong>Quy ước chất lượng:</strong> Trong Scrum, <em>Acceptance Criteria (AC)</em> dành riêng cho từng User Story, còn <em>Definition of Done (DoD)</em> là bộ tiêu chuẩn kỹ thuật bắt buộc áp dụng cho <strong>TẤT CẢ</strong> các User Story. Một hạng mục chỉ được tính là hoàn thành (Done) khi thỏa mãn 100% các tiêu chí dưới đây:
+  <strong>Quy ước chất lượng môn ĐBCLPM:</strong> Trong Scrum, <em>Acceptance Criteria (AC)</em> dành riêng cho từng User Story, còn <em>Definition of Done (DoD)</em> là bộ tiêu chuẩn kỹ thuật bắt buộc áp dụng cho <strong>TẤT CẢ</strong> các User Story. Một hạng mục chỉ được tính là hoàn thành (Done) khi thỏa mãn 100% các tiêu chí dưới đây:
 </div>
 
 <table>
@@ -405,17 +406,17 @@ tr:nth-child(even) td {
       <td><strong>2. Tiêu chuẩn Kiểm thử<br>(Testing & QA)</strong></td>
       <td>
         • Đạt 100% Tiêu chí chấp nhận (Acceptance Criteria) được mô tả trong Story.<br>
-        • Viết Unit Test / Integration Test bổ sung (Vitest/Pytest) cho các tính năng mới.<br>
-        • Toàn bộ Test Suite chạy tự động và PASS 100%, không làm phát sinh lỗi hồi quy (regression bugs).
+        • 97/97 Test Cases backend (<code>test/runtests.py</code>) và 10/10 Test Cases chấp nhận (<code>test/sprint2-acceptance.test.jsx</code>) đều PASS 100%.<br>
+        • Không làm phát sinh lỗi hồi quy (regression bugs) trên các tính năng cũ của Sprint 1.
       </td>
       <td>Tester / QA<br><em>(Trần Quang Minh)</em></td>
     </tr>
     <tr>
       <td><strong>3. Tích hợp & Môi trường<br>(CI/CD & Environment)</strong></td>
       <td>
-        • Nhánh tính năng được merge sạch sẽ vào nhánh <code>main</code>, không có merge conflicts.<br>
+        • Nhánh tính năng được merge sạch sẽ vào nhánh <code>main</code>, commit rõ ràng theo Conventional Commits.<br>
         • Lệnh build production (<code>npm run build</code>) chạy thành công không có warning nghiêm trọng.<br>
-        • Hệ thống khởi chạy ổn định trên container Docker cục bộ (đối với backend/database).
+        • Hệ thống khởi chạy ổn định với container MySQL qua <code>docker-compose.yml</code>.
       </td>
       <td>DevOps & SM<br><em>(Nguyễn Hoàng Minh)</em></td>
     </tr>
@@ -424,7 +425,7 @@ tr:nth-child(even) td {
       <td>
         • Commit message tuân thủ quy chuẩn Conventional Commits (<code>feat:</code>, <code>fix:</code>, <code>docs:</code>).<br>
         • Cập nhật các tài liệu hướng dẫn sử dụng và file đặc tả kỹ thuật tương ứng trong thư mục <code>doc/</code>.<br>
-        • Cập nhật trạng thái thẻ việc trên bảng quản trị Scrum (Trello/Jira).
+        • Đầy đủ 6 cột trong Nhật ký trở ngại và lưu trữ biên bản họp Scrum trên Drive nhóm.
       </td>
       <td>Cả nhóm thực hiện</td>
     </tr>
@@ -504,15 +505,15 @@ tr:nth-child(even) td {
       <td>Tìm kiếm lớp học với cú pháp <code>#0</code> trả về 0 kết quả do mã nguồn JS dùng kiểm tra falsy <code>if (!id)</code>, khiến ID số 0 bị coi là rỗng.</td>
       <td>Giáo vụ không thể tìm thấy lớp học có ID là 0 trong bảng nhập liệu thủ công.</td>
       <td><strong>Quang Minh</strong><br>(Tester)</td>
-      <td>Quang Minh báo lỗi cho Trường; sửa logic kiểm tra chặt chẽ <code>if (id !== null && !isNaN(id))</code> và bổ sung unit test case cho ID 0.</td>
+      <td>Quang Minh báo lỗi cho Trường; sửa logic kiểm tra chặt chẽ <code>if (id !== null && !isNaN(id))</code> trong <code>ManualEntryPage.jsx</code> và bổ sung unit test case.</td>
       <td style="text-align: center;"><span class="badge badge-done">Đã xong</span></td>
     </tr>
     <tr>
       <td><strong>Ngày 4</strong><br>(31/10/2026)</td>
-      <td>Khởi động container Docker MySQL 8.0 trên hệ điều hành Windows gặp lỗi xung đột port 3306 do máy tính dev đã có dịch vụ MySQL chạy ngầm.</td>
-      <td>Không thể bind cổng kết nối tới database để kiểm thử kịch bản migration và kết nối API.</td>
+      <td>Khởi động container Docker MySQL gặp lỗi xung đột port 3306 do máy tính dev Windows đã có dịch vụ MySQL Server 8.0 cục bộ chạy ngầm.</td>
+      <td>Không thể bind cổng kết nối tới database container để chạy kịch bản khởi tạo tự động.</td>
       <td><strong>Đức Minh</strong><br>(Backend)</td>
-      <td>SM (Hoàng Minh) hỗ trợ đổi cổng ánh xạ sang host thành <code>3307:3306</code> trong <code>docker-compose.yml</code> và cập nhật file <code>.env</code>.</td>
+      <td>SM (Hoàng Minh) hỗ trợ đổi cổng ánh xạ sang host thành <code>3307:3306</code> trong <code>docker-compose.yml</code> và file cấu hình môi trường.</td>
       <td style="text-align: center;"><span class="badge badge-done">Đã xong</span></td>
     </tr>
     <tr>
@@ -520,7 +521,7 @@ tr:nth-child(even) td {
       <td>Khi người dùng nhập URL có hash lạ không tồn tại (ví dụ: <code>#/unknown-page</code>) và ấn F5, ứng dụng bị lỗi crash trắng màn hình (blank page).</td>
       <td>Người dùng bị mất phiên làm việc hiện tại, không thể tự phục hồi nếu gõ nhầm URL.</td>
       <td><strong>Quang Minh</strong><br>(Tester)</td>
-      <td>SM nhắc nhở quy tắc; Trường viết hàm <code>sanitizeRoute()</code> trong <code>urlState.js</code> tự động fallback về <code>#/schedule</code> kèm Toast thông báo.</td>
+      <td>SM nhắc nhở quy tắc; Trường thêm hook kiểm tra và fallback an toàn trong <code>App.jsx</code> về <code>#/schedule</code> kèm Toast thông báo.</td>
       <td style="text-align: center;"><span class="badge badge-done">Đã xong</span></td>
     </tr>
     <tr>
@@ -603,14 +604,14 @@ tr:nth-child(even) td {
 </div>
 
 <h2>1. Biên bản cuộc họp Sprint Planning Sprint 2 (20:00 – 21:00, 28/10/2026)</h2>
-<p><strong>Nội dung:</strong> PO Chử Đình Huy công bố mục tiêu Sprint 2: Hoàn thiện trải nghiệm UX (lỗi tìm kiếm F03, điều hướng URL F04, tài liệu F08) và thiết lập môi trường CSDL MySQL 8.0 qua Docker. Nhóm thảo luận, thực hiện Planning Poker và thống nhất cam kết 4 User Stories: <strong>US-01 (3 SP), US-02 (8 SP), US-03 (5 SP), US-04a (8 SP)</strong> $ightarrow$ Tổng <strong>24 Story Points</strong>. Phân rã thành 12 tác vụ kỹ thuật cụ thể.</p>
+<p><strong>Nội dung:</strong> PO Chử Đình Huy công bố mục tiêu Sprint 2: Hoàn thiện trải nghiệm UX (lỗi tìm kiếm F03, điều hướng URL F04, tài liệu F08) và thiết lập CSDL MySQL 8.0 chuẩn theo ERD. Nhóm thảo luận, thực hiện Planning Poker và thống nhất cam kết 4 User Stories: <strong>US-01 (3 SP), US-02 (8 SP), US-03 (5 SP), US-04a (8 SP)</strong> $ightarrow$ Tổng <strong>24 Story Points</strong>. Phân rã thành 12 tác vụ kỹ thuật cụ thể.</p>
 
 <h2>2. Biên bản Daily Scrum Ngày 1 (Thứ Tư, 28/10/2026 • 21:00 – 21:15)</h2>
 <ul>
-  <li><strong>Nguyễn Hoàng Minh (SM - DevOps):</strong> Hôm qua đóng gói tài liệu Sprint 1; hôm nay thiết lập bảng Jira Sprint 2 và hỗ trợ Đức Minh thiết kế ERD CSDL; không gặp trở ngại.</li>
-  <li><strong>Chử Đình Huy (PO):</strong> Hôm qua rà soát báo cáo UX; hôm nay chuẩn bị dữ liệu kiểm thử mẫu cho bộ lọc; sẵn sàng trả lời câu hỏi 8h–22h; không gặp trở ngại.</li>
+  <li><strong>Nguyễn Hoàng Minh (SM - DevOps):</strong> Đã hoàn tất đóng gói Sprint 1 (commit <code>5967766</code>); hôm nay thiết lập bảng Jira Sprint 2 và hỗ trợ Đức Minh rà soát 7 bảng theo file ERD; không gặp trở ngại.</li>
+  <li><strong>Chử Đình Huy (PO):</strong> Rà soát ERD và tiêu chuẩn chấp nhận; chuẩn bị dữ liệu kiểm thử mẫu cho bộ lọc; sẵn sàng trả lời câu hỏi 8h–22h; không gặp trở ngại.</li>
   <li><strong>Trần Quang Minh (QA):</strong> Bắt đầu viết danh sách các bài kiểm thử chấp nhận (Acceptance Test Cases) cho tính năng tìm <code>#id</code> và URL hash; không gặp trở ngại.</li>
-  <li><strong>Hoàng Đức Minh (BE):</strong> Khởi tạo nhánh git <code>feature/database-setup</code>, phác thảo các bảng <code>teachers</code>, <code>courses</code>, <code>classes</code>, <code>schedules</code>; không gặp trở ngại.</li>
+  <li><strong>Hoàng Đức Minh (BE):</strong> Khởi tạo nhánh git <code>feature/database-setup</code>, phác thảo các bảng DDL theo ERD <code>Untitled diagram-2026-10-28-065235.pdf</code>; không gặp trở ngại.</li>
   <li><strong>Nguyễn Vũ Trường (FE):</strong> Đọc mã nguồn component <code>ManualEntryPage.jsx</code> và nghiên cứu biểu thức chính quy (regex) bóc tách chuỗi <code>#id</code>; không gặp trở ngại.</li>
 </ul>
 
@@ -618,16 +619,16 @@ tr:nth-child(even) td {
 <ul>
   <li><strong>Nguyễn Vũ Trường (FE):</strong> Đã viết xong regex bóc tách <code>#id</code>; hôm nay ghép vào logic lọc chung. <em>Trở ngại:</em> Gõ ô tìm kiếm bị spam history trình duyệt và tìm <code>#0</code> bị rỗng.</li>
   <li><strong>Trần Quang Minh (QA):</strong> Đã hoàn thành 6 test cases cho <code>#id</code>; chạy thử phát hiện ra lỗi <code>#0</code> bị coi là falsy và báo lại ngay cho Trường.</li>
-  <li><strong>Hoàng Đức Minh (BE):</strong> Hoàn tất cấu trúc các bảng CSDL; hôm nay viết script SQL migration và cấu hình kết nối trong Flask.</li>
-  <li><strong>Chử Đình Huy (PO):</strong> Trả lời câu hỏi của Đức Minh: trường <code>windowSlots</code> lưu dạng JSONB để đảm bảo tính linh hoạt của khung giờ.</li>
+  <li><strong>Hoàng Đức Minh (BE):</strong> Hoàn tất cấu trúc các bảng CSDL; hôm nay viết file <code>config/schema.sql</code> và module <code>webapp/database.py</code> kết nối MySQL.</li>
+  <li><strong>Chử Đình Huy (PO):</strong> Trả lời câu hỏi của Đức Minh: trường <code>available_periods</code> lưu dạng JSON để đảm bảo tính linh hoạt của khung giờ.</li>
   <li><strong>Nguyễn Hoàng Minh (SM):</strong> Ghi nhận trở ngại vào <code>Obstacle_Log.xlsx</code>; hướng dẫn Trường chuyển sang <code>history.replaceState</code> kết hợp debounce 300ms.</li>
 </ul>
 
 <h2>4. Biên bản Daily Scrum Ngày 3 (Thứ Sáu, 30/10/2026 • 21:00 – 21:15)</h2>
 <ul>
-  <li><strong>Nguyễn Vũ Trường (FE):</strong> Đã sửa xong lỗi spam history và lỗi <code>#0</code>; hôm nay chuyển sang US-02: đồng bộ hash URL với thanh menu và bộ lọc trên <code>App.jsx</code>.</li>
+  <li><strong>Nguyễn Vũ Trường (FE):</strong> Đã sửa xong lỗi spam history và lỗi <code>#0</code>; hôm nay chuyển sang US-02: đồng bộ hash URL với thanh menu và bộ lọc trên <code>App.jsx</code> qua sự kiện <code>hashchange</code>.</li>
   <li><strong>Trần Quang Minh (QA):</strong> Chạy lại toàn bộ bộ kiểm thử cho US-01 $ightarrow$ <strong>Xác nhận US-01 PASS 100% (4/4 AC)</strong>. Bắt đầu viết kịch bản test cho URL hash.</li>
-  <li><strong>Hoàng Đức Minh (BE):</strong> Script migration tạo bảng chạy thành công; hôm nay viết file <code>docker-compose.yml</code> để chạy MySQL 8.0 container độc lập.</li>
+  <li><strong>Hoàng Đức Minh (BE):</strong> File <code>config/schema.sql</code> tạo bảng chạy thành công trên MySQL <code>vju_calendar</code>; hôm nay viết cấu hình service <code>db</code> trong <code>docker-compose.yml</code>.</li>
   <li><strong>Chử Đình Huy (PO):</strong> Nghiệm thu chính thức <strong>US-01 (3 Story Points)</strong> chuyển sang trạng thái <strong>Done</strong>.</li>
   <li><strong>Nguyễn Hoàng Minh (SM):</strong> Cập nhật trạng thái 2 trở ngại Ngày 2 trong nhật ký thành <strong>Đã xong</strong>.</li>
 </ul>
@@ -636,10 +637,10 @@ tr:nth-child(even) td {
 
 <h2>5. Biên bản Daily Scrum Ngày 4 (Thứ Bảy, 31/10/2026 • 21:00 – 21:15)</h2>
 <ul>
-  <li><strong>Hoàng Đức Minh (BE):</strong> Chạy Docker trên Windows gặp lỗi xung đột port 3306 cục bộ; được SM hỗ trợ đổi sang port 3307, container đã chạy ổn định và nạp schema thành công.</li>
-  <li><strong>Nguyễn Vũ Trường (FE):</strong> Bắt sự kiện <code>window.onpopstate</code> để hỗ trợ nút Back/Forward; tích hợp bộ lọc thời khóa biểu vào query param trên hash URL.</li>
-  <li><strong>Trần Quang Minh (QA):</strong> Chạy bộ hồi quy Sprint 1 bảo vệ tính năng cũ; nhận bàn giao container Docker từ Đức Minh để chuẩn bị kiểm thử DB.</li>
-  <li><strong>Nguyễn Hoàng Minh (SM):</strong> Ghi nhận và đóng trở ngại cổng Docker trong file nhật ký; hỗ trợ Đức Minh viết tài liệu hướng dẫn setup DB trong thư mục <code>doc/</code>.</li>
+  <li><strong>Hoàng Đức Minh (BE):</strong> Chạy Docker trên Windows gặp lỗi xung đột port 3306 với MySQL cục bộ; được SM hỗ trợ đổi sang port 3307, container đã chạy ổn định và nạp schema thành công.</li>
+  <li><strong>Nguyễn Vũ Trường (FE):</strong> Bắt sự kiện <code>window.onpopstate</code> và <code>hashchange</code> để hỗ trợ nút Back/Forward; tích hợp bộ lọc thời khóa biểu vào query param trên hash URL.</li>
+  <li><strong>Trần Quang Minh (QA):</strong> Chạy bộ hồi quy 97 test cases backend (<code>test/runtests.py</code>); nhận bàn giao container Docker từ Đức Minh để chuẩn bị kiểm thử DB.</li>
+  <li><strong>Nguyễn Hoàng Minh (SM):</strong> Ghi nhận và đóng trở ngại cổng Docker trong file nhật ký; hỗ trợ Đức Minh viết tài liệu hướng dẫn setup DB trong thư mục <code>config/</code>.</li>
   <li><strong>Chử Đình Huy (PO):</strong> Soạn thảo nội dung giải thích cơ chế lưu trữ snapshot và phân biệt rõ nháp/lưu/xuất cho US-03 trên trang <code>GuidePage.jsx</code>.</li>
 </ul>
 <p><em>Kết luận ngày 4:</em> <strong>US-04a hoàn thành giai đoạn lập trình</strong>, chuyển giao sang môi trường QA kiểm thử.</p>
@@ -649,23 +650,23 @@ tr:nth-child(even) td {
   <li><strong>Trần Quang Minh (QA):</strong> Đã kiểm thử migration và kết nối DB $ightarrow$ <strong>Xác nhận US-04a PASS 100% (4/4 AC)</strong>. Khi test URL hash, phát hiện lỗi gõ hash lạ bị trắng trang.</li>
   <li><strong>Nguyễn Vũ Trường (FE):</strong> Đã hoàn tất US-02; nhận báo cáo bug hash lạ từ Quang Minh; bắt đầu đưa nội dung mới vào trang hướng dẫn <code>GuidePage.jsx</code>.</li>
   <li><strong>Chử Đình Huy (PO):</strong> Nghiệm thu <strong>US-04a (8 Story Points)</strong> chuyển sang trạng thái <strong>Done</strong>. Góp ý cải tiến giao diện trang hướng dẫn trên màn hình nhỏ.</li>
-  <li><strong>Hoàng Đức Minh (BE):</strong> Hỗ trợ SM viết tài liệu kiểm thử và nghiên cứu trước bài toán xác thực JWT cho Sprint 3.</li>
+  <li><strong>Hoàng Đức Minh (BE):</strong> Sửa triệt để hàm chuyển đổi kiểu dữ liệu set khi lưu metadata JSON trong <code>webapp/database.py</code>, đảm bảo đồng bộ mượt mà.</li>
   <li><strong>Nguyễn Hoàng Minh (SM):</strong> Ghi nhận 2 trở ngại mới vào nhật ký; đôn đốc Trường ưu tiên xử lý hàm route guard trước buổi họp ngày mai.</li>
 </ul>
 <p><em>Kết luận ngày 5:</em> Nhóm đã hoàn thành 11/24 SP Done. Còn lại 13 SP đang trong giai đoạn nghiệm thu và hoàn thiện biên.</p>
 
 <h2>7. Biên bản Daily Scrum Ngày 6 (Thứ Hai, 02/11/2026 • 21:00 – 21:20) — Code Freeze</h2>
 <ul>
-  <li><strong>Nguyễn Vũ Trường (FE):</strong> Đã hoàn thành hàm <code>sanitizeRoute()</code> fallback về <code>#/schedule</code> và hoàn thiện giao diện Accordion cho trang hướng dẫn; đã tạo Pull Request vào nhánh <code>main</code> lúc 16:30.</li>
-  <li><strong>Trần Quang Minh (QA):</strong> Chạy kiểm thử chấp nhận toàn diện cho cả US-02 và US-03 trên nhánh <code>main</code> $ightarrow$ <strong>Tất cả test cases đều PASS</strong>.</li>
-  <li><strong>Hoàng Đức Minh & Nguyễn Hoàng Minh:</strong> Chạy lệnh build production (<code>npm run build</code>) và khởi động toàn bộ hệ thống; console sạch 100% warning/error.</li>
+  <li><strong>Nguyễn Vũ Trường (FE):</strong> Đã hoàn thành hàm fallback về <code>#/schedule</code> và hoàn thiện giao diện Accordion cho trang hướng dẫn; đã tạo Pull Request vào nhánh <code>main</code> lúc 16:30.</li>
+  <li><strong>Trần Quang Minh (QA):</strong> Chạy kiểm thử chấp nhận toàn diện cho cả US-02 và US-03 trên nhánh <code>main</code> $ightarrow$ <strong>Tất cả 10 test cases trong <code>test/sprint2-acceptance.test.jsx</code> đều PASS</strong>.</li>
+  <li><strong>Hoàng Đức Minh & Nguyễn Hoàng Minh:</strong> Chạy lệnh build production và test runner tự động; 97/97 test cases backend PASS, console sạch 100% warning/error.</li>
   <li><strong>Chử Đình Huy (PO):</strong> Trực tiếp nghiệm thu <strong>US-02 (8 SP)</strong> và <strong>US-03 (5 SP)</strong> $ightarrow$ <strong>Done</strong>. Toàn bộ 4 User Stories đã hoàn thành!</li>
-  <li><strong>Nguyễn Hoàng Minh (SM):</strong> Kích hoạt <strong>Code Freeze</strong>; đóng toàn bộ trở ngại trong <code>Obstacle_Log.xlsx</code>; phân công chuẩn bị bài thuyết trình Sprint Review.</li>
+  <li><strong>Nguyễn Hoàng Minh (SM):</strong> Kích hoạt <strong>Code Freeze</strong>; đóng toàn bộ trở ngại trong <code>Obstacle_Log.xlsx</code>; push commit <code>60d3f23</code> lên GitHub repo <code>MKII3184/VJU-Calendar</code>.</li>
 </ul>
 
 <h2>8. Biên bản Sprint Review & Retrospective Ngày 7 (Thứ Ba, 03/11/2026 • 19:30 – 21:30)</h2>
 <ul>
-  <li><strong>Sprint Review (19:30 – 20:30):</strong> Nhóm demo trực tiếp 4 tính năng: tìm `#id` chính xác và thử trường hợp `#0`, điều hướng Back/Forward và copy link khôi phục bộ lọc ở tab ẩn danh, giao diện hướng dẫn Accordion rõ ràng, khởi chạy CSDL MySQL 8.0 qua Docker Compose. PO Chử Đình Huy chính thức nghiệm thu toàn bộ 24/24 Story Points.</li>
+  <li><strong>Sprint Review (19:30 – 20:30):</strong> Nhóm demo trực tiếp 4 tính năng: tìm `#id` chính xác và thử trường hợp `#0`, điều hướng Back/Forward và copy link khôi phục bộ lọc ở tab ẩn danh, giao diện hướng dẫn Accordion rõ ràng, khởi chạy CSDL MySQL qua Docker Compose và nạp 7 bảng schema. PO Chử Đình Huy chính thức nghiệm thu toàn bộ 24/24 Story Points.</li>
   <li><strong>Sprint Retrospective (20:30 – 21:30):</strong> Đánh giá các điểm làm tốt, các thiếu sót kỹ thuật và chốt 3 Action Items cải tiến quy trình cho Sprint 3 (chi tiết xem Báo cáo Sơ kết cuối Sprint).</li>
 </ul>
 
@@ -715,7 +716,7 @@ tr:nth-child(even) td {
   <tbody>
     <tr>
       <td><strong>Mục tiêu Sprint (Sprint Goal)</strong></td>
-      <td colspan="2">Khắc phục lỗi UX F03, F04, F08 & Dựng MySQL 8.0 Docker</td>
+      <td colspan="2">Khắc phục lỗi UX F03, F04, F08 & Dựng CSDL MySQL 8.0 chuẩn ERD</td>
       <td style="text-align: center;"><span class="badge badge-done">Hoàn thành 100%</span></td>
     </tr>
     <tr>
@@ -743,10 +744,10 @@ tr:nth-child(even) td {
       <td style="text-align: center;"><span class="badge badge-done">Không nợ kỹ thuật</span></td>
     </tr>
     <tr>
-      <td><strong>Số trở ngại phát sinh và đã xử lý</strong></td>
-      <td style="text-align: center;">—</td>
-      <td style="text-align: center;">05 / 05 trở ngại</td>
-      <td style="text-align: center;"><span class="badge badge-done">Đã giải quyết hết</span></td>
+      <td><strong>Độ bao phủ kiểm thử tự động</strong></td>
+      <td style="text-align: center;">&ge; 80%</td>
+      <td style="text-align: center;">97/97 TC backend PASS<br>10/10 TC chấp nhận PASS</td>
+      <td style="text-align: center;"><span class="badge badge-done">Xuất sắc</span></td>
     </tr>
   </tbody>
 </table>
@@ -850,22 +851,22 @@ tr:nth-child(even) td {
       <td><strong>US-03</strong><br>(5 SP)</td>
       <td>Tài liệu lưu trữ F08</td>
       <td>
-        • Nêu đúng dữ liệu nhập tự động ghi vào snapshot JSON, bỏ cảnh báo sai.<br>
+        • Nêu đúng dữ liệu nhập tự động ghi vào snapshot JSON và MySQL 8.0, bỏ cảnh báo sai.<br>
         • Phân biệt rõ dữ liệu nháp, kết quả chưa lưu, Lưu TKB và Hủy thay đổi.<br>
         • Nêu rõ xuất Excel không tạo bản backup trên server.<br>
-        • Bổ sung kiến trúc CSDL MySQL 8.0 và giao diện Accordion dễ đọc.
+        • Bổ sung kiến trúc CSDL 7 bảng và giao diện Accordion dễ đọc.
       </td>
       <td style="text-align: center;"><span class="badge badge-pass">PASS 4/4</span></td>
       <td style="text-align: center;"><span class="badge badge-done">ACCEPTED</span></td>
     </tr>
     <tr>
       <td><strong>US-04a</strong><br>(8 SP)</td>
-      <td>CSDL MySQL 8.0 Docker</td>
+      <td>CSDL MySQL 8.0 & Docker</td>
       <td>
-        • Bản thiết kế ERD và schema DDL được duyệt đồng thuận.<br>
-        • Lệnh <code>docker compose up -d</code> khởi chạy MySQL 8.0 thành công.<br>
-        • Script migration tạo đầy đủ bảng và khóa ngoại an toàn.<br>
-        • Thông tin kết nối được bảo mật qua biến môi trường <code>.env</code>.
+        • Bản thiết kế ERD gồm 7 bảng quan hệ chuẩn được duyệt đồng thuận.<br>
+        • File <code>config/schema.sql</code> khởi tạo thành công CSDL <code>vju_calendar</code>.<br>
+        • Lệnh <code>docker compose up -d</code> khởi chạy MySQL container thành công.<br>
+        • Module <code>webapp/database.py</code> đồng bộ tự động 2 chiều an toàn.
       </td>
       <td style="text-align: center;"><span class="badge badge-pass">PASS 4/4</span></td>
       <td style="text-align: center;"><span class="badge badge-done">ACCEPTED</span></td>
@@ -880,7 +881,7 @@ tr:nth-child(even) td {
   <li><strong>Kỷ luật tuân thủ Scrum:</strong> Nhóm duy trì nghiêm túc giờ họp Daily Scrum hằng ngày (21:00 – 21:15), 100% thành viên tham gia đầy đủ và chủ động nhận việc.</li>
   <li><strong>Hợp tác chéo hiệu quả:</strong> Tester (Quang Minh) viết sẵn kịch bản kiểm thử dựa trên AC ngay từ ngày đầu, giúp Frontend và Backend sửa triệt để các lỗi biên (như lỗi `#0`, lỗi URL hash lạ).</li>
   <li><strong>Thực hiện đúng cam kết học chéo:</strong> Chử Đình Huy đã kèm cặp Hoàng Đức Minh thiết kế CSDL; Nguyễn Hoàng Minh đã hướng dẫn Nguyễn Vũ Trường xử lý kiến trúc URL State.</li>
-  <li><strong>Xử lý trở ngại xuất sắc:</strong> Cả 5 trở ngại trong `Obstacle_Log.xlsx` đều được giải quyết dứt điểm trong vòng 24 giờ.</li>
+  <li><strong>Chất lượng mã nguồn vượt trội:</strong> Toàn bộ 97 test cases backend và 10 test cases acceptance đều PASS 100%, không phát sinh nợ kỹ thuật.</li>
 </ul>
 
 <h3>4.2. Điều cần cải thiện (What Didn't Go Well)</h3>

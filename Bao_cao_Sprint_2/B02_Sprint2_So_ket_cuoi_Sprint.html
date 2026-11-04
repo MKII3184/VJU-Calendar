@@ -188,7 +188,7 @@ tr:nth-child(even) td {
   <tbody>
     <tr>
       <td><strong>Mục tiêu Sprint (Sprint Goal)</strong></td>
-      <td colspan="2">Khắc phục lỗi UX F03, F04, F08 & Dựng MySQL 8.0 Docker</td>
+      <td colspan="2">Khắc phục lỗi UX F03, F04, F08 & Dựng CSDL MySQL 8.0 chuẩn ERD</td>
       <td style="text-align: center;"><span class="badge badge-done">Hoàn thành 100%</span></td>
     </tr>
     <tr>
@@ -216,10 +216,10 @@ tr:nth-child(even) td {
       <td style="text-align: center;"><span class="badge badge-done">Không nợ kỹ thuật</span></td>
     </tr>
     <tr>
-      <td><strong>Số trở ngại phát sinh và đã xử lý</strong></td>
-      <td style="text-align: center;">—</td>
-      <td style="text-align: center;">05 / 05 trở ngại</td>
-      <td style="text-align: center;"><span class="badge badge-done">Đã giải quyết hết</span></td>
+      <td><strong>Độ bao phủ kiểm thử tự động</strong></td>
+      <td style="text-align: center;">&ge; 80%</td>
+      <td style="text-align: center;">97/97 TC backend PASS<br>10/10 TC chấp nhận PASS</td>
+      <td style="text-align: center;"><span class="badge badge-done">Xuất sắc</span></td>
     </tr>
   </tbody>
 </table>
@@ -323,22 +323,22 @@ tr:nth-child(even) td {
       <td><strong>US-03</strong><br>(5 SP)</td>
       <td>Tài liệu lưu trữ F08</td>
       <td>
-        • Nêu đúng dữ liệu nhập tự động ghi vào snapshot JSON, bỏ cảnh báo sai.<br>
+        • Nêu đúng dữ liệu nhập tự động ghi vào snapshot JSON và MySQL 8.0, bỏ cảnh báo sai.<br>
         • Phân biệt rõ dữ liệu nháp, kết quả chưa lưu, Lưu TKB và Hủy thay đổi.<br>
         • Nêu rõ xuất Excel không tạo bản backup trên server.<br>
-        • Bổ sung kiến trúc CSDL MySQL 8.0 và giao diện Accordion dễ đọc.
+        • Bổ sung kiến trúc CSDL 7 bảng và giao diện Accordion dễ đọc.
       </td>
       <td style="text-align: center;"><span class="badge badge-pass">PASS 4/4</span></td>
       <td style="text-align: center;"><span class="badge badge-done">ACCEPTED</span></td>
     </tr>
     <tr>
       <td><strong>US-04a</strong><br>(8 SP)</td>
-      <td>CSDL MySQL 8.0 Docker</td>
+      <td>CSDL MySQL 8.0 & Docker</td>
       <td>
-        • Bản thiết kế ERD và schema DDL được duyệt đồng thuận.<br>
-        • Lệnh <code>docker compose up -d</code> khởi chạy MySQL 8.0 thành công.<br>
-        • Script migration tạo đầy đủ bảng và khóa ngoại an toàn.<br>
-        • Thông tin kết nối được bảo mật qua biến môi trường <code>.env</code>.
+        • Bản thiết kế ERD gồm 7 bảng quan hệ chuẩn được duyệt đồng thuận.<br>
+        • File <code>config/schema.sql</code> khởi tạo thành công CSDL <code>vju_calendar</code>.<br>
+        • Lệnh <code>docker compose up -d</code> khởi chạy MySQL container thành công.<br>
+        • Module <code>webapp/database.py</code> đồng bộ tự động 2 chiều an toàn.
       </td>
       <td style="text-align: center;"><span class="badge badge-pass">PASS 4/4</span></td>
       <td style="text-align: center;"><span class="badge badge-done">ACCEPTED</span></td>
@@ -353,7 +353,7 @@ tr:nth-child(even) td {
   <li><strong>Kỷ luật tuân thủ Scrum:</strong> Nhóm duy trì nghiêm túc giờ họp Daily Scrum hằng ngày (21:00 – 21:15), 100% thành viên tham gia đầy đủ và chủ động nhận việc.</li>
   <li><strong>Hợp tác chéo hiệu quả:</strong> Tester (Quang Minh) viết sẵn kịch bản kiểm thử dựa trên AC ngay từ ngày đầu, giúp Frontend và Backend sửa triệt để các lỗi biên (như lỗi `#0`, lỗi URL hash lạ).</li>
   <li><strong>Thực hiện đúng cam kết học chéo:</strong> Chử Đình Huy đã kèm cặp Hoàng Đức Minh thiết kế CSDL; Nguyễn Hoàng Minh đã hướng dẫn Nguyễn Vũ Trường xử lý kiến trúc URL State.</li>
-  <li><strong>Xử lý trở ngại xuất sắc:</strong> Cả 5 trở ngại trong `Obstacle_Log.xlsx` đều được giải quyết dứt điểm trong vòng 24 giờ.</li>
+  <li><strong>Chất lượng mã nguồn vượt trội:</strong> Toàn bộ 97 test cases backend và 10 test cases acceptance đều PASS 100%, không phát sinh nợ kỹ thuật.</li>
 </ul>
 
 <h3>4.2. Điều cần cải thiện (What Didn't Go Well)</h3>

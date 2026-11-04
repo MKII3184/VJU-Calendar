@@ -30,6 +30,16 @@ from sqlalchemy.orm import sessionmaker
 
 logger = logging.getLogger(__name__)
 
+def _clean_for_json(obj):
+    if isinstance(obj, set):
+        return sorted(list(obj))
+    if isinstance(obj, dict):
+        return {str(k): _clean_for_json(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_clean_for_json(v) for v in obj]
+    return obj
+
+
 # Thư mục chứa SQLite fallback
 BASE_DIR = Path(__file__).resolve().parent
 DB_FALLBACK_FILE = BASE_DIR / "vju_calendar.db"
@@ -317,9 +327,9 @@ def save_data_to_db(data, extra=None, co_huu=None):
                 ))
 
         # Lưu metadata
-        conn.execute(insert(metadata_table).values(key="extra", value=extra))
-        conn.execute(insert(metadata_table).values(key="co_huu", value=co_huu))
-        conn.execute(insert(metadata_table).values(key="raw_state", value=data))
+        conn.execute(insert(metadata_table).values(key="extra", value=_clean_for_json(extra)))
+        conn.execute(insert(metadata_table).values(key="co_huu", value=_clean_for_json(co_huu)))
+        conn.execute(insert(metadata_table).values(key="raw_state", value=_clean_for_json(data)))
 
     logger.info("Đã đồng bộ thành công dữ liệu sang Database (7 bảng).")
     return True

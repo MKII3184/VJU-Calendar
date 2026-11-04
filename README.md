@@ -129,6 +129,11 @@ VJU-Calendar/
 │   ├── kiem_tra_chuyen_di.py     # Kiểm tra tối ưu di chuyển
 │   ├── kiem_tra_nhom_sinh_vien.py # Kiểm tra trùng lịch sinh viên
 │   └── requirements.txt          # Dependencies Python
+├── Bao_cao_Sprint_2/             # Hồ sơ báo cáo Sprint 2 (5 file PDF & HTML chuẩn ĐBCLPM)
+├── test/                         # Bộ kiểm thử tự động
+│   ├── sprint1-acceptance.test.jsx # 16 bài kiểm thử chấp nhận Sprint 1
+│   ├── sprint2-acceptance.test.jsx # 10 bài kiểm thử chấp nhận Sprint 2
+│   └── runtests.py               # Test runner 97 test cases backend (100% PASS)
 ├── doc/                          # Tài liệu dự án
 │   ├── PHAN-TICH-RANG-BUOC.md
 │   ├── QUY-TRINH-NGHIEP-VU-XEP-TKB.md

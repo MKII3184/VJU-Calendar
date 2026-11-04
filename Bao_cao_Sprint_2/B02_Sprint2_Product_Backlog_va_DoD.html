@@ -168,11 +168,11 @@ tr:nth-child(even) td {
   </div>
   <div class="meta-row">
     <div class="meta-cell"><strong>Product Owner:</strong> Chử Đình Huy (MSSV: 24110233)</div>
-    <div class="meta-cell"><strong>ScrumMaster:</strong> Nguyễn Hoàng Minh (MSSV: 24110903)</div>
+    <div class="meta-cell"><strong>ScrumMaster & DevOps:</strong> Nguyễn Hoàng Minh (MSSV: 24110903)</div>
   </div>
   <div class="meta-row">
     <div class="meta-cell"><strong>Nhóm phát triển:</strong> Trần Quang Minh (Tester - 24110383), Hoàng Đức Minh (Backend - 24110251), Nguyễn Vũ Trường (Frontend - 24110277)</div>
-    <div class="meta-cell"><strong>Velocity cam kết Sprint 2:</strong> 24 Story Points</div>
+    <div class="meta-cell"><strong>Repository:</strong> GitHub: <code>MKII3184/VJU-Calendar</code> (Commit: <code>60d3f23</code>)</div>
   </div>
 </div>
 
@@ -193,7 +193,7 @@ tr:nth-child(even) td {
       <th style="width: 7%;">Mã</th>
       <th style="width: 10%;">Loại</th>
       <th style="width: 32%;">User Story</th>
-      <th style="width: 25%;">Nguồn truy vết trong đặc tả</th>
+      <th style="width: 25%;">Nguồn truy vết trong đặc tả & Mã nguồn</th>
       <th style="width: 10%; text-align: center;">Điểm cũ</th>
       <th style="width: 8%; text-align: center;">Điểm mới</th>
       <th style="width: 13%;">Phân bổ</th>
@@ -204,7 +204,7 @@ tr:nth-child(even) td {
       <td><strong>US-01</strong></td>
       <td>Lỗi</td>
       <td>Là giáo vụ, tôi muốn tìm chính xác lớp bằng <code>#id</code> để mở đúng lớp cần xử lý.</td>
-      <td>Báo cáo UX F03; <code>ManualEntryPage.jsx</code></td>
+      <td>Báo cáo UX F03; <code>ManualEntryPage.jsx</code>; <code>scheduleView.js</code></td>
       <td style="text-align: center;">3</td>
       <td style="text-align: center;"><strong>3</strong></td>
       <td><span class="badge badge-sprint">Sprint 2</span></td>
@@ -231,7 +231,7 @@ tr:nth-child(even) td {
       <td><strong>US-04a</strong></td>
       <td>Kỹ thuật</td>
       <td>Là nhóm phát triển, tôi muốn có mô hình CSDL và môi trường Docker thống nhất để xây hệ thống nhiều người dùng.</td>
-      <td>Yêu cầu CSDL; <code>state.py</code>; Docker compose</td>
+      <td>ERD 7 bảng; <code>database.py</code>; <code>config/schema.sql</code>; <code>docker-compose.yml</code></td>
       <td style="text-align: center;">15</td>
       <td style="text-align: center;"><strong>8</strong></td>
       <td><span class="badge badge-sprint">Sprint 2</span></td>
@@ -240,7 +240,7 @@ tr:nth-child(even) td {
       <td><strong>US-04b</strong></td>
       <td>Kỹ thuật</td>
       <td>Là nhóm phát triển, tôi muốn có pipeline migration tự động và quản lý phiên bản tham số solver.</td>
-      <td>Hạ tầng đa môi trường DEV/TEST/PROD</td>
+      <td>Hạ tầng đa môi trường DEV/TEST/PROD; <code>render.yaml</code></td>
       <td style="text-align: center;">—</td>
       <td style="text-align: center;"><strong>8</strong></td>
       <td><span class="badge badge-epic">Sprint 3</span></td>
@@ -249,7 +249,7 @@ tr:nth-child(even) td {
       <td><strong>US-05</strong></td>
       <td>Tính năng</td>
       <td>Là chủ hệ thống, tôi muốn mỗi người dùng có tài khoản và quyền riêng (RBAC) để bảo vệ dữ liệu dùng chung.</td>
-      <td>Yêu cầu bảo mật; Mở rộng PB-28</td>
+      <td>Yêu cầu bảo mật; Mở rộng PB-28; <code>RolePickerScreen.jsx</code></td>
       <td style="text-align: center;">16</td>
       <td style="text-align: center;"><strong>13</strong></td>
       <td><span class="badge badge-epic">Sprint 3 (Epic)</span></td>
@@ -258,7 +258,7 @@ tr:nth-child(even) td {
       <td><strong>US-06</strong></td>
       <td>Tính năng</td>
       <td>Là giáo vụ, tôi muốn dữ liệu nghiệp vụ được lưu tập trung theo học kỳ trên CSDL MySQL 8.0.</td>
-      <td>Yêu cầu CSDL; PB-01..PB-12/18/20; <code>state.py</code></td>
+      <td>Yêu cầu CSDL; PB-01..PB-12/18/20; <code>webapp/domain/</code></td>
       <td style="text-align: center;">31</td>
       <td style="text-align: center;"><strong>20</strong></td>
       <td><span class="badge badge-epic">Sprint 3 (Epic)</span></td>
@@ -267,7 +267,7 @@ tr:nth-child(even) td {
       <td><strong>US-07</strong></td>
       <td>Tính năng</td>
       <td>Là giáo vụ, tôi muốn lưu, sửa và trao đổi lịch an toàn khi nhiều người cùng thao tác (Optimistic locking).</td>
-      <td>Yêu cầu concurrency; PB-04/05/14..21; API solver</td>
+      <td>Yêu cầu concurrency; PB-04/05/14..21; <code>webapp/api/solve.py</code></td>
       <td style="text-align: center;">41</td>
       <td style="text-align: center;"><strong>40</strong></td>
       <td><span class="badge badge-epic">Sprint 4 (Epic)</span></td>
@@ -276,7 +276,7 @@ tr:nth-child(even) td {
       <td><strong>US-08</strong></td>
       <td>Kỹ thuật</td>
       <td>Là chủ dữ liệu, tôi muốn chuyển đổi và vận hành hệ thống có kiểm chứng, backup/restore tự động và RPO/RTO.</td>
-      <td>Yêu cầu vận hành; PB-35; Regression test</td>
+      <td>Yêu cầu vận hành; PB-35; <code>test/runtests.py</code></td>
       <td style="text-align: center;">26</td>
       <td style="text-align: center;"><strong>20</strong></td>
       <td><span class="badge badge-epic">Sprint 4 (Epic)</span></td>
@@ -287,7 +287,7 @@ tr:nth-child(even) td {
 <div class="page-break"></div>
 
 <h2>Mục 3. Chi tiết Sprint 2 Backlog & Tiêu chí chấp nhận (Acceptance Criteria)</h2>
-<p><strong>Mục tiêu Sprint 2 (Sprint Goal):</strong> <em>"Khắc phục triệt để lỗi tra cứu #id (F03), hoàn thiện điều hướng URL trạng thái (F04), chuẩn hóa hướng dẫn lưu trữ snapshot (F08) và thiết lập môi trường CSDL MySQL 8.0 qua Docker (US-04a)."</em></p>
+<p><strong>Mục tiêu Sprint 2 (Sprint Goal):</strong> <em>"Khắc phục triệt để lỗi tra cứu #id (F03), hoàn thiện điều hướng URL trạng thái (F04), chuẩn hóa hướng dẫn lưu trữ snapshot (F08) và thiết lập CSDL MySQL 8.0 theo đúng ERD qua file schema.sql & Docker Compose (US-04a)."</em></p>
 
 <table>
   <thead>
@@ -301,7 +301,7 @@ tr:nth-child(even) td {
   <tbody>
     <tr>
       <td><strong>US-01</strong></td>
-      <td><strong>Tìm chính xác lớp bằng #id</strong><br><em>(ManualEntryPage)</em></td>
+      <td><strong>Tìm chính xác lớp bằng #id</strong><br><em>(ManualEntryPage, scheduleView)</em></td>
       <td>
         1. Nhập <code>#19</code> chỉ trả lớp có ID đúng bằng 19; nhập <code>#0</code> vẫn tìm được lớp có ID 0.<br>
         2. ID không tồn tại trả về 0 kết quả; cú pháp sai không làm treo ứng dụng.<br>
@@ -326,21 +326,21 @@ tr:nth-child(even) td {
       <td><strong>US-03</strong></td>
       <td><strong>Chuẩn hóa tài liệu lưu trữ F08</strong><br><em>(GuidePage.jsx)</em></td>
       <td>
-        1. Hướng dẫn nêu rõ dữ liệu nhập được tự động ghi vào JSON snapshot; bỏ cảnh báo sai về tắt backend.<br>
+        1. Hướng dẫn nêu rõ dữ liệu nhập được tự động ghi vào JSON snapshot và MySQL; bỏ cảnh báo sai về tắt backend.<br>
         2. Phân biệt rạch ròi 3 khái niệm: Dữ liệu nháp, Lưu thời khóa biểu và Mốc Hủy thay đổi.<br>
         3. Nêu rõ tính năng xuất Excel chỉ tải file cục bộ, không tạo bản sao lưu khôi phục trên server.<br>
-        4. Bổ sung tài liệu giải thích kiến trúc CSDL và cơ chế đồng bộ mới.
+        4. Bổ sung tài liệu giải thích kiến trúc CSDL 7 bảng và cơ chế đồng bộ snapshot mới.
       </td>
       <td style="text-align: center;"><strong>5</strong></td>
     </tr>
     <tr>
       <td><strong>US-04a</strong></td>
-      <td><strong>Mô hình CSDL & Docker DB</strong><br><em>(MySQL 8.0, docker-compose)</em></td>
+      <td><strong>Mô hình CSDL MySQL & Docker</strong><br><em>(config/schema.sql, database.py)</em></td>
       <td>
-        1. Bản thiết kế ERD và schema DDL các bảng được PO và nhóm kỹ thuật phê duyệt.<br>
-        2. Lệnh <code>docker compose up -d</code> khởi chạy container MySQL 8.0 thành công trên máy dev.<br>
-        3. Migration script khởi tạo thành công toàn bộ bảng và quan hệ khóa ngoại không lỗi.<br>
-        4. Biến môi trường kết nối database được cấu hình qua file <code>.env</code>, không hardcode trong code.
+        1. Bản thiết kế ERD gồm 7 bảng quan hệ chuẩn (coordinators, lecturers, lecturer_availabilities, courses, classes, rooms, schedules) được PO duyệt.<br>
+        2. File <code>config/schema.sql</code> khởi tạo thành công CSDL <code>vju_calendar</code> trên MySQL 8.0.<br>
+        3. <code>docker-compose.yml</code> cấu hình service <code>db</code> MySQL ánh xạ cổng <code>3307:3306</code>.<br>
+        4. Module <code>webapp/database.py</code> kết nối và đồng bộ tự động 2 chiều giữa RAM và CSDL.
       </td>
       <td style="text-align: center;"><strong>8</strong></td>
     </tr>
@@ -355,7 +355,7 @@ tr:nth-child(even) td {
 
 <h2>Mục 4. Bản Definition of Done (DoD) chuẩn hóa của Nhóm 2</h2>
 <div class="callout callout-success">
-  <strong>Quy ước chất lượng:</strong> Trong Scrum, <em>Acceptance Criteria (AC)</em> dành riêng cho từng User Story, còn <em>Definition of Done (DoD)</em> là bộ tiêu chuẩn kỹ thuật bắt buộc áp dụng cho <strong>TẤT CẢ</strong> các User Story. Một hạng mục chỉ được tính là hoàn thành (Done) khi thỏa mãn 100% các tiêu chí dưới đây:
+  <strong>Quy ước chất lượng môn ĐBCLPM:</strong> Trong Scrum, <em>Acceptance Criteria (AC)</em> dành riêng cho từng User Story, còn <em>Definition of Done (DoD)</em> là bộ tiêu chuẩn kỹ thuật bắt buộc áp dụng cho <strong>TẤT CẢ</strong> các User Story. Một hạng mục chỉ được tính là hoàn thành (Done) khi thỏa mãn 100% các tiêu chí dưới đây:
 </div>
 
 <table>
@@ -380,17 +380,17 @@ tr:nth-child(even) td {
       <td><strong>2. Tiêu chuẩn Kiểm thử<br>(Testing & QA)</strong></td>
       <td>
         • Đạt 100% Tiêu chí chấp nhận (Acceptance Criteria) được mô tả trong Story.<br>
-        • Viết Unit Test / Integration Test bổ sung (Vitest/Pytest) cho các tính năng mới.<br>
-        • Toàn bộ Test Suite chạy tự động và PASS 100%, không làm phát sinh lỗi hồi quy (regression bugs).
+        • 97/97 Test Cases backend (<code>test/runtests.py</code>) và 10/10 Test Cases chấp nhận (<code>test/sprint2-acceptance.test.jsx</code>) đều PASS 100%.<br>
+        • Không làm phát sinh lỗi hồi quy (regression bugs) trên các tính năng cũ của Sprint 1.
       </td>
       <td>Tester / QA<br><em>(Trần Quang Minh)</em></td>
     </tr>
     <tr>
       <td><strong>3. Tích hợp & Môi trường<br>(CI/CD & Environment)</strong></td>
       <td>
-        • Nhánh tính năng được merge sạch sẽ vào nhánh <code>main</code>, không có merge conflicts.<br>
+        • Nhánh tính năng được merge sạch sẽ vào nhánh <code>main</code>, commit rõ ràng theo Conventional Commits.<br>
         • Lệnh build production (<code>npm run build</code>) chạy thành công không có warning nghiêm trọng.<br>
-        • Hệ thống khởi chạy ổn định trên container Docker cục bộ (đối với backend/database).
+        • Hệ thống khởi chạy ổn định với container MySQL qua <code>docker-compose.yml</code>.
       </td>
       <td>DevOps & SM<br><em>(Nguyễn Hoàng Minh)</em></td>
     </tr>
@@ -399,7 +399,7 @@ tr:nth-child(even) td {
       <td>
         • Commit message tuân thủ quy chuẩn Conventional Commits (<code>feat:</code>, <code>fix:</code>, <code>docs:</code>).<br>
         • Cập nhật các tài liệu hướng dẫn sử dụng và file đặc tả kỹ thuật tương ứng trong thư mục <code>doc/</code>.<br>
-        • Cập nhật trạng thái thẻ việc trên bảng quản trị Scrum (Trello/Jira).
+        • Đầy đủ 6 cột trong Nhật ký trở ngại và lưu trữ biên bản họp Scrum trên Drive nhóm.
       </td>
       <td>Cả nhóm thực hiện</td>
     </tr>

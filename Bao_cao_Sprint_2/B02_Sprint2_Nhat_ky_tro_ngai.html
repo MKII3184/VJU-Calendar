@@ -205,15 +205,15 @@ tr:nth-child(even) td {
       <td>Tìm kiếm lớp học với cú pháp <code>#0</code> trả về 0 kết quả do mã nguồn JS dùng kiểm tra falsy <code>if (!id)</code>, khiến ID số 0 bị coi là rỗng.</td>
       <td>Giáo vụ không thể tìm thấy lớp học có ID là 0 trong bảng nhập liệu thủ công.</td>
       <td><strong>Quang Minh</strong><br>(Tester)</td>
-      <td>Quang Minh báo lỗi cho Trường; sửa logic kiểm tra chặt chẽ <code>if (id !== null && !isNaN(id))</code> và bổ sung unit test case cho ID 0.</td>
+      <td>Quang Minh báo lỗi cho Trường; sửa logic kiểm tra chặt chẽ <code>if (id !== null && !isNaN(id))</code> trong <code>ManualEntryPage.jsx</code> và bổ sung unit test case.</td>
       <td style="text-align: center;"><span class="badge badge-done">Đã xong</span></td>
     </tr>
     <tr>
       <td><strong>Ngày 4</strong><br>(31/10/2026)</td>
-      <td>Khởi động container Docker MySQL 8.0 trên hệ điều hành Windows gặp lỗi xung đột port 3306 do máy tính dev đã có dịch vụ MySQL chạy ngầm.</td>
-      <td>Không thể bind cổng kết nối tới database để kiểm thử kịch bản migration và kết nối API.</td>
+      <td>Khởi động container Docker MySQL gặp lỗi xung đột port 3306 do máy tính dev Windows đã có dịch vụ MySQL Server 8.0 cục bộ chạy ngầm.</td>
+      <td>Không thể bind cổng kết nối tới database container để chạy kịch bản khởi tạo tự động.</td>
       <td><strong>Đức Minh</strong><br>(Backend)</td>
-      <td>SM (Hoàng Minh) hỗ trợ đổi cổng ánh xạ sang host thành <code>3307:3306</code> trong <code>docker-compose.yml</code> và cập nhật file <code>.env</code>.</td>
+      <td>SM (Hoàng Minh) hỗ trợ đổi cổng ánh xạ sang host thành <code>3307:3306</code> trong <code>docker-compose.yml</code> và file cấu hình môi trường.</td>
       <td style="text-align: center;"><span class="badge badge-done">Đã xong</span></td>
     </tr>
     <tr>
@@ -221,7 +221,7 @@ tr:nth-child(even) td {
       <td>Khi người dùng nhập URL có hash lạ không tồn tại (ví dụ: <code>#/unknown-page</code>) và ấn F5, ứng dụng bị lỗi crash trắng màn hình (blank page).</td>
       <td>Người dùng bị mất phiên làm việc hiện tại, không thể tự phục hồi nếu gõ nhầm URL.</td>
       <td><strong>Quang Minh</strong><br>(Tester)</td>
-      <td>SM nhắc nhở quy tắc; Trường viết hàm <code>sanitizeRoute()</code> trong <code>urlState.js</code> tự động fallback về <code>#/schedule</code> kèm Toast thông báo.</td>
+      <td>SM nhắc nhở quy tắc; Trường thêm hook kiểm tra và fallback an toàn trong <code>App.jsx</code> về <code>#/schedule</code> kèm Toast thông báo.</td>
       <td style="text-align: center;"><span class="badge badge-done">Đã xong</span></td>
     </tr>
     <tr>
