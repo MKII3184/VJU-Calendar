@@ -62,7 +62,7 @@ services:
       - DB_PORT=3306
       - DB_USER=root
       - DB_PASSWORD=dmcvmkii28
-      - DB_NAME=vju_calendar
+      - DB_NAME=vju_calendar_sandbox
       - SNAPSHOT_PATH=/app/webapp/data/manual_state_snapshot_sandbox.json
     ports:
       - "5056:5056"

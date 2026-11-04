@@ -9,6 +9,10 @@ CREATE DATABASE IF NOT EXISTS `vju_calendar`
 CHARACTER SET utf8mb4 
 COLLATE utf8mb4_unicode_ci;
 
+CREATE DATABASE IF NOT EXISTS `vju_calendar_sandbox` 
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_unicode_ci;
+
 USE `vju_calendar`;
 
 -- 1. Bảng Điều phối viên (coordinators)
