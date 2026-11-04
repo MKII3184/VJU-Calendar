@@ -1,5 +1,6 @@
 import { Eye, TriangleAlert, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeSwitcher } from "@/components/layout/theme-switcher";
 
 // Thay LoginScreen gốc (JWT thật) — công cụ demo này không có hệ thống tài
 // khoản, nên "đăng nhập" chỉ là chọn vai trò để giới hạn các màn hình được
@@ -11,7 +12,8 @@ import { Button } from "@/components/ui/button";
 // khoi thuong hieu o giua, the trang do bong.
 export default function RolePickerScreen({ onPick }) {
   return (
-    <div className="liquid-role-canvas flex min-h-dvh items-center justify-center p-4">
+    <div className="liquid-role-canvas relative flex min-h-dvh items-center justify-center p-4">
+      <ThemeSwitcher className="absolute top-3 right-3" />
       <div className="w-full max-w-sm">
         {/* Thương hiệu */}
         <div className="mb-6 flex flex-col items-center gap-2 text-center">
@@ -19,8 +21,8 @@ export default function RolePickerScreen({ onPick }) {
             VJU
           </span>
           <div>
-            <p className="text-lg font-semibold text-white">Xếp thời khoá biểu</p>
-            <p className="text-sidebar-muted text-sm">Phòng Đào tạo</p>
+            <p className="text-foreground text-lg font-semibold">Xếp thời khoá biểu</p>
+            <p className="text-muted-foreground text-sm">Phòng Đào tạo</p>
           </div>
         </div>
 

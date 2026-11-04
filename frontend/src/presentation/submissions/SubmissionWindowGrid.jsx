@@ -54,6 +54,7 @@ export default function SubmissionWindowGrid({
   allowEmpty = false,
   saveLabel,
   gridClassName,
+  showInstructions = true,
 }) {
   const [grid, setGrid] = useState({});
   // Keo chuot quet mot VUNG CHU NHAT: giao vu thuong ranh nguyen buoi ("T2-T6
@@ -64,12 +65,20 @@ export default function SubmissionWindowGrid({
 
   const locked = readOnly || disabled || saving;
 
-  useEffect(() => {
-    setGrid(windowSlotsToSelectedCellsMap(initialSlots, slotsPerDay));
-  }, [initialSlots, slotsPerDay]);
-
   // Set de tra cuu nhanh trong lucRender tung o.
-  const dangDay = useMemo(() => new Set(teachingSlots), [teachingSlots]);
+  // Khoa theo NOI DUNG: caller hay truyen `x || []` (mang moi moi lan render),
+  // neu khoa theo tham chieu thi ban nhap bi reset lien tuc.
+  const teachingKey = teachingSlots.join(",");
+  const dangDay = useMemo(() => new Set(teachingSlots), [teachingKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  // O DANG DAY khong bao gio la gio ranh: khong chon, khong luu, va neu du lieu
+  // cu lo co o trung thi bo no khoi ban nhap.
+  const isTeaching = useCallback((d, p) => dangDay.has(d * slotsPerDay + p), [dangDay, slotsPerDay]);
+  const initialKey = initialSlots.join(",");
+  const savedSlots = useMemo(() => initialSlots.filter((s) => !dangDay.has(s)), [initialKey, dangDay]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    setGrid(windowSlotsToSelectedCellsMap(savedSlots, slotsPerDay));
+  }, [savedSlots, slotsPerDay]);
 
   const days = DAY_LABELS.slice(0, numDays).map((label, idx) => ({
     idx,
@@ -88,12 +97,12 @@ export default function SubmissionWindowGrid({
       const next = { ...prev };
       for (let d = Math.min(anchor.d, head.d); d <= Math.max(anchor.d, head.d); d++) {
         for (let p = Math.min(anchor.p, head.p); p <= Math.max(anchor.p, head.p); p++) {
-          next[`${d}-${p}`] = value;
+          if (!isTeaching(d, p)) next[`${d}-${p}`] = value;
         }
       }
       return next;
     });
-  }, []);
+  }, [isTeaching]);
 
   // Nha chuot NGOAI luoi van phai chot vung dang quet - neu chi nghe pointerup
   // tren o thi keo ra ngoai roi tha se ket dinh o trang thai dang keo.
@@ -108,7 +117,7 @@ export default function SubmissionWindowGrid({
   }, [dragBox, commitDrag]);
 
   const startDrag = (d, p) => {
-    if (locked) return;
+    if (locked || isTeaching(d, p)) return;
     const value = !grid[`${d}-${p}`];
     dragRef.current = { anchor: { d, p }, head: { d, p }, value };
     setDragBox({ d0: d, p0: p, d1: d, p1: p, value });
@@ -129,7 +138,7 @@ export default function SubmissionWindowGrid({
   // dung startDrag o day vi no mo mot vung dang quet ma khong bao gio co
   // pointerup de chot lai.
   const toggleCell = (d, p) => {
-    if (locked) return;
+    if (locked || isTeaching(d, p)) return;
     setGrid((prev) => ({ ...prev, [`${d}-${p}`]: !prev[`${d}-${p}`] }));
   };
 
@@ -138,25 +147,28 @@ export default function SubmissionWindowGrid({
   // keo tay tung lan.
   const toggleDay = (d) => {
     if (locked) return;
-    const allOn = periods.every((p) => grid[`${d}-${p}`]);
+    const free = periods.filter((p) => !isTeaching(d, p));
+    const allOn = free.every((p) => grid[`${d}-${p}`]);
     setGrid((prev) => {
       const next = { ...prev };
-      periods.forEach((p) => { next[`${d}-${p}`] = !allOn; });
+      free.forEach((p) => { next[`${d}-${p}`] = !allOn; });
       return next;
     });
   };
 
   const togglePeriod = (p) => {
     if (locked) return;
-    const allOn = days.every((d) => grid[`${d.idx}-${p}`]);
+    const free = days.filter((d) => !isTeaching(d.idx, p));
+    const allOn = free.every((d) => grid[`${d.idx}-${p}`]);
     setGrid((prev) => {
       const next = { ...prev };
-      days.forEach((d) => { next[`${d.idx}-${p}`] = !allOn; });
+      free.forEach((d) => { next[`${d.idx}-${p}`] = !allOn; });
       return next;
     });
   };
 
   const cellOn = (d, p) => {
+    if (isTeaching(d, p)) return false;
     if (dragBox && d >= dragBox.d0 && d <= dragBox.d1 && p >= dragBox.p0 && p <= dragBox.p1) {
       return dragBox.value;
     }
@@ -174,7 +186,7 @@ export default function SubmissionWindowGrid({
   // doi chua luu, du tong van bang nhau.
   const dirty = useMemo(() => {
     if (readOnly) return false;
-    const saved = new Set(initialSlots);
+    const saved = new Set(savedSlots);
     if (saved.size !== selectedCount) return true;
     for (const d of days) {
       for (const p of periods) {
@@ -183,7 +195,7 @@ export default function SubmissionWindowGrid({
     }
     return false;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [readOnly, initialSlots, grid, dragBox, selectedCount, numDays, slotsPerDay]);
+  }, [readOnly, savedSlots, grid, dragBox, selectedCount, numDays, slotsPerDay]);
 
   return (
     <div className="space-y-2">
@@ -266,10 +278,12 @@ export default function SubmissionWindowGrid({
 
       {!readOnly && (
         <div className="flex flex-wrap items-center gap-2">
-          <p className="text-muted-foreground text-xs">
-            Kéo để quét cả vùng · bấm nhãn <strong className="text-foreground">T2…CN</strong> hoặc{" "}
-            <strong className="text-foreground">số tiết</strong> để bật/tắt cả hàng
-          </p>
+          {showInstructions && (
+            <p className="text-muted-foreground text-xs">
+              Kéo để quét cả vùng · bấm nhãn <strong className="text-foreground">T2…CN</strong> hoặc{" "}
+              <strong className="text-foreground">số tiết</strong> để bật/tắt cả hàng
+            </p>
+          )}
           <div className="ml-auto flex flex-wrap items-center gap-2">
             {onGenerateAvailability && (
               <GenerateAvailabilityButton disabled={locked} saving={saving} onConfirm={onGenerateAvailability} />
@@ -288,7 +302,7 @@ export default function SubmissionWindowGrid({
                 type="button"
                 size="sm"
                 disabled={saving || (!allowEmpty && selectedCount === 0)}
-                onClick={() => onSave(submissionToWindowSlots(grid, slotsPerDay))}
+                onClick={() => onSave(submissionToWindowSlots(grid, slotsPerDay).filter((s) => !dangDay.has(s)))}
               >
                 {saving
                   ? "Đang lưu…"
@@ -327,18 +341,19 @@ function RowCells({ period, days, slotsPerDay, dangDay, cellOn, locked, onToggle
           <div
             key={d.idx}
             role="checkbox"
-            tabIndex={locked ? -1 : 0}
+            tabIndex={locked || day ? -1 : 0}
             aria-checked={on}
+            aria-disabled={day || undefined}
             aria-label={`${d.label} tiết ${period + 1}${day ? " — đang dạy" : ""}`}
             title={day ? "Đang dạy ở giờ này (lớp đã chốt giờ)" : undefined}
             onPointerDown={(e) => {
-              if (locked) return;
+              if (locked || day) return;
               e.preventDefault();
               onStartDrag(d.idx, period);
             }}
             onPointerEnter={() => onExtendDrag(d.idx, period)}
             onKeyDown={(e) => {
-              if (locked || (e.key !== " " && e.key !== "Enter")) return;
+              if (locked || day || (e.key !== " " && e.key !== "Enter")) return;
               e.preventDefault();
               onToggleCell(d.idx, period);
             }}
@@ -352,7 +367,7 @@ function RowCells({ period, days, slotsPerDay, dangDay, cellOn, locked, onToggle
                   : "",
               !locked && (day || on) && "hover:brightness-[.97]",
               !locked && !day && !on && "hover:bg-emerald-50/70",
-              locked && "cursor-default",
+              (locked || day) && "cursor-default",
             )}
           />
         );

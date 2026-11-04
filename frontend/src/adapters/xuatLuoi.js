@@ -93,12 +93,8 @@ export function nhanHocKy(data) {
 export function moTaBoLocDangDung(view, data, phamVi) {
   const f = view?.filter ?? {};
   const phan = [];
-  if (f.scope === "program" && f.scopeValue) phan.push(`Chương trình: ${f.scopeValue}`);
-  if (f.khoa) phan.push(`Khoá: ${f.khoa}`);
-  if (f.scope === "teacher" && f.scopeValue) {
-    const t = (view?.teachers ?? []).find((x) => String(x.id) === String(f.scopeValue));
-    phan.push(`Giảng viên: ${t?.name ?? `#${f.scopeValue}`}`);
-  }
+  if (f.programs?.length) phan.push(`Chương trình: ${f.programs.join(", ")}`);
+  if (f.khoas?.length) phan.push(`Khoá: ${f.khoas.join(", ")}`);
   if (f.chiXemPhamVi && phamVi) {
     const ve = [];
     if (phamVi.programs?.length) ve.push(phamVi.programs.join(", "));

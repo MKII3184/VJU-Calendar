@@ -2,11 +2,12 @@
 """GIANG VIEN nhap tay: them moi va sua (ke ca khung gio ranh)."""
 
 import copy
+import re
 
 from flask import Blueprint, request
 
 from api.common import can_du_lieu, loi, tra_du_lieu
-from domain.availability import parse_availability_slots
+from domain.availability import loi_gio_ranh_trung_gio_day, parse_availability_slots
 from domain.availability_generator import generate_teacher_availability
 from domain.hoc_chung import tach_nhom_khong_hop_le
 from domain.luoi import dong_bo_ket_qua
@@ -16,6 +17,21 @@ from snapshot import save_snapshot
 from state import STATE
 
 bp = Blueprint("manual_teacher", __name__)
+
+_SDT_HOP_LE = re.compile(r"[0-9]{0,10}")
+
+
+def _loi_so_dien_thoai(body):
+    """So dien thoai tuy chon: chi chu so 0-9, toi da 10. Chi kiem khi body CO
+    truong `phone` (PATCH luu gio ranh khong gui phone). So cu tu Excel khong hop
+    le van duoc HIEN THI, nhung luu thong tin GV thi phai sua lai."""
+    if "phone" not in body:
+        return None
+    phone = body.get("phone")
+    phone = "" if phone is None else phone
+    if not isinstance(phone, str) or not _SDT_HOP_LE.fullmatch(phone):
+        return "Số điện thoại chỉ gồm chữ số 0-9, tối đa 10 chữ số."
+    return None
 
 
 @bp.post("/api/manual/teacher")
@@ -37,6 +53,9 @@ def api_manual_add_teacher(data):
     teacher_type = body.get("teacherType")
     if teacher_type not in ("GUEST", "RESIDENT"):
         return loi("teacherType phải là 'GUEST' hoặc 'RESIDENT'.")
+    err = _loi_so_dien_thoai(body)
+    if err:
+        return loi(err)
 
     slots = []
     if teacher_type == "GUEST":
@@ -72,22 +91,32 @@ def api_manual_update_teacher(data, teacher_id):
         return loi(f"Không tìm thấy giảng viên id={teacher_id}.")
     body = request.get_json(force=True)
 
-    if "name" in body:
-        name = (body.get("name") or "").strip()
-        if not name:
-            return loi("Họ tên không được để trống.")
-        teacher["name"] = name
-    for field in ("org", "title", "email", "phone"):
-        if field in body:
-            teacher[field] = (body.get(field) or "").strip()
-    if "teacherType" in body:
-        if body["teacherType"] not in ("GUEST", "RESIDENT"):
-            return loi("teacherType phải là 'GUEST' hoặc 'RESIDENT'.")
-        teacher["type"] = body["teacherType"]
+    err = _loi_so_dien_thoai(body)
+    if err:
+        return loi(err)
+    # Kiem tra het truoc khi ghi bat ky field nao: bi tu choi thi du lieu da luu
+    # giu nguyen, khong luu do dang (vd doi ten roi moi bao loi gio ranh).
+    slots = None
     if "availability" in body:
         slots, err = parse_availability_slots(data, body)
         if err:
             return loi(err)
+        err = loi_gio_ranh_trung_gio_day(data, teacher_id, slots)
+        if err:
+            return loi(err)
+    if "name" in body and not (body.get("name") or "").strip():
+        return loi("Họ tên không được để trống.")
+    if "teacherType" in body and body["teacherType"] not in ("GUEST", "RESIDENT"):
+        return loi("teacherType phải là 'GUEST' hoặc 'RESIDENT'.")
+
+    if "name" in body:
+        teacher["name"] = body["name"].strip()
+    for field in ("org", "title", "email", "phone"):
+        if field in body:
+            teacher[field] = (body.get(field) or "").strip()
+    if "teacherType" in body:
+        teacher["type"] = body["teacherType"]
+    if slots is not None:
         data.setdefault("manual_teacher_windows", {})[teacher_id] = slots
 
     dem_lai_so_gv(data)

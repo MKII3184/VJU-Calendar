@@ -248,15 +248,14 @@ function looksDuplicated(a, b) {
  * vi sao no co van de.
  */
 export function filterProblemInbox(inbox, data, filter, phamVi = null) {
-  const scope = filter?.scope;
-  const value = filter?.scopeValue;
-  // Hai bo loc doc lap: "Xem" (scope/scopeValue) va "chi xem pham vi dang xep".
-  // Hop thu phai di theo CA HAI, giong het luoi - khong thi luoi hien 33 buoi cua
-  // FTH ma hop thu van ke ca van de cua chuong trinh khac.
-  const khoa = filter?.khoa;
+  const programs = filter?.programs ?? [];
+  const khoas = filter?.khoas ?? [];
+  // Hop thu phai di theo CA bo loc "Xem" lan "chi xem pham vi dang xep", giong het
+  // luoi - khong thi luoi hien 33 buoi cua FTH ma hop thu van ke ca van de cua
+  // chuong trinh khac.
   const locTheoPhamVi = Boolean(filter?.chiXemPhamVi && coPhamVi(phamVi));
-  const locTheoScope = Boolean(scope && scope !== "all" && value !== "" && value != null);
-  const locTheoKhoa = Boolean(khoa);
+  const locTheoScope = programs.length > 0;
+  const locTheoKhoa = khoas.length > 0;
   if (!inbox || (!locTheoScope && !locTheoPhamVi && !locTheoKhoa)) return inbox;
 
   const byId = new Map((data?.classes ?? []).map((c) => [c.sectionId, c]));
@@ -266,11 +265,8 @@ export function filterProblemInbox(inbox, data, filter, phamVi = null) {
     if (!c) return false;
     if (idsPhamVi && !idsPhamVi.has(sid)) return false;
     // Khoa la o loc doc lap, GIAO voi scope - xem adapters/scheduleView.js.
-    if (locTheoKhoa && !(c.cohortParts ?? []).includes(khoa)) return false;
-    if (!locTheoScope) return true;
-    if (scope === "program") return (c.programParts ?? []).includes(value);
-    if (scope === "teacher") return (c.teacherIds ?? [c.teacherId]).includes(Number(value));
-    return true;
+    if (locTheoKhoa && !khoas.some((k) => (c.cohortParts ?? []).includes(k))) return false;
+    return !locTheoScope || programs.some((p) => (c.programParts ?? []).includes(p));
   };
   const hop = (ids) => (ids ?? []).some(trongPhamVi);
 

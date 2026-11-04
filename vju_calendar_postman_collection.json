@@ -1,0 +1,1249 @@
+{
+  "info": {
+    "_postman_id": "a91823d4-72e9-4e31-9252-vjucalendar01",
+    "name": "VJU-Calendar API Testing (FATE_VJU)",
+    "description": "Bộ sưu tập kiểm thử REST API toàn diện cho Hệ thống Xếp Thời Khóa Biểu VJU-Calendar.\nPhục vụ kiểm thử chức năng (Functional API Testing), kiểm thử biên (Boundary/Negative Testing) và tự động hóa qua Postman Runner / Newman CLI.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:5055",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01. Trạng thái & Hệ thống (System State)",
+      "item": [
+        {
+          "name": "TC-01: Kiểm tra trạng thái hệ thống",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Kiểu dữ liệu JSON hợp lệ', function () {",
+                  "    pm.response.to.be.json;",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('hasData');",
+                  "    pm.expect(jsonData).to.have.property('overridesCount');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/state",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "state"
+              ]
+            },
+            "description": "Lấy trạng thái tổng quan của hệ thống: có dữ liệu chưa, đã giải giai đoạn 1/2 chưa, số lượng override."
+          }
+        },
+        {
+          "name": "TC-02: Lấy dữ liệu hiện tại (/api/data)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Response trả về đúng định dạng', function () {",
+                  "    pm.expect([200, 400]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/data",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "data"
+              ]
+            },
+            "description": "Lấy toàn bộ cây dữ liệu hiện có trong STATE (giảng viên, học phần, lớp học phần, phòng)."
+          }
+        },
+        {
+          "name": "TC-03: Lấy kết quả TKB & Issues (/api/results)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Có trường guestResult và residentResult', function () {",
+                  "    var d = pm.response.json();",
+                  "    pm.expect(d).to.have.property('guestResult');",
+                  "    pm.expect(d).to.have.property('residentResult');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/results",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "results"
+              ]
+            },
+            "description": "Lấy kết quả xếp lịch của 2 giai đoạn và danh sách các xung đột/cảnh báo."
+          }
+        }
+      ]
+    },
+    {
+      "name": "02. Khởi tạo & Dọn dẹp (Init & Clean)",
+      "item": [
+        {
+          "name": "TC-04: Khởi tạo bộ dữ liệu TKB rỗng (/api/manual/init)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Dữ liệu rỗng gồm 7 ngày', function () {",
+                  "    var d = pm.response.json();",
+                  "    var numDays = d.numDays || (d.params && d.params.numDays);",
+                  "    pm.expect(numDays).to.eql(7);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/init",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "init"
+              ]
+            },
+            "description": "Khởi tạo môi trường dữ liệu chuẩn rỗng để bắt đầu quy trình nhập hoặc xếp TKB."
+          }
+        },
+        {
+          "name": "TC-05: Xóa giờ đã xếp (/api/manual/clear-times)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/clear-times",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "clear-times"
+              ]
+            },
+            "description": "Xóa toàn bộ kết quả đã gán giờ trên lưới tuần, đưa các lớp về trạng thái chưa xếp."
+          }
+        },
+        {
+          "name": "TC-06: Hoàn tác về mốc lưu gần nhất (/api/manual/hoan-tac)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Mã trạng thái hợp lệ (200 hoặc 400 nếu chưa có mốc)', function () {",
+                  "    pm.expect([200, 400]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/hoan-tac",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "hoan-tac"
+              ]
+            },
+            "description": "Khôi phục lại dữ liệu lưới và overrides từ điểm mốc an toàn gần nhất."
+          }
+        }
+      ]
+    },
+    {
+      "name": "03. Quản lý Giảng viên (Teachers)",
+      "item": [
+        {
+          "name": "TC-07: Thêm Giảng viên Thỉnh giảng (GUEST)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Giảng viên mới xuất hiện trong danh sách', function () {",
+                  "    var d = pm.response.json();",
+                  "    var gv = d.teachers.find(t => t.name === 'TS. Nguyễn Văn A');",
+                  "    pm.expect(gv).to.not.be.undefined;",
+                  "    pm.expect(gv.teacherType).to.eql('GUEST');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"TS. Nguyễn Văn A\",\n  \"org\": \"FATE\",\n  \"teacherType\": \"GUEST\",\n  \"availability\": [\n    0,\n    1,\n    2,\n    3,\n    13,\n    14,\n    15,\n    16\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/teacher",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "teacher"
+              ]
+            },
+            "description": "Thêm một giảng viên thỉnh giảng có khai báo danh sách tiết rảnh trong tuần."
+          }
+        },
+        {
+          "name": "TC-08: Thêm Giảng viên Cơ hữu (RESIDENT)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('GV cơ hữu không bắt buộc availability', function () {",
+                  "    var d = pm.response.json();",
+                  "    var gv = d.teachers.find(t => t.name === 'ThS. Trần Thị B');",
+                  "    pm.expect(gv).to.not.be.undefined;",
+                  "    pm.expect(gv.teacherType).to.eql('RESIDENT');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"ThS. Trần Thị B\",\n  \"org\": \"FATE\",\n  \"teacherType\": \"RESIDENT\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/teacher",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "teacher"
+              ]
+            },
+            "description": "Thêm một giảng viên cơ hữu của khoa FATE."
+          }
+        },
+        {
+          "name": "TC-09 [Negative]: Thêm GV thiếu họ tên (Mong đợi 400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code phải là 400 Bad Request', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test('Trả về thông báo lỗi chi tiết', function () {",
+                  "    var d = pm.response.json();",
+                  "    pm.expect(d).to.have.property('error');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teacherType\": \"GUEST\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/teacher",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "teacher"
+              ]
+            },
+            "description": "Kiểm thử bắt lỗi khi người dùng gửi request thiếu trường bắt buộc 'name'."
+          }
+        },
+        {
+          "name": "TC-10: Cập nhật Giảng viên (/api/manual/teacher/0)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"PGS.TS\",\n  \"email\": \"nguyenvana@vnu.edu.vn\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/teacher/0",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "teacher",
+                "0"
+              ]
+            },
+            "description": "Cập nhật học hàm, học vị, email của giảng viên id=0."
+          }
+        },
+        {
+          "name": "TC-11: Tự sinh giờ rảnh ngẫu nhiên cho GV",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/teacher/0/generate-availability",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "teacher",
+                "0",
+                "generate-availability"
+              ]
+            },
+            "description": "Tự động sinh các slot rảnh mẫu cho giảng viên để phục vụ test nhanh."
+          }
+        }
+      ]
+    },
+    {
+      "name": "04. Quản lý Học phần (Courses)",
+      "item": [
+        {
+          "name": "TC-12: Thêm Học phần CSE3013",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Học phần CSE3013 tồn tại trong danh sách', function () {",
+                  "    var d = pm.response.json();",
+                  "    var c = d.courses.find(x => x.code === 'CSE3013');",
+                  "    pm.expect(c).to.not.be.undefined;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"CSE3013\",\n  \"name\": \"Cấu trúc dữ liệu và giải thuật\",\n  \"credits\": 3\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/course",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "course"
+              ]
+            },
+            "description": "Thêm mới một học phần lý thuyết 3 tín chỉ."
+          }
+        },
+        {
+          "name": "TC-13: Thêm Học phần CSE3014",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"CSE3014\",\n  \"name\": \"Lập trình Web nâng cao\",\n  \"credits\": 3\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/course",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "course"
+              ]
+            },
+            "description": "Thêm học phần thứ hai."
+          }
+        },
+        {
+          "name": "TC-14 [Negative]: Thêm học phần với số tín chỉ không phải số (Mong đợi 400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 400', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"ERR1001\",\n  \"name\": \"Học phần sai tín chỉ\",\n  \"credits\": \"ba_tin_chi\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/course",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "course"
+              ]
+            },
+            "description": "Kiểm tra hệ thống từ chối khi kiểu dữ liệu tín chỉ không hợp lệ."
+          }
+        }
+      ]
+    },
+    {
+      "name": "05. Quản lý Lớp học phần (Sections)",
+      "item": [
+        {
+          "name": "TC-15: Thêm Lớp học phần tự động xếp (autoSchedule=true)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Lớp học phần được thêm vào danh sách', function () {",
+                  "    var d = pm.response.json();",
+                  "    pm.expect(d.classes.length).to.be.above(0);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teacherIds\": [\n    0\n  ],\n  \"courseId\": 0,\n  \"duration\": 3,\n  \"classCode\": \"CSE3013-1\",\n  \"program\": \"FTH\",\n  \"cohort\": \"VJU2026\",\n  \"autoSchedule\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/section",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "section"
+              ]
+            },
+            "description": "Thêm một lớp học phần được cấu hình để Solver tự động tìm khung giờ phù hợp."
+          }
+        },
+        {
+          "name": "TC-16: Thêm Lớp có giờ chốt cứng (day=2, period 1-3)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"teacherIds\": [\n    1\n  ],\n  \"courseId\": 0,\n  \"duration\": 3,\n  \"classCode\": \"CSE3013-2\",\n  \"program\": \"FTH\",\n  \"cohort\": \"VJU2026\",\n  \"day\": 2,\n  \"periodStart\": 1,\n  \"periodEnd\": 3\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/section",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "section"
+              ]
+            },
+            "description": "Thêm lớp đã có thỏa thuận giờ trước, được khóa cứng vào Thứ 4 tiết 1-3."
+          }
+        },
+        {
+          "name": "TC-17: Khóa / Chốt giờ lớp học phần 📌 (/api/manual/section/0/chot)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Lớp 0 được gắn cờ isFixed', function () {",
+                  "    var d = pm.response.json();",
+                  "    var cls = d.classes.find(c => c.id === 0);",
+                  "    if (cls) { pm.expect(cls.isFixed).to.be.true; }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/section/0/chot",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "section",
+                "0",
+                "chot"
+              ]
+            },
+            "description": "Khóa giờ lớp học phần để bộ giải không được tự ý di chuyển."
+          }
+        },
+        {
+          "name": "TC-18: Bỏ chốt giờ lớp học phần (/api/manual/section/0/chot)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/section/0/chot",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "section",
+                "0",
+                "chot"
+              ]
+            },
+            "description": "Mở khóa giờ để bộ giải được quyền tối ưu lại vị trí lớp học."
+          }
+        }
+      ]
+    },
+    {
+      "name": "06. Thuật toán Xếp lịch (CP-SAT Solver)",
+      "item": [
+        {
+          "name": "TC-19: Xếp lịch Giai đoạn 1 - Thỉnh giảng (/api/solve-guest)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Solver trả về kết quả FEASIBLE hoặc OPTIMAL', function () {",
+                  "    var d = pm.response.json();",
+                  "    pm.expect(['FEASIBLE', 'OPTIMAL']).to.include(d.status);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/solve-guest",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "solve-guest"
+              ]
+            },
+            "description": "Chạy bộ giải OR-Tools CP-SAT để xếp các lớp của GV Thỉnh giảng theo đúng khung giờ rảnh đã khai báo."
+          }
+        },
+        {
+          "name": "TC-20: Xếp lịch Giai đoạn 2 - Cơ hữu (/api/solve-resident)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/solve-resident",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "solve-resident"
+              ]
+            },
+            "description": "Ghép các lớp của giảng viên cơ hữu vào các khoảng trống còn lại trên lưới tuần."
+          }
+        },
+        {
+          "name": "TC-21: Xếp lịch theo phạm vi CTĐT (Scope: FTH - VJU2026)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"program\": \"FTH\",\n  \"cohort\": \"VJU2026\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/solve-guest",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "solve-guest"
+              ]
+            },
+            "description": "Chỉ xếp các lớp thuộc phạm vi CTĐT FTH Khóa VJU2026, giữ nguyên toàn bộ các chương trình khác."
+          }
+        }
+      ]
+    },
+    {
+      "name": "07. Kéo thả & Can thiệp Thủ công (Overrides)",
+      "item": [
+        {
+          "name": "TC-22: Kéo thả di chuyển buổi học (/api/move-lesson)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sectionId\": 0,\n  \"day\": 1,\n  \"startSlot\": 2,\n  \"pinned\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/move-lesson",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "move-lesson"
+              ]
+            },
+            "description": "Giáo vụ kéo thả buổi học sang Thứ 3, bắt đầu từ tiết 2 và ghim vị trí."
+          }
+        },
+        {
+          "name": "TC-23: Xóa vị trí can thiệp thủ công (/api/clear-override)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sectionId\": 0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/clear-override",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "clear-override"
+              ]
+            },
+            "description": "Bỏ vị trí kéo thả tay để trả buổi học về kết quả tự động ban đầu."
+          }
+        },
+        {
+          "name": "TC-24: Lưu TKB chính thức (/api/manual/save-schedule)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/save-schedule",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "save-schedule"
+              ]
+            },
+            "description": "Lưu trạng thái TKB hiện tại thành mốc chính thức và ghi vào snapshot."
+          }
+        }
+      ]
+    },
+    {
+      "name": "08. Tính năng Nâng cao (Học chung & Bỏ qua)",
+      "item": [
+        {
+          "name": "TC-25: Lấy danh sách nhóm học chung (/api/manual/hoc-chung)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/hoc-chung",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "hoc-chung"
+              ]
+            },
+            "description": "Lấy danh sách các nhóm môn học chung phòng, học cùng giảng viên."
+          }
+        },
+        {
+          "name": "TC-26: Tạo nhóm học chung (/api/manual/hoc-chung)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sectionIds\": [\n    0,\n    1\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/hoc-chung",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "hoc-chung"
+              ]
+            },
+            "description": "Gộp 2 lớp vào học chung 1 ca học."
+          }
+        },
+        {
+          "name": "TC-27: Lấy danh sách lớp bỏ qua (/api/manual/bo-qua)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/bo-qua",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "bo-qua"
+              ]
+            },
+            "description": "Xem danh sách các lớp bị đánh dấu bỏ qua (không tham gia xếp lịch)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "09. Xuất file Excel (Export)",
+      "item": [
+        {
+          "name": "TC-28: Xuất file Excel TKB tổng thể (/api/manual/export)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Content-Type là file Excel OpenXML', function () {",
+                  "    pm.expect(pm.response.headers.get('Content-Type')).to.include('spreadsheetml');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/export",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "export"
+              ]
+            },
+            "description": "Xuất bảng kế hoạch thời khóa biểu tổng hợp 29 cột chuẩn định dạng trường VJU."
+          }
+        },
+        {
+          "name": "TC-29: Xuất file Excel ma trận lưới tuần (/api/manual/export-luoi)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code là 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manual/export-luoi",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "manual",
+                "export-luoi"
+              ]
+            },
+            "description": "Xuất bảng ma trận tuần (Thứ 2 - CN x Tiết 1 - 13) để in ấn hoặc dán thông báo."
+          }
+        }
+      ]
+    }
+  ]
+}

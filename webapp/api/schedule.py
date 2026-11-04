@@ -181,10 +181,13 @@ def api_save_schedule(data):
 
         day, period0 = divmod(slot, slots_per_day)
         teacher = data["teachers"][s["teacher_id"]]
+        was_auto = bool(s.get("time_assumed") or s.get("time_source") == "auto")
         apply_section_time(data, sid, teacher, s["duration"], {
             "day": day, "period_start": period0 + 1,
             "period_end": period0 + s["duration"],
         })
+        if was_auto:
+            s["time_source"] = "auto"
         saved_count += 1
 
     # Trang thai lich cho TOAN BO lop (khong chi cac lop vua luu) - quet trung

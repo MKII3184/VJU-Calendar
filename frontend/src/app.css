@@ -18,6 +18,7 @@
 
 @import 'tailwindcss';
 @import './styles.css' layer(legacy);
+@import './theme.css';
 
 /* Quét class Tailwind trong toàn bộ mã nguồn React. */
 @source './**/*.{js,jsx}';
@@ -89,15 +90,22 @@
   --sidebar-active-foreground: oklch(0.99 0 0);
   --sidebar-border: oklch(1 0 0 / 14%);
 
-  --glass-surface: rgb(255 255 255 / 78%);
-  --glass-surface-strong: rgb(255 255 255 / 92%);
-  --glass-blue: rgb(37 99 235 / 25%);
-  --glass-teal: rgb(13 148 136 / 25%);
+  --glass-surface: rgb(var(--g-w) / 78%);
+  --glass-surface-strong: rgb(var(--g-w) / 92%);
+  /* Thành phần màu của chất liệu kính: nền trắng/xám trung tính (sáng) — đổi
+     sang slate tối ở .dark. Các rule kính bên dưới đều đi qua 4 biến này. */
+  --g-w: 255 255 255;
+  --g-t1: 244 245 247;
+  --g-t2: 238 240 243;
+  --g-shadow: 15 23 42;
+  --surface-solid: #ffffff;
+  --surface-subtle: #f5f6f8;
+  --canvas-bg: linear-gradient(145deg, #ffffff 0%, #f5f6f8 52%, #eceef1 100%);
   --glass-red: rgb(220 38 38 / 30%);
-  --glass-border: rgb(255 255 255 / 82%);
+  --glass-border: rgb(var(--g-w) / 82%);
   --glass-shadow: 0 18px 50px rgb(82 24 24 / 10%), 0 2px 10px rgb(15 23 42 / 6%);
   --glass-shadow-soft: 0 8px 28px rgb(82 24 24 / 8%), 0 1px 4px rgb(15 23 42 / 5%);
-  --manual-glass-surface: linear-gradient(105deg, rgb(255 255 255 / 88%), rgb(239 246 255 / 78%), rgb(240 253 250 / 76%));
+  --manual-glass-surface: linear-gradient(105deg, rgb(var(--g-w) / 88%), rgb(var(--g-t1) / 78%), rgb(var(--g-t2) / 76%));
 }
 
 .dark {
@@ -120,6 +128,18 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.551 0.027 264.364);
+
+  --g-w: 30 41 59;
+  --g-t1: 30 41 59;
+  --g-t2: 22 32 50;
+  --g-shadow: 0 0 0;
+  --surface-solid: oklch(0.208 0.042 265.755);
+  --surface-subtle: oklch(0.17 0.04 265);
+  --canvas-bg: linear-gradient(145deg, #0b1220 0%, #0f172a 52%, #111b30 100%);
+  --glass-shadow: 0 18px 50px rgb(0 0 0 / 45%), 0 2px 10px rgb(0 0 0 / 30%);
+  --glass-shadow-soft: 0 8px 28px rgb(0 0 0 / 38%), 0 1px 4px rgb(0 0 0 / 28%);
+  --status-pending: oklch(0.8 0.15 86);
+  --status-approved: oklch(0.72 0.15 148);
 }
 
 @theme inline {
@@ -203,23 +223,20 @@
 }
 
 @layer components {
-  .liquid-canvas {
-    background-color: #f6f9ff;
-    background-image:
-      radial-gradient(circle at 8% 4%, var(--glass-blue), transparent 31rem),
-      radial-gradient(circle at 88% 12%, var(--glass-teal), transparent 29rem),
-      radial-gradient(circle at 72% 88%, var(--glass-red), transparent 35rem),
-      linear-gradient(145deg, #fff 0%, #f4f8ff 46%, #f1fbf9 100%);
+  .liquid-canvas,
+  .liquid-role-canvas {
+    background-color: var(--surface-subtle);
+    background-image: var(--canvas-bg);
     background-attachment: fixed;
+    color: var(--foreground);
   }
 
-  .liquid-role-canvas {
-    background-color: #541b20;
-    background-image:
-      radial-gradient(circle at 10% 14%, var(--glass-blue), transparent 23rem),
-      radial-gradient(circle at 88% 20%, var(--glass-teal), transparent 25rem),
-      radial-gradient(circle at 68% 92%, var(--glass-red), transparent 32rem),
-      linear-gradient(145deg, #35151d 0%, #771f25 48%, #371725 100%);
+  .liquid-role-canvas::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: var(--primary);
   }
 
   .glass-topbar,
@@ -239,19 +256,19 @@
   }
 
   .glass-topbar {
-    background: linear-gradient(110deg, rgb(255 255 255 / 82%), rgb(37 99 235 / 8%), rgb(13 148 136 / 7%));
-    box-shadow: 0 1px 0 rgb(255 255 255 / 80%), 0 8px 30px rgb(37 99 235 / 8%);
+    background: linear-gradient(110deg, rgb(var(--g-w) / 82%), rgb(var(--g-shadow) / 8%), rgb(13 148 136 / 7%));
+    box-shadow: 0 1px 0 rgb(var(--g-w) / 80%), 0 8px 30px rgb(var(--g-shadow) / 8%);
   }
 
   .glass-sidebar {
-    background: linear-gradient(180deg, rgb(255 255 255 / 76%), rgb(13 148 136 / 7%));
-    box-shadow: 8px 0 32px rgb(13 148 136 / 7%);
+    background: linear-gradient(180deg, rgb(var(--g-w) / 76%), rgb(var(--g-shadow) / 7%));
+    box-shadow: 8px 0 32px rgb(var(--g-shadow) / 7%);
   }
 
   .glass-page-header,
   .glass-toolbar {
-    background: linear-gradient(105deg, rgb(255 255 255 / 90%), rgb(37 99 235 / 7%), rgb(13 148 136 / 6%));
-    box-shadow: 0 10px 30px rgb(37 99 235 / 7%);
+    background: linear-gradient(105deg, rgb(var(--g-w) / 90%), rgb(var(--g-shadow) / 7%), rgb(13 148 136 / 6%));
+    box-shadow: 0 10px 30px rgb(var(--g-shadow) / 7%);
   }
 
   .glass-panel,
@@ -260,7 +277,7 @@
   }
 
   .glass-hero-card {
-    background: rgb(255 255 255 / 88%);
+    background: rgb(var(--g-w) / 88%);
   }
 
   .glass-popover,
@@ -269,113 +286,188 @@
     background: var(--glass-surface-strong);
   }
 
-  .schedule-workspace .glass-panel {
-    border-color: rgb(255 255 255 / 82%);
+  .schedule-filter-popover {
+    border-color: rgb(var(--g-w) / 90%);
     background:
-      linear-gradient(120deg, rgb(255 255 255 / 42%), transparent 34% 68%, rgb(255 255 255 / 16%)),
-      linear-gradient(145deg, rgb(255 255 255 / 66%), rgb(239 246 255 / 52%), rgb(220 250 247 / 44%));
-    box-shadow: 0 14px 34px rgb(37 99 235 / 12%), inset 1px 1px 0 rgb(255 255 255 / 92%), inset -1px -1px 0 rgb(37 99 235 / 9%);
+      radial-gradient(ellipse at 12% 0%, rgb(var(--g-w) / 92%), transparent 58%),
+      radial-gradient(ellipse at 92% 100%, rgb(var(--g-t2) / 20%), transparent 62%),
+      linear-gradient(135deg, rgb(var(--g-w) / 76%), rgb(var(--g-t1) / 68%), rgb(var(--g-t2) / 60%));
+    box-shadow: 0 20px 52px rgb(var(--g-shadow) / 18%), inset 1px 1px 0 rgb(var(--g-w) / 96%), inset -1px -1px 0 rgb(var(--g-shadow) / 10%);
+    -webkit-backdrop-filter: blur(22px) saturate(175%);
+    backdrop-filter: blur(22px) saturate(175%);
+  }
+
+  .lesson-popover {
+    border: 1px solid rgb(var(--g-w) / 90%);
+    background:
+      radial-gradient(ellipse at 14% 0%, rgb(var(--g-w) / 94%), transparent 56%),
+      radial-gradient(ellipse at 92% 100%, rgb(var(--g-shadow) / 16%), transparent 64%),
+      linear-gradient(135deg, rgb(var(--g-w) / 82%), rgb(var(--g-t1) / 74%), rgb(var(--g-t2) / 66%));
+    color: var(--foreground);
+    box-shadow: 0 22px 54px rgb(var(--g-shadow) / 20%), inset 1px 1px 0 rgb(var(--g-w) / 98%), inset -1px -1px 0 rgb(var(--g-shadow) / 10%);
+    -webkit-backdrop-filter: blur(22px) saturate(175%);
+    backdrop-filter: blur(22px) saturate(175%);
+  }
+
+  .lesson-popover::before {
+    border: 1px solid rgb(var(--g-w) / 82%);
+    background: rgb(var(--g-t1) / 90%);
+    box-shadow: -2px 2px 5px rgb(var(--g-shadow) / 8%);
+  }
+
+  .lesson-popover.flip-left::before {
+    box-shadow: 2px -2px 5px rgb(var(--g-shadow) / 8%);
+  }
+
+  .lesson-popover.pass-through {
+    pointer-events: none;
+  }
+
+  .lesson-popover.interactive {
+    pointer-events: auto;
+  }
+
+  .lesson-popover .tt-section,
+  .lesson-popover .tt-label,
+  .lesson-popover .tt-teacher-row,
+  .lesson-popover .tt-hint {
+    color: var(--muted-foreground);
+  }
+
+  .lesson-popover .tt-name,
+  .lesson-popover .tt-teacher-row strong,
+  .lesson-popover .tt-val,
+  .lesson-popover .tt-close-btn:hover {
+    color: var(--foreground);
+  }
+
+  .lesson-popover .tt-room-row {
+    border-color: color-mix(in oklch, var(--border) 78%, transparent);
+  }
+
+  .lesson-popover .tt-close-btn {
+    color: var(--muted-foreground);
+  }
+
+  .schedule-workspace .glass-panel {
+    border-color: rgb(var(--g-w) / 82%);
+    background:
+      linear-gradient(120deg, rgb(var(--g-w) / 42%), transparent 34% 68%, rgb(var(--g-w) / 16%)),
+      linear-gradient(145deg, rgb(var(--g-w) / 66%), rgb(var(--g-t1) / 52%), rgb(var(--g-t2) / 44%));
+    box-shadow: 0 14px 34px rgb(var(--g-shadow) / 12%), inset 1px 1px 0 rgb(var(--g-w) / 92%), inset -1px -1px 0 rgb(var(--g-shadow) / 9%);
     -webkit-backdrop-filter: blur(10px) saturate(160%);
     backdrop-filter: blur(10px) saturate(160%);
   }
 
-  .manual-edit-glass {
-    border-left-color: rgb(255 255 255 / 88%);
-    background: var(--manual-glass-surface);
-    box-shadow: -16px 0 42px rgb(37 99 235 / 9%), inset 1px 0 0 rgb(255 255 255 / 92%);
-    -webkit-backdrop-filter: blur(20px) saturate(145%);
-    backdrop-filter: blur(20px) saturate(145%);
-  }
-
-  .edit-drawer-glass {
+  .glass-dialog,
+  .manual-edit-glass,
+  .schedule-workflow-glass,
+  .edit-drawer-glass,
+  .teacher-edit-dialog {
+    border-color: rgb(var(--g-w) / 66%);
     background:
-      linear-gradient(120deg, rgb(255 255 255 / 38%), transparent 25% 54%, rgb(255 255 255 / 13%) 73%, transparent),
-      linear-gradient(105deg, rgb(255 255 255 / 52%), rgb(239 246 255 / 42%), rgb(220 250 247 / 38%));
-    box-shadow: -20px 0 44px rgb(37 99 235 / 15%), inset 1px 0 0 rgb(255 255 255 / 95%), inset 15px 0 24px rgb(255 255 255 / 18%);
-    -webkit-backdrop-filter: blur(8px) saturate(165%);
-    backdrop-filter: blur(8px) saturate(165%);
+      linear-gradient(135deg, rgb(var(--g-w) / 25%), rgb(var(--g-t1) / 18%), rgb(var(--g-t2) / 14%));
+    box-shadow: 0 24px 64px rgb(15 23 42 / 20%), inset 1px 1px 0 rgb(var(--g-w) / 72%);
+    -webkit-backdrop-filter: blur(14px) saturate(165%);
+    backdrop-filter: blur(14px) saturate(165%);
   }
 
-  .manual-edit-glass > div:first-child {
-    background: linear-gradient(105deg, rgb(255 255 255 / 24%), rgb(37 99 235 / 4%), transparent);
-    box-shadow: inset 0 -1px 0 rgb(255 255 255 / 78%), 0 8px 24px rgb(37 99 235 / 6%);
-  }
-
+  .glass-dialog > [data-slot='dialog-header'],
+  .manual-edit-glass > div:first-child,
   .edit-drawer-glass > div:first-child {
-    border-color: rgb(255 255 255 / 68%);
+    border-color: rgb(var(--g-w) / 52%);
+    background: rgb(var(--g-w) / 12%);
+    box-shadow: none;
+  }
+
+  .schedule-workflow-glass .glass-panel {
+    border-color: rgb(var(--g-w) / 58%);
     background:
-      radial-gradient(ellipse at 15% 0%, rgb(255 255 255 / 72%), transparent 64%),
-      linear-gradient(105deg, rgb(255 255 255 / 55%), rgb(227 238 255 / 42%) 52%, rgb(161 232 233 / 38%));
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 95%), inset 0 -1px 0 rgb(255 255 255 / 70%), 0 8px 24px rgb(37 99 235 / 9%);
+      linear-gradient(135deg, rgb(var(--g-w) / 26%), rgb(var(--g-t1) / 18%), rgb(var(--g-t2) / 14%));
+    box-shadow: inset 1px 1px 0 rgb(var(--g-w) / 64%), 0 10px 28px rgb(var(--g-shadow) / 9%);
+    -webkit-backdrop-filter: blur(10px) saturate(155%);
+    backdrop-filter: blur(10px) saturate(155%);
+  }
+
+  .schedule-workflow-inbox > .glass-panel {
+    position: static;
+    height: 100%;
+    min-height: 0;
+    max-height: none;
+    border-color: rgb(var(--g-w) / 48%);
+    background:
+      linear-gradient(135deg, rgb(var(--g-w) / 15%), rgb(var(--g-t1) / 10%), rgb(var(--g-t2) / 8%));
+    -webkit-backdrop-filter: blur(8px) saturate(150%);
+    backdrop-filter: blur(8px) saturate(150%);
   }
 
   .manual-edit-glass > div:nth-child(2) {
-    background: linear-gradient(180deg, rgb(255 255 255 / 10%), transparent 18rem);
+    background: linear-gradient(180deg, rgb(var(--g-w) / 10%), transparent 18rem);
   }
 
   .availability-glass-grid {
-    border-color: rgb(255 255 255 / 86%);
+    border-color: rgb(var(--g-w) / 86%);
     background: var(--manual-glass-surface);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 88%), 0 8px 24px rgb(37 99 235 / 7%);
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 88%), 0 8px 24px rgb(var(--g-shadow) / 7%);
     -webkit-backdrop-filter: blur(12px) saturate(140%);
     backdrop-filter: blur(12px) saturate(140%);
   }
 
   .availability-glass-header {
     border-color: rgb(203 213 225 / 58%);
-    background: rgb(239 246 255 / 58%);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 72%);
+    background: rgb(var(--g-t1) / 58%);
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 72%);
   }
 
   .availability-glass-cell {
     border-color: rgb(203 213 225 / 52%);
-    background: rgb(255 255 255 / 32%);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 52%);
+    background: rgb(var(--g-w) / 32%);
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 52%);
   }
 
   .availability-glass-available {
     border-color: rgb(52 211 153 / 42%);
     background:
-      radial-gradient(circle at 22% 8%, rgb(255 255 255 / 82%) 0 7%, transparent 38%),
+      radial-gradient(circle at 22% 8%, rgb(var(--g-w) / 82%) 0 7%, transparent 38%),
       linear-gradient(135deg, rgb(209 250 229 / 82%), rgb(110 231 183 / 48%));
-    box-shadow: inset 1px 1px 0 rgb(255 255 255 / 88%), inset -1px -1px 0 rgb(16 185 129 / 18%);
+    box-shadow: inset 1px 1px 0 rgb(var(--g-w) / 88%), inset -1px -1px 0 rgb(16 185 129 / 18%);
   }
 
   .availability-glass-teaching {
     border-color: rgb(56 189 248 / 42%);
     background:
-      radial-gradient(circle at 22% 8%, rgb(255 255 255 / 84%) 0 7%, transparent 38%),
+      radial-gradient(circle at 22% 8%, rgb(var(--g-w) / 84%) 0 7%, transparent 38%),
       linear-gradient(135deg, rgb(224 242 254 / 86%), rgb(125 211 252 / 46%));
-    box-shadow: inset 1px 1px 0 rgb(255 255 255 / 90%), inset -1px -1px 0 rgb(14 165 233 / 18%);
+    box-shadow: inset 1px 1px 0 rgb(var(--g-w) / 90%), inset -1px -1px 0 rgb(14 165 233 / 18%);
   }
 
   .manual-edit-glass .availability-glass-available {
     border-color: rgb(13 148 136 / 45%);
     background:
-      radial-gradient(ellipse at 25% 6%, rgb(255 255 255 / 86%), transparent 54%),
+      radial-gradient(ellipse at 25% 6%, rgb(var(--g-w) / 86%), transparent 54%),
       radial-gradient(ellipse at 85% 90%, rgb(13 148 136 / 48%), transparent 76%),
       linear-gradient(145deg, rgb(13 148 136 / 42%), rgb(13 148 136 / 18%) 52%, rgb(13 148 136 / 38%));
-    box-shadow: inset 1px 1px 1px rgb(255 255 255 / 92%), inset -2px -2px 4px rgb(13 148 136 / 22%);
+    box-shadow: inset 1px 1px 1px rgb(var(--g-w) / 92%), inset -2px -2px 4px rgb(13 148 136 / 22%);
   }
 
   .manual-edit-glass .availability-glass-teaching {
     border-color: rgb(37 99 235 / 45%);
     background:
-      radial-gradient(ellipse at 25% 6%, rgb(255 255 255 / 86%), transparent 54%),
+      radial-gradient(ellipse at 25% 6%, rgb(var(--g-w) / 86%), transparent 54%),
       radial-gradient(ellipse at 85% 90%, rgb(37 99 235 / 48%), transparent 76%),
       linear-gradient(145deg, rgb(37 99 235 / 42%), rgb(37 99 235 / 18%) 52%, rgb(37 99 235 / 38%));
-    box-shadow: inset 1px 1px 1px rgb(255 255 255 / 92%), inset -2px -2px 4px rgb(37 99 235 / 22%);
+    box-shadow: inset 1px 1px 1px rgb(var(--g-w) / 92%), inset -2px -2px 4px rgb(37 99 235 / 22%);
   }
 
   .liquid-data-grid {
     --liquid-grid-line: rgb(148 163 184 / 38%);
-    --liquid-grid-header: rgb(239 246 255 / 78%);
-    --liquid-grid-cell: rgb(255 255 255 / 34%);
-    border-color: rgb(255 255 255 / 82%);
+    --liquid-grid-header: rgb(var(--g-t1) / 78%);
+    --liquid-grid-cell: rgb(var(--g-w) / 34%);
+    border-color: rgb(var(--g-w) / 82%);
     background:
-      linear-gradient(115deg, rgb(255 255 255 / 48%), transparent 38% 68%, rgb(255 255 255 / 22%)),
-      linear-gradient(145deg, rgb(255 255 255 / 52%), rgb(239 246 255 / 38%), rgb(220 250 247 / 32%));
-    box-shadow: inset 1px 1px 0 rgb(255 255 255 / 90%), inset -1px -1px 0 rgb(37 99 235 / 10%), 0 12px 32px rgb(37 99 235 / 10%);
+      linear-gradient(115deg, rgb(var(--g-w) / 48%), transparent 38% 68%, rgb(var(--g-w) / 22%)),
+      linear-gradient(145deg, rgb(var(--g-w) / 52%), rgb(var(--g-t1) / 38%), rgb(var(--g-t2) / 32%));
+    box-shadow: inset 1px 1px 0 rgb(var(--g-w) / 90%), inset -1px -1px 0 rgb(var(--g-shadow) / 10%), 0 12px 32px rgb(var(--g-shadow) / 10%);
     -webkit-backdrop-filter: blur(10px) saturate(155%);
     backdrop-filter: blur(10px) saturate(155%);
   }
@@ -385,7 +477,7 @@
   .liquid-data-grid [data-slot='table-row'] {
     border-color: var(--liquid-grid-line);
     background: var(--liquid-grid-cell);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 28%);
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 28%);
   }
 
   .liquid-data-grid .schedv2-grid-cell.day,
@@ -394,7 +486,7 @@
   .liquid-data-grid [data-slot='table-header'] {
     border-color: var(--liquid-grid-line);
     background: var(--liquid-grid-header);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 74%);
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 74%);
   }
 
   .liquid-data-grid.detailed > .schedv2-grid-cell.day,
@@ -405,30 +497,30 @@
 
   @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
     .liquid-data-grid {
-      background: rgb(255 255 255 / 95%);
+      background: rgb(var(--g-w) / 95%);
     }
   }
 
   .glass-control,
   [data-slot='input']:not([type='file']),
   [data-slot='native-select'] {
-    border-color: rgb(255 255 255 / 88%);
-    background: rgb(255 255 255 / 68%);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 80%), 0 2px 8px rgb(82 24 24 / 6%);
+    border-color: rgb(var(--g-w) / 88%);
+    background: rgb(var(--g-w) / 68%);
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 80%), 0 2px 8px rgb(82 24 24 / 6%);
   }
 
   .glass-brand-mark {
-    border: 1px solid rgb(255 255 255 / 30%);
-    background: linear-gradient(145deg, rgb(255 255 255 / 25%), rgb(255 255 255 / 8%));
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 36%), 0 14px 34px rgb(31 9 12 / 24%);
+    border: 1px solid color-mix(in oklch, var(--primary) 70%, white);
+    background: linear-gradient(145deg, rgb(255 255 255 / 24%), transparent 50%), var(--primary);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 36%), 0 10px 24px rgb(82 24 24 / 24%);
     -webkit-backdrop-filter: blur(14px) saturate(145%);
     backdrop-filter: blur(14px) saturate(145%);
   }
 
   .glass-nav-active {
     border: 1px solid rgb(216 40 39 / 13%);
-    background: linear-gradient(120deg, rgb(216 40 39 / 12%), rgb(255 255 255 / 62%));
-    box-shadow: inset 3px 0 0 var(--primary), inset 0 1px 0 rgb(255 255 255 / 80%);
+    background: linear-gradient(120deg, rgb(216 40 39 / 12%), rgb(var(--g-w) / 62%));
+    box-shadow: inset 3px 0 0 var(--primary), inset 0 1px 0 rgb(var(--g-w) / 80%);
   }
 
   @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
@@ -442,7 +534,7 @@
     .glass-drawer,
     .glass-hero-card,
     .schedule-workspace .glass-panel {
-      background: rgb(255 255 255 / 96%);
+      background: rgb(var(--g-w) / 96%);
     }
   }
 
@@ -459,8 +551,8 @@
 
 @layer utilities {
   [data-slot='button']:not([data-variant='link']) {
-    border: 1px solid rgb(255 255 255 / 52%);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 42%), inset 0 -1px 0 rgb(15 23 42 / 8%), 0 5px 14px rgb(37 99 235 / 10%);
+    border: 1px solid rgb(var(--g-w) / 52%);
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 42%), inset 0 -1px 0 rgb(15 23 42 / 8%), 0 5px 14px rgb(var(--g-shadow) / 10%);
     -webkit-backdrop-filter: blur(8px) saturate(155%);
     backdrop-filter: blur(8px) saturate(155%);
   }
@@ -473,109 +565,109 @@
 
     [data-slot='button']:not([data-variant='link']):hover:not(:disabled) {
       border-color: color-mix(in oklch, var(--primary) 66%, white);
-      box-shadow: inset 0 1px 0 rgb(255 255 255 / 58%), inset 0 -1px 0 rgb(15 23 42 / 9%), 0 7px 18px rgb(82 24 24 / 15%);
+      box-shadow: inset 0 1px 0 rgb(var(--g-w) / 58%), inset 0 -1px 0 rgb(15 23 42 / 9%), 0 7px 18px rgb(82 24 24 / 15%);
     }
   }
 
   [data-slot='button']:not([data-variant='link']):active:not(:disabled) {
-    box-shadow: inset 0 2px 5px rgb(15 23 42 / 13%), 0 2px 7px rgb(37 99 235 / 9%);
+    box-shadow: inset 0 2px 5px rgb(15 23 42 / 13%), 0 2px 7px rgb(var(--g-shadow) / 9%);
     transform: translateY(1px);
   }
 
   [data-slot='button'][data-variant='default'] {
     border-color: color-mix(in oklch, var(--primary) 70%, white);
     background:
-      linear-gradient(145deg, rgb(255 255 255 / 32%), transparent 42%),
+      linear-gradient(145deg, rgb(var(--g-w) / 32%), transparent 42%),
       color-mix(in oklch, var(--primary) 82%, transparent);
   }
 
   [data-slot='button'][data-variant='default']:hover:not(:disabled) {
     background:
-      linear-gradient(145deg, rgb(255 255 255 / 40%), transparent 45%),
+      linear-gradient(145deg, rgb(var(--g-w) / 40%), transparent 45%),
       color-mix(in oklch, var(--primary) 90%, transparent);
   }
 
   [data-slot='button'][data-variant='destructive'] {
     border-color: color-mix(in oklch, var(--destructive) 72%, white);
     background:
-      linear-gradient(145deg, rgb(255 255 255 / 30%), transparent 44%),
+      linear-gradient(145deg, rgb(var(--g-w) / 30%), transparent 44%),
       color-mix(in oklch, var(--destructive) 82%, transparent);
   }
 
   [data-slot='button'][data-variant='destructive']:hover:not(:disabled) {
     background:
-      linear-gradient(145deg, rgb(255 255 255 / 38%), transparent 46%),
+      linear-gradient(145deg, rgb(var(--g-w) / 38%), transparent 46%),
       color-mix(in oklch, var(--destructive) 90%, transparent);
   }
 
   [data-slot='button'][data-variant='success'] {
     border-color: rgb(167 243 208 / 72%);
     background:
-      linear-gradient(145deg, rgb(255 255 255 / 30%), transparent 44%),
+      linear-gradient(145deg, rgb(var(--g-w) / 30%), transparent 44%),
       rgb(5 150 105 / 82%);
   }
 
   [data-slot='button'][data-variant='success']:hover:not(:disabled) {
     background:
-      linear-gradient(145deg, rgb(255 255 255 / 38%), transparent 46%),
+      linear-gradient(145deg, rgb(var(--g-w) / 38%), transparent 46%),
       rgb(4 120 87 / 90%);
   }
 
   [data-slot='button'][data-variant='warning'] {
     border-color: rgb(253 230 138 / 78%);
     background:
-      linear-gradient(145deg, rgb(255 255 255 / 30%), transparent 44%),
+      linear-gradient(145deg, rgb(var(--g-w) / 30%), transparent 44%),
       rgb(217 119 6 / 82%);
   }
 
   [data-slot='button'][data-variant='warning']:hover:not(:disabled) {
     background:
-      linear-gradient(145deg, rgb(255 255 255 / 38%), transparent 46%),
+      linear-gradient(145deg, rgb(var(--g-w) / 38%), transparent 46%),
       rgb(180 83 9 / 90%);
   }
 
   [data-slot='button'][data-variant='outline'],
   [data-slot='button'][data-variant='secondary'] {
-    border-color: rgb(255 255 255 / 82%);
-    background: linear-gradient(120deg, rgb(255 255 255 / 58%), rgb(239 246 255 / 38%), rgb(220 250 247 / 30%));
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 94%), 0 4px 13px rgb(37 99 235 / 9%);
+    border-color: rgb(var(--g-w) / 82%);
+    background: linear-gradient(120deg, rgb(var(--g-w) / 58%), rgb(var(--g-t1) / 38%), rgb(var(--g-t2) / 30%));
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 94%), 0 4px 13px rgb(var(--g-shadow) / 9%);
   }
 
   [data-slot='button'][data-variant='outline']:hover:not(:disabled),
   [data-slot='button'][data-variant='secondary']:hover:not(:disabled) {
-    background: linear-gradient(120deg, rgb(255 255 255 / 72%), rgb(219 234 254 / 54%), rgb(204 251 241 / 40%));
+    background: linear-gradient(120deg, rgb(var(--g-w) / 72%), rgb(var(--g-t1) / 54%), rgb(var(--g-t2) / 40%));
   }
 
   [data-slot='button'][data-variant='ghost'] {
     border-color: transparent;
-    background: rgb(255 255 255 / 8%);
+    background: rgb(var(--g-w) / 8%);
     box-shadow: none;
   }
 
   [data-slot='button'][data-variant='ghost']:hover:not(:disabled) {
-    border-color: rgb(255 255 255 / 72%);
-    background: linear-gradient(120deg, rgb(255 255 255 / 58%), rgb(239 246 255 / 34%), rgb(220 250 247 / 26%));
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 88%), 0 4px 12px rgb(37 99 235 / 8%);
+    border-color: rgb(var(--g-w) / 72%);
+    background: linear-gradient(120deg, rgb(var(--g-w) / 58%), rgb(var(--g-t1) / 34%), rgb(var(--g-t2) / 26%));
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 88%), 0 4px 12px rgb(var(--g-shadow) / 8%);
   }
 
   [data-slot='button'][data-variant='ghost'].glass-nav-active {
     border-color: rgb(216 40 39 / 13%);
-    background: linear-gradient(120deg, rgb(216 40 39 / 12%), rgb(255 255 255 / 62%));
-    box-shadow: inset 3px 0 0 var(--primary), inset 0 1px 0 rgb(255 255 255 / 80%);
+    background: linear-gradient(120deg, rgb(216 40 39 / 12%), rgb(var(--g-w) / 62%));
+    box-shadow: inset 3px 0 0 var(--primary), inset 0 1px 0 rgb(var(--g-w) / 80%);
   }
 
   [data-slot='button']:focus-visible {
     border-color: color-mix(in oklch, var(--primary) 66%, white);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 72%), 0 0 0 3px color-mix(in oklch, var(--primary) 20%, transparent), 0 5px 14px rgb(82 24 24 / 10%);
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 72%), 0 0 0 3px color-mix(in oklch, var(--primary) 20%, transparent), 0 5px 14px rgb(82 24 24 / 10%);
   }
 
   .glass-input,
   [data-slot='input']:not([type='file']),
   [data-slot='input-shell'] {
-    border-color: rgb(255 255 255 / 82%);
+    border-color: rgb(var(--g-w) / 82%);
     background:
-      linear-gradient(120deg, rgb(255 255 255 / 50%), rgb(239 246 255 / 34%) 65%, rgb(220 250 247 / 28%));
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 90%), 0 3px 12px rgb(37 99 235 / 8%);
+      linear-gradient(120deg, rgb(var(--g-w) / 50%), rgb(var(--g-t1) / 34%) 65%, rgb(var(--g-t2) / 28%));
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 90%), 0 3px 12px rgb(var(--g-shadow) / 8%);
     -webkit-backdrop-filter: blur(8px) saturate(155%);
     backdrop-filter: blur(8px) saturate(155%);
   }
@@ -584,7 +676,7 @@
   [data-slot='input']:not([type='file']):focus-visible,
   [data-slot='input-shell']:focus-within {
     border-color: color-mix(in oklch, var(--primary) 58%, white);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 92%), 0 0 0 3px color-mix(in oklch, var(--primary) 18%, transparent), 0 4px 14px rgb(82 24 24 / 10%);
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 92%), 0 0 0 3px color-mix(in oklch, var(--primary) 18%, transparent), 0 4px 14px rgb(82 24 24 / 10%);
   }
 
   [data-slot='input'][aria-invalid='true'],
@@ -595,51 +687,58 @@
 
   [data-slot='checkbox'] {
     border-color: color-mix(in oklch, var(--primary) 52%, white);
-    background: linear-gradient(145deg, rgb(255 255 255 / 66%), rgb(239 246 255 / 38%));
+    background: linear-gradient(145deg, rgb(var(--g-w) / 66%), rgb(var(--g-t1) / 38%));
     color: var(--primary);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 94%), 0 2px 7px rgb(37 99 235 / 9%);
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 94%), 0 2px 7px rgb(var(--g-shadow) / 9%);
     -webkit-backdrop-filter: blur(6px) saturate(150%);
     backdrop-filter: blur(6px) saturate(150%);
   }
 
   [data-slot='checkbox'][data-state='checked'] {
     border-color: color-mix(in oklch, var(--primary) 64%, white);
-    background: linear-gradient(145deg, rgb(255 255 255 / 72%), color-mix(in oklch, var(--primary) 14%, transparent));
+    background: linear-gradient(145deg, rgb(var(--g-w) / 72%), color-mix(in oklch, var(--primary) 14%, transparent));
     color: var(--primary);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 94%), 0 0 0 1px color-mix(in oklch, var(--primary) 12%, transparent), 0 2px 8px rgb(82 24 24 / 10%);
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 94%), 0 0 0 1px color-mix(in oklch, var(--primary) 12%, transparent), 0 2px 8px rgb(82 24 24 / 10%);
   }
 
   [data-slot='checkbox'][data-state='indeterminate'] {
     border-color: color-mix(in oklch, var(--primary) 74%, white);
-    background: color-mix(in oklch, var(--primary) 18%, rgb(255 255 255 / 72%));
+    background: color-mix(in oklch, var(--primary) 18%, rgb(var(--g-w) / 72%));
     color: var(--primary);
   }
 
   [data-slot='checkbox']:focus-visible {
     border-color: color-mix(in oklch, var(--primary) 68%, white);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 94%), 0 0 0 3px color-mix(in oklch, var(--primary) 20%, transparent);
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 94%), 0 0 0 3px color-mix(in oklch, var(--primary) 20%, transparent);
   }
 
   .glass-segmented,
   .schedule-glass-inset {
-    border-color: rgb(255 255 255 / 72%);
-    background: linear-gradient(120deg, rgb(255 255 255 / 44%), rgb(239 246 255 / 30%), rgb(220 250 247 / 24%));
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 82%), 0 2px 10px rgb(37 99 235 / 7%);
+    border-color: rgb(var(--g-w) / 72%);
+    background: linear-gradient(120deg, rgb(var(--g-w) / 44%), rgb(var(--g-t1) / 30%), rgb(var(--g-t2) / 24%));
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 82%), 0 2px 10px rgb(var(--g-shadow) / 7%);
     -webkit-backdrop-filter: blur(7px) saturate(150%);
     backdrop-filter: blur(7px) saturate(150%);
   }
 
   .glass-segmented-active {
-    background: rgb(255 255 255 / 68%);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 94%), 0 3px 10px rgb(82 24 24 / 9%);
+    background: rgb(var(--g-w) / 68%);
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 94%), 0 3px 10px rgb(82 24 24 / 9%);
+  }
+
+  .teacher-type-tab-active {
+    background: linear-gradient(120deg, color-mix(in oklch, var(--primary) 14%, white 72%), rgb(var(--g-w) / 68%));
+    box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--primary) 28%, transparent), inset 0 1px 0 rgb(var(--g-w) / 94%), 0 3px 12px color-mix(in oklch, var(--primary) 14%, transparent);
+    -webkit-backdrop-filter: blur(8px) saturate(155%);
+    backdrop-filter: blur(8px) saturate(155%);
   }
 
   [data-slot='dropdown-menu-trigger'],
   select[data-slot='native-select'] {
-    border-color: rgb(255 255 255 / 75%);
+    border-color: rgb(var(--g-w) / 75%);
     background:
-      linear-gradient(120deg, rgb(255 255 255 / 54%), rgb(239 246 255 / 36%) 65%, rgb(220 250 247 / 30%));
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 92%), 0 3px 12px rgb(37 99 235 / 10%);
+      linear-gradient(120deg, rgb(var(--g-w) / 54%), rgb(var(--g-t1) / 36%) 65%, rgb(var(--g-t2) / 30%));
+    box-shadow: inset 0 1px 0 rgb(var(--g-w) / 92%), 0 3px 12px rgb(var(--g-shadow) / 10%);
     -webkit-backdrop-filter: blur(8px) saturate(160%);
     backdrop-filter: blur(8px) saturate(160%);
   }
@@ -647,28 +746,28 @@
   [data-slot='dropdown-menu-trigger']:hover,
   [data-slot='dropdown-menu-trigger'][data-state='open'],
   select[data-slot='native-select']:hover {
-    background: linear-gradient(120deg, rgb(255 255 255 / 70%), rgb(219 234 254 / 55%), rgb(204 251 241 / 40%));
+    background: linear-gradient(120deg, rgb(var(--g-w) / 70%), rgb(var(--g-t1) / 55%), rgb(var(--g-t2) / 40%));
   }
 
   [data-slot='dropdown-menu-content'] {
-    border-color: rgb(255 255 255 / 82%);
+    border-color: rgb(var(--g-w) / 82%);
     background:
-      linear-gradient(120deg, rgb(255 255 255 / 38%), transparent 30% 66%, rgb(255 255 255 / 16%)),
-      linear-gradient(145deg, rgb(255 255 255 / 62%), rgb(239 246 255 / 52%), rgb(220 250 247 / 46%));
-    box-shadow: 0 18px 42px rgb(37 99 235 / 18%), inset 1px 1px 0 rgb(255 255 255 / 94%), inset -1px -1px 0 rgb(37 99 235 / 12%);
+      linear-gradient(120deg, rgb(var(--g-w) / 38%), transparent 30% 66%, rgb(var(--g-w) / 16%)),
+      linear-gradient(145deg, rgb(var(--g-w) / 62%), rgb(var(--g-t1) / 52%), rgb(var(--g-t2) / 46%));
+    box-shadow: 0 18px 42px rgb(var(--g-shadow) / 18%), inset 1px 1px 0 rgb(var(--g-w) / 94%), inset -1px -1px 0 rgb(var(--g-shadow) / 12%);
     -webkit-backdrop-filter: blur(10px) saturate(165%);
     backdrop-filter: blur(10px) saturate(165%);
   }
 
   [data-slot='dropdown-menu-content'] > .sticky {
-    background: rgb(248 251 255 / 72%);
+    background: rgb(var(--g-t1) / 72%);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
   }
 
   [data-slot='dropdown-menu-item'][data-highlighted],
   [data-slot='dropdown-menu-checkbox-item'][data-highlighted] {
-    background: rgb(37 99 235 / 13%);
+    background: rgb(var(--g-shadow) / 13%);
     color: var(--foreground);
   }
 
@@ -686,11 +785,11 @@
       max-height: min(20rem, 60vh);
       max-width: calc(100vw - 1rem);
       overflow-y: auto;
-      border: 1px solid rgb(255 255 255 / 82%);
+      border: 1px solid rgb(var(--g-w) / 82%);
       border-radius: 0.75rem;
       padding: 0.25rem;
-      background: linear-gradient(145deg, rgb(255 255 255 / 70%), rgb(239 246 255 / 58%), rgb(220 250 247 / 50%));
-      box-shadow: 0 18px 42px rgb(37 99 235 / 18%), inset 1px 1px 0 rgb(255 255 255 / 94%);
+      background: linear-gradient(145deg, rgb(var(--g-w) / 70%), rgb(var(--g-t1) / 58%), rgb(var(--g-t2) / 50%));
+      box-shadow: 0 18px 42px rgb(var(--g-shadow) / 18%), inset 1px 1px 0 rgb(var(--g-w) / 94%);
       -webkit-backdrop-filter: blur(10px) saturate(165%);
       backdrop-filter: blur(10px) saturate(165%);
     }
@@ -704,7 +803,7 @@
 
     select[data-slot='native-select'] option:hover,
     select[data-slot='native-select'] option:checked {
-      background: rgb(37 99 235 / 13%);
+      background: rgb(var(--g-shadow) / 13%);
     }
   }
 
@@ -718,12 +817,12 @@
     .glass-segmented,
     .schedule-glass-inset,
     [data-slot='dropdown-menu-content'] {
-      background: rgb(255 255 255 / 96%);
+      background: rgb(var(--g-w) / 96%);
     }
 
     @supports (appearance: base-select) {
       select[data-slot='native-select']::picker(select) {
-        background: rgb(255 255 255 / 96%);
+        background: rgb(var(--g-w) / 96%);
       }
     }
   }

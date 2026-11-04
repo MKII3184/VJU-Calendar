@@ -79,6 +79,7 @@ def api_manual_clear_times(data):
             bo_qua_da_chot += 1
             continue
         apply_section_time(data, sid, teacher, s["duration"], None)
+        s["time_source"] = "auto"
         # Go ghim: khong go thi lop van bi ep ve gio vua xoa o lan Giai ke tiep,
         # tuc nut "Xoa gio" khong lam gi ca (xem ghim_theo_gio_form).
         ghim_theo_gio_form(data, sid, None)

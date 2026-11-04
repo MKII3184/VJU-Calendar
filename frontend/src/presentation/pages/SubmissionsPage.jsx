@@ -34,6 +34,22 @@ const STATE_OPTIONS = [
 // doi tu cuon trong khung 520px, ben duoi lai do tiep 60 dong bang).
 const VIEW = { QUEUE: "queue", TABLE: "table", COORDS: "coords" };
 
+/** Tên học phần: với vai trò sửa được thì là nút mở form "Sửa lớp" đúng lớp đó. */
+function CourseName({ name, sectionId, onOpen }) {
+  if (!onOpen) return <span>{name}</span>;
+  return (
+    <button
+      type="button"
+      className="course-name-link focus-visible:ring-ring/50 rounded-sm focus-visible:ring-[3px] focus-visible:outline-none"
+      title={`Sửa lớp #${sectionId}`}
+      aria-label={`Sửa lớp #${sectionId}: ${name}`}
+      onClick={() => onOpen(sectionId)}
+    >
+      {name}
+    </button>
+  );
+}
+
 /** Khung the dung chung cho ba man con. */
 function Card({ title, note, children, headExtra }) {
   return (
@@ -152,7 +168,7 @@ export default function SubmissionsPage({ role }) {
             className={cn(
               "inline-flex h-full items-center gap-1.5 rounded-md px-2.5 text-sm font-medium transition-colors",
               activeView === t.key
-                ? "glass-segmented-active text-foreground"
+                ? "glass-segmented-active teacher-type-tab-active text-foreground"
                 : "text-muted-foreground hover:text-foreground",
             )}
           >
@@ -196,6 +212,8 @@ export default function SubmissionsPage({ role }) {
       {activeView === VIEW.TABLE && (
         <TableView
           sq={sq}
+          canEdit={canEdit}
+          onOpenSection={setAssignSectionId}
           search={search}
           program={program}
           stateFilter={stateFilter}
@@ -301,6 +319,7 @@ function QueueView({
           openTeacherId={openTeacherId}
           setOpenTeacherId={setOpenTeacherId}
           onSaveTeacherAvailability={onSaveTeacherAvailability}
+          onOpenSection={canEdit ? onAssign : undefined}
           limit={limit}
           onMore={onMore}
         />
@@ -327,7 +346,7 @@ function UnassignedCard({ rows, total, coordFilter, coordNote, canEdit, onAssign
             <div className="min-w-0 space-y-0.5">
               <p className="flex flex-wrap items-baseline gap-x-2 text-sm">
                 <span className="text-muted-foreground tabular-nums">#{r.sectionId}</span>
-                <span>{r.courseName}</span>
+                <CourseName name={r.courseName} sectionId={r.sectionId} onOpen={canEdit ? onAssign : undefined} />
               </p>
               <p className="text-muted-foreground text-xs">
                 {r.programLabel} · {r.coordinator} · {r.roomType} · {r.duration} tiết
@@ -363,7 +382,7 @@ function UnassignedCard({ rows, total, coordFilter, coordNote, canEdit, onAssign
 // do, khong bay them nut de tranh mo 2 luoi trung nhau cho cung 1 nguoi).
 function NeedsHoursCard({
   sq, teachers, rows, coordNote, canEdit, loading,
-  openTeacherId, setOpenTeacherId, onSaveTeacherAvailability, limit, onMore,
+  openTeacherId, setOpenTeacherId, onSaveTeacherAvailability, onOpenSection, limit, onMore,
 }) {
   const [search, setSearch] = useState("");
   const [program, setProgram] = useState("");
@@ -439,7 +458,7 @@ function NeedsHoursCard({
               <Fragment key={r.sectionId}>
                 <TableRow className={cn(isOpen && "bg-muted/40")}>
                   <TableCell className="whitespace-normal">
-                    {r.courseName}
+                    <CourseName name={r.courseName} sectionId={r.sectionId} onOpen={onOpenSection} />
                     <span className="text-muted-foreground ml-1 text-xs">
                       #{r.sectionId} · {r.roomType} · {r.duration} tiết
                     </span>
@@ -506,7 +525,7 @@ function NeedsHoursCard({
   );
 }
 
-function TableView({ sq, search, program, stateFilter, limit, onSearch, onProgram, onStateFilter, onMore }) {
+function TableView({ sq, canEdit, onOpenSection, search, program, stateFilter, limit, onSearch, onProgram, onStateFilter, onMore }) {
   const visible = filterRows(sq.rows, { search, program, state: stateFilter });
   const shown = visible.slice(0, limit);
 
@@ -588,7 +607,9 @@ function TableView({ sq, search, program, stateFilter, limit, onSearch, onProgra
                   )}
                 </TableCell>
                 <TableCell>{r.teacherName}</TableCell>
-                <TableCell className="whitespace-normal">{r.courseName}</TableCell>
+                <TableCell className="whitespace-normal">
+                  <CourseName name={r.courseName} sectionId={r.sectionId} onOpen={canEdit ? onOpenSection : undefined} />
+                </TableCell>
                 <TableCell>{r.programLabel}</TableCell>
                 <TableCell className="text-muted-foreground">{r.coordinator}</TableCell>
                 <TableCell className="whitespace-normal">{renderWindowCell(r)}</TableCell>

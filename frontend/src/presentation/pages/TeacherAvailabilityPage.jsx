@@ -163,7 +163,7 @@ export default function TeacherAvailabilityPage({ role }) {
                 className={cn(
                   "inline-flex h-full items-center gap-1.5 rounded-md px-2.5 text-sm font-medium capitalize transition-colors",
                   loai === key
-                    ? "glass-segmented-active text-foreground"
+                    ? "glass-segmented-active teacher-type-tab-active text-foreground"
                     : "text-muted-foreground hover:text-foreground",
                 )}
               >
@@ -348,7 +348,6 @@ export default function TeacherAvailabilityPage({ role }) {
         <TeacherEditDrawer
           data={data}
           teacher={drawerTeacher}
-          classes={lopTheoGv.get(drawerId) || []}
           onClose={() => setDrawerId(null)}
         />
       )}

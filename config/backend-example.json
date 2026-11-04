@@ -1,0 +1,91 @@
+{
+  "calendar": {
+    "numDays": 7,
+    "slotsPerDay": 13,
+    "defaultDuration": 2,
+    "maxImportedPeriod": 16,
+    "dayLabels": [
+      "Thứ 2",
+      "Thứ 3",
+      "Thứ 4",
+      "Thứ 5",
+      "Thứ 6",
+      "Thứ 7",
+      "Chủ nhật"
+    ],
+    "slotDayNames": [
+      "Thu 2",
+      "Thu 3",
+      "Thu 4",
+      "Thu 5",
+      "Thu 6",
+      "Thu 7",
+      "Chu nhat"
+    ]
+  },
+  "rooms": {
+    "ltPool": 60,
+    "labPool": 40
+  },
+  "teacherDayLimits": {
+    "GUEST": 5,
+    "RESIDENT": 4
+  },
+  "campuses": {
+    "priority": [
+      "hoa lac",
+      "my dinh"
+    ],
+    "sessionBlocks": {
+      "hoa lac": [
+        [2, 5],
+        [6, 13]
+      ],
+      "my dinh": [
+        [1, 5],
+        [6, 13]
+      ]
+    }
+  },
+  "solver": {
+    "timeLimitSeconds": 30,
+    "numSearchWorkers": 8,
+    "crossProgramCombinationLimit": 5000
+  },
+  "legacyDataParams": {
+    "seed": 0,
+    "pctPreSubmitted": 100,
+    "numForcedConflicts": 0
+  },
+  "availabilityGenerator": {
+    "sessionBlocks": {
+      "morning": {
+        "startPeriod": 2,
+        "endPeriod": 5,
+        "selectionGroup": "daytime"
+      },
+      "afternoon": {
+        "startPeriod": 6,
+        "endPeriod": 9,
+        "selectionGroup": "daytime"
+      },
+      "evening": {
+        "startPeriod": 10,
+        "endPeriod": 12,
+        "selectionGroup": "evening"
+      }
+    },
+    "selectionGroupWeights": {
+      "daytime": 90,
+      "evening": 10
+    },
+    "generationChanceByBlockStage": {
+      "0": 100,
+      "1": 35,
+      "2": 10,
+      "3OrMore": 0
+    },
+    "maxGeneratedBlocksPerDay": 1,
+    "replaceExistingAvailability": true
+  }
+}

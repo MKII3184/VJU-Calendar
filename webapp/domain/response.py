@@ -24,6 +24,8 @@ def _section_status(data, s):
         if s["teacher_type"] == "GUEST" and s["id"] in data["pending_section_ids"]:
             return "missing_time"
         return "ready_auto"
+    if s.get("time_source") == "auto":
+        return "ready_auto"
     return "ready_fixed"
 
 
@@ -38,6 +40,11 @@ def build_classes_list(data):
     for ds in sc.cac_nhom_hoc_chung(data):
         for sid0 in ds:
             cung_buoi[sid0] = ds
+
+    solver_slots = {}
+    for result in (STATE.get("guestResult"), STATE.get("residentResult")):
+        for lesson in (result or {}).get("lessons") or []:
+            solver_slots[lesson["id"]] = lesson["slot"]
 
     out = []
     for sid, s in data["sections"].items():
@@ -101,7 +108,15 @@ def build_classes_list(data):
             p_end = p_start + s["duration"] - 1
 
         time_assumed = bool(s.get("time_assumed")) and not ov
-        time_label = f"{DAY_LABELS_VN[day]}, tiết {p_start}-{p_end}" if not time_assumed and day is not None else None
+        time_preview = False
+        if time_assumed and day is None and sid in solver_slots:
+            slots_per_day = data["params"]["slotsPerDay"]
+            day, period0 = divmod(solver_slots[sid], slots_per_day)
+            p_start = period0 + 1
+            p_end = p_start + s["duration"] - 1
+            time_preview = True
+        time_label = f"{DAY_LABELS_VN[day]}, tiết {p_start}-{p_end}" if day is not None else None
+        time_source = s.get("time_source") or ("auto" if s.get("time_assumed") else "fixed")
 
         out.append({
             "sectionId": sid,
@@ -134,6 +149,7 @@ def build_classes_list(data):
             "expectedStudents": s.get("expected_students"),
             "day": day, "periodStart": p_start, "periodEnd": p_end,
             "timeAssumed": time_assumed, "timeLabel": time_label,
+            "timeSource": time_source, "timePreview": time_preview,
             # Gio dang hien la do giao vu keo-tha dat, khong phai gio goc trong
             # du lieu - de man hinh noi ro thay vi im lang doi mot con so.
             "timeFromOverride": bool(ov and ov.get("slot") is not None),

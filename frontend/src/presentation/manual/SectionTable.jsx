@@ -2,12 +2,12 @@ import { useLayoutEffect, useRef } from "react";
 import { Lock, LockOpen } from "lucide-react";
 import { Pill } from "@/components/shared/pill";
 
-// BANG MIRROR 30 COT cua file Excel ke hoach giang day - trai tim cua man "Du
+// BANG TOM TAT 16 COT tu file Excel ke hoach giang day - trai tim cua man "Du
 // lieu hoc phan". Tach khoi ManualEntryPage vi day la mot khoi tu chung: nhan
 // danh sach lop da loc, ve ra bang, bao ra ngoai khi nguoi dung bam.
 //
-// Giu nguyen CSS cu (.xls-*): day la ban sao CO CHU Y cua file Excel goc, mat do
-// rat day (30 cot, header 3 tang, rowSpan merge-xuong). Padding px-3 py-3 cua
+// Giu nguyen CSS cu (.xls-*): bang giu cau truc Excel goc nhung an thong tin phu,
+// van co header 2 tang va rowSpan merge-xuong. Padding px-3 py-3 cua
 // shadcn Table se lam no phinh gap may lan va mat cong dung.
 
 // Tone thay cho cac class danger/warn/ok cu - dung chung bo 6 tone cua design
@@ -33,14 +33,14 @@ const SCHEDULE_STATUS_META = {
 // "Thu" hien so gon (2..7, CN) giong dung cot L cua Excel goc, KHONG dung
 // DAY_LABELS ("Thứ 2") - cot nay trong file that chi ghi 1 so/chu.
 function dayNumber(day) {
-  if (day == null) return "";
+  if (day == null || day === "") return "—";
   return day === 6 ? "CN" : day + 2;
 }
 
 // Toan bo chi tiet chot lich, gop thanh MOT chuoi cho tooltip: ai chot, luc nao,
 // bao nhieu lop, ghi chu. Truoc day mo ra thanh 3 dong chu in san trong cot
 // "Chot lich" - lap lai o moi hoc phan va keo cot rong ra, trong khi bang da co
-// 30 cot. Nay trang thai chi con mot badge duoi ten mon, chi tiet nam o day.
+// 17 cot. Nay trang thai chi con mot badge duoi ten mon, chi tiet nam o day.
 function nhanChot(chot) {
   if (!chot) return "";
   const luc = (chot.at || "").slice(0, 16).replace("T", " ");
@@ -73,7 +73,7 @@ function groupByCourse(rows) {
 
 
 // So cot DONG BANG ben trai: TT · Ma hoc phan · Ten hoc phan · So tin chi ·
-// Chot lich - dung 5 o dau cua dong tieu de thu nhat (chung deu rowSpan={3}).
+// Chot lich - dung 5 o dau cua dong tieu de thu nhat (chung deu rowSpan={2}).
 const SO_COT_DONG_BANG = 5;
 
 
@@ -136,58 +136,33 @@ export default function SectionTable({
 
           Truoc do dung vach doc 2px, nhung vien bi rang cua khi nguoi dung
           zoom le (chieu cao o ra so thap phan, moi o lam tron mot kieu) -
-          ma bang 30 cot thi zoom nho lai la phan xa tu nhien. Nen khong co
+          ma bang 17 cot thi zoom nho lai la phan xa tu nhien. Nen khong co
           vien de lam tron nen dung vung o moi muc zoom.
 
           Class dat TRUC TIEP len o, khong dung :nth-child: dong DAU moi nhom
           co them 4 o merge con dong sau khong, nen chi so cot lech nhau. */}
       <thead>
         <tr>
-          <th rowSpan={3} className="xls-z-course xls-c-tt">TT</th>
-          <th rowSpan={3} className="xls-z-course xls-c-ma">Mã học phần</th>
-          <th rowSpan={3} className="xls-z-course xls-c-ten">Tên học phần</th>
-          <th rowSpan={3} className="xls-z-course xls-c-tc">Số tín chỉ</th>
-          <th rowSpan={3} className="xls-z-course xls-chot-head">Chốt lịch</th>
-          <th rowSpan={3}>Mã lớp học phần</th>
-          {/* SO TIET moi buoi day - dung vi tri nhu trong file Excel (cot ngay
-              sau "Mã lớp học phần"). Truoc day bang bo qua cot nay hoan toan,
-              nen giao vu dien so tiet vao file xong khong co cho nao doi chieu
-              xem he thong doc duoc chua. */}
-          <th rowSpan={3}>Số tiết</th>
-          <th colSpan={2}>Phân bổ TC</th>
-          <th rowSpan={3}>Khóa</th>
-          <th rowSpan={3}>CTĐT</th>
-          <th rowSpan={3}>Số SV dự kiến</th>
-          <th colSpan={3}>Thời gian</th>
-          <th colSpan={7}>Thông tin giảng viên</th>
-          <th colSpan={2}>Số giờ dạy</th>
-          <th rowSpan={3}>Địa điểm</th>
-          <th rowSpan={3}>Hình thức</th>
-          <th rowSpan={3}>Ngôn ngữ</th>
-          <th rowSpan={3}>Yêu cầu khác</th>
-          <th rowSpan={3}>Ghi chú</th>
-          <th rowSpan={3}>Trạng thái</th>
-          <th rowSpan={3}>Trạng thái lịch</th>
+          <th rowSpan={2} className="xls-z-course xls-c-tt">ID</th>
+          <th rowSpan={2} className="xls-z-course xls-c-ma">Mã học phần</th>
+          <th rowSpan={2} className="xls-z-course xls-c-ten">Tên học phần</th>
+          <th rowSpan={2} className="xls-z-course xls-c-tc">Số tín chỉ</th>
+          <th rowSpan={2} className="xls-z-course xls-chot-head">Chốt lịch</th>
+          <th rowSpan={2}>Mã lớp học phần</th>
+          <th rowSpan={2}>Khóa</th>
+          <th rowSpan={2}>CTĐT</th>
+          <th rowSpan={2}>Số SV dự kiến</th>
+          <th colSpan={2}>Thời gian</th>
+          <th colSpan={2}>Thông tin giảng viên</th>
+          <th rowSpan={2}>Địa điểm</th>
+          <th rowSpan={2}>Trạng thái</th>
+          <th rowSpan={2}>Trạng thái lịch</th>
         </tr>
         <tr>
-          <th rowSpan={2}>Lý thuyết</th>
-          <th rowSpan={2}>Thực hành</th>
-          <th rowSpan={2}>Thứ</th>
-          <th rowSpan={2}>Tiết đầu</th>
-          <th rowSpan={2}>Tiết cuối</th>
-          <th colSpan={2} className="xls-ref-head">Kỳ trước (để đối chiếu)</th>
-          <th colSpan={5} className="xls-z-teacher">Kỳ này</th>
-          <th rowSpan={2}>Lý thuyết</th>
-          <th rowSpan={2}>Thực hành</th>
-        </tr>
-        <tr>
-          <th className="xls-ref-head">Họ tên GV</th>
-          <th className="xls-ref-head">Đơn vị công tác</th>
+          <th>Thứ</th>
+          <th>Tiết giảng dạy</th>
           <th className="xls-z-teacher">Học hàm/vị</th>
           <th className="xls-z-teacher">Họ và tên GV</th>
-          <th className="xls-z-teacher">Đơn vị công tác</th>
-          <th className="xls-z-teacher">Email</th>
-          <th className="xls-z-teacher">SĐT</th>
         </tr>
       </thead>
       {/* MOI HOC PHAN = MOT <tbody> rieng, khong don het vao 1 tbody.
@@ -202,7 +177,7 @@ export default function SectionTable({
       {courseGroups.map((g, gi) => (
         <tbody key={g.courseId ?? `none-${gi}`}>
           {g.rows.map((c, i) => {
-          const meta = STATUS_META[c.status] || { label: c.status, tone: "slate" };
+          const meta = STATUS_META[c.status] || { label: c.status || "—", tone: "slate" };
           return (
             <tr key={c.sectionId} className="sed-row xls-row" onClick={onOpenSection(c.sectionId)}>
               {i === 0 && <td className="xls-course xls-z-course xls-c-tt" rowSpan={g.rows.length} onClick={onOpenCourse(g.courseId)}>{c.sectionId}</td>}
@@ -269,32 +244,16 @@ export default function SectionTable({
                   </button>
                 )}
               </td>
-              {/* durationAssumed = file bo trong CA gio hoc lan o "Số tiết", he
-                  thong tam suy ra (webapp/domain/excel_rows.doan_so_tiet). Danh
-                  dau bang "?" chu khong giau di: con so van phai hien de xep lich
-                  doc duoc, nhung giao vu phai phan biet duoc cai nao la that. */}
-              <td className={c.durationAssumed ? "xls-doan" : undefined}
-                  title={c.durationAssumed
-                    ? "Hệ thống tạm suy ra — file bỏ trống cả giờ học lẫn ô “Số tiết”. Mở lớp để xác nhận."
-                    : undefined}>
-                {c.duration ?? "—"}{c.durationAssumed && <span className="xls-doan-dau"> ?</span>}
-              </td>
-              <td>{c.ltCredits ?? "—"}</td>
-              <td>{c.thCredits ?? "—"}</td>
               <td>{c.cohort || "—"}</td>
-              <td>{c.programLabel}</td>
+              <td>{c.programLabel || "—"}</td>
               <td>{c.expectedStudents ?? "—"}</td>
               <td>{dayNumber(c.day)}</td>
-              <td>{c.periodStart ?? "—"}</td>
-              <td>{c.periodEnd ?? "—"}</td>
-              <td className="xls-ref">{c.prevTeacherName || "—"}</td>
-              <td className="xls-ref">{c.prevTeacherOrg || "—"}</td>
+              <td>{c.periodStart != null && c.periodEnd != null ? `${c.periodStart} - ${c.periodEnd}` : "—"}</td>
               {/* MOI GIANG VIEN MOT DONG trong o - dung nhu file Excel goc
-                  ghi ca nhom trong mot o. Truoc day chi hien nguoi dau nen
-                  email/SDT cua nhung nguoi con lai khong doc duoc o dau, va
-                  khong bam vao ho de khai gio duoc. Bam vao TUNG dong -> mo
-                  ngan sua CHINH nguoi do (co muc "Gio co the day"). */}
-              {["title", "name", "org", "email", "phone"].map((truong) => (
+                  ghi ca nhom trong mot o. Hien hoc ham/vi va ho ten cua tung
+                  nguoi, bam vao TUNG dong -> mo ngan sua CHINH nguoi do
+                  (co muc "Gio co the day" va day du thong tin lien he). */}
+              {["title", "name"].map((truong) => (
                 <td key={truong} className="xls-z-teacher xls-gv-cell">
                   {(c.teachers?.length ? c.teachers : [null]).map((t, k) => (
                     <button
@@ -320,13 +279,7 @@ export default function SectionTable({
                   ))}
                 </td>
               ))}
-              <td>{c.teachingHoursLt ?? "—"}</td>
-              <td>{c.teachingHoursTh ?? "—"}</td>
               <td>{c.location || "—"}</td>
-              <td>{c.teachingMode || "—"}</td>
-              <td>{c.language || "—"}</td>
-              <td>{c.otherRequirements || "—"}</td>
-              <td>{c.notes || "—"}</td>
               <td><Pill tone={meta.tone}>{meta.label}</Pill></td>
               <td>
                 {c.scheduleStatus
@@ -344,7 +297,7 @@ export default function SectionTable({
       {rows.length === 0 && (
         <tbody>
           <tr>
-            <td colSpan={30} className="text-muted-foreground p-6 text-center">
+            <td colSpan={16} className="text-muted-foreground p-6 text-center">
               Chưa có lớp nào khớp bộ lọc.
             </td>
           </tr>

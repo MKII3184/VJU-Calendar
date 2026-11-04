@@ -7,11 +7,9 @@ import {
   danhSachKhoa,
   demPhamVi,
 } from "../../adapters/phamVi";
-import { FilterSelect } from "@/components/shared/filter-select";
+import { MultiFilterSelect } from "@/components/shared/multi-filter-select";
 import { Pill } from "@/components/shared/pill";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
 // CHỌN PHẠM VI XẾP — "lần bấm Xếp này áp cho chương trình nào".
@@ -21,35 +19,25 @@ import { cn } from "@/lib/utils";
 // hai việc khác hẳn nhau và nhầm lẫn thì hậu quả cũng khác hẳn. Đặt ngay trên
 // thanh tiến trình để đọc theo đúng thứ tự: "xếp cho ai" rồi mới tới "bấm gì".
 //
-// Chương trình chọn MỘT (một GĐCT phụ trách một CTĐT), khóa chọn NHIỀU: nhu cầu
-// thật là "FTH khóa 2026, 2025 và 2024" trong cùng một lần xếp.
+// Cả chương trình lẫn khóa đều chọn NHIỀU: "FTH + BCSE, khóa 2026, 2025 và 2024"
+// trong cùng một lần xếp. Backend (domain/pham_vi.py) đã nhận danh sách.
 export default function PhamViXepPanel({ data, phamVi, onChange, disabled, ketQuaPhamVi }) {
   const programs = danhSachChuongTrinh(data);
-  const chuongTrinh = phamVi?.programs?.[0] ?? null;
+  const chuongTrinh = phamVi?.programs ?? [];
   const khoaDaChon = phamVi?.cohorts ?? [];
 
-  // Khóa hiện ra ĐI THEO chương trình đang chọn — xem adapters/phamVi.js.
-  const khoas = useMemo(
-    () => danhSachKhoa(data, chuongTrinh ? [chuongTrinh] : []),
-    [data, chuongTrinh],
-  );
+  // Khóa hiện ra ĐI THEO các chương trình đang chọn — xem adapters/phamVi.js.
+  const khoas = useMemo(() => danhSachKhoa(data, chuongTrinh), [data, chuongTrinh]);
   const dem = useMemo(() => demPhamVi(data, phamVi), [data, phamVi]);
   const dangCoPhamVi = coPhamVi(phamVi);
 
-  const datChuongTrinh = (v) =>
-    // Đổi chương trình thì bỏ hết khóa đang tick: khóa của CTĐT cũ có thể không
-    // tồn tại ở CTĐT mới, để lại là phạm vi rỗng lớp mà nhìn vẫn như có chọn.
-    onChange(chuanHoa({ programs: v ? [v] : [], cohorts: [] }));
-
-  const bat = (khoa) =>
-    onChange(
-      chuanHoa({
-        programs: chuongTrinh ? [chuongTrinh] : [],
-        cohorts: khoaDaChon.includes(khoa)
-          ? khoaDaChon.filter((k) => k !== khoa)
-          : [...khoaDaChon, khoa],
-      }),
-    );
+  // Đổi chương trình thì bỏ các khóa không còn thuộc chương trình mới: để lại là
+  // phạm vi rỗng lớp mà nhìn vẫn như có chọn.
+  const datChuongTrinh = (ds) => {
+    const hopLe = danhSachKhoa(data, ds);
+    onChange(chuanHoa({ programs: ds, cohorts: khoaDaChon.filter((k) => hopLe.includes(k)) }));
+  };
+  const datKhoa = (ds) => onChange(chuanHoa({ programs: chuongTrinh, cohorts: ds }));
 
   return (
     <div
@@ -67,37 +55,25 @@ export default function PhamViXepPanel({ data, phamVi, onChange, disabled, ketQu
         Xếp cho
       </span>
 
-      <FilterSelect
+      <MultiFilterSelect
         label="Toàn khoa"
         searchable
-        value={chuongTrinh}
+        values={chuongTrinh}
+        disabled={disabled}
         options={programs}
         onChange={datChuongTrinh}
       />
 
-      {chuongTrinh && khoas.length > 0 && (
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <span className="text-muted-foreground text-xs">Khoá</span>
-          {khoas.map((k) => (
-            <Label key={k} htmlFor={`pv-${k}`} className="text-sm font-normal">
-              <Checkbox
-                id={`pv-${k}`}
-                checked={khoaDaChon.includes(k)}
-                onCheckedChange={() => bat(k)}
-                disabled={disabled}
-              />
-              {k}
-            </Label>
-          ))}
-          {/* Không tick khóa nào = MỌI khóa của chương trình. Phải nói ra, không
-              thì giáo vụ tưởng chưa chọn gì là chưa xếp được. */}
-          {khoaDaChon.length === 0 && (
-            <span className="text-muted-foreground text-xs italic">
-              (chưa tick = mọi khoá)
-            </span>
-          )}
-        </div>
-      )}
+      {/* Không chọn khóa nào = MỌI khóa của chương trình. Phải nói ra, không thì
+          giáo vụ tưởng chưa chọn gì là chưa xếp được. */}
+      <MultiFilterSelect
+        label="Mọi khoá"
+        searchable
+        values={khoaDaChon}
+        disabled={disabled}
+        options={khoas}
+        onChange={datKhoa}
+      />
 
       <div className="ml-auto flex flex-wrap items-center gap-2">
         {dangCoPhamVi ? (

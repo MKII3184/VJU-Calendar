@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Check, TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -7,15 +7,18 @@ import { cn } from "@/lib/utils";
 // la hai buoc cua cung mot san pham. Buoc thi thuoc ve thanh tien trinh.
 export default function WorkflowStrip({ steps, canEdit, loading }) {
   return (
-    <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+    <div className="grid gap-3">
       {steps.map((s, i) => {
         const done = s.state === "done";
+        const problem = s.state === "blocked" || s.state === "partial" || s.state === "error";
         return (
           <div
             key={s.key}
+            data-state={s.state}
             className={cn(
-              "glass-panel flex items-center gap-3 rounded-xl border p-3 xl:min-h-32",
-              done && "border-emerald-500/40",
+              "glass-panel flex items-start gap-3 rounded-xl border p-3",
+              done && "border-emerald-500/50 bg-emerald-500/10",
+              problem && "border-red-500/50 bg-red-500/10",
               // Buoc co canh bao (vd nghiem GD2 vua bi huy) phai NHIN RA duoc,
               // khong the chi doi mot con so o dong `value`.
               //
@@ -31,16 +34,25 @@ export default function WorkflowStrip({ steps, canEdit, loading }) {
                 "flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold",
                 done
                   ? "bg-emerald-600 text-white"
-                  : "bg-muted text-muted-foreground",
+                  : problem
+                    ? "bg-red-600 text-white"
+                    : "bg-muted text-muted-foreground",
               )}
               aria-hidden="true"
             >
-              {done ? <Check className="size-4" /> : i + 1}
+              {i + 1}
             </span>
 
             <span className="min-w-0 flex-1">
-              <span className="block truncate text-sm font-medium">
+              <span className="flex flex-wrap items-center gap-2 text-sm font-semibold">
                 {s.label}
+                <span className={cn(
+                  "inline-flex items-center gap-1 text-[11px]",
+                  done ? "text-emerald-800" : problem ? "font-bold text-black" : "text-muted-foreground",
+                )}>
+                  {done ? <Check className="size-3.5" /> : problem ? <TriangleAlert className="size-3.5" /> : null}
+                  {done ? "Hoàn tất" : problem ? (s.state === "partial" ? "Chưa hoàn tất" : "Bị chặn") : "Sẵn sàng"}
+                </span>
               </span>
               <span className="text-muted-foreground block text-xs tabular-nums">
                 {s.value}
@@ -49,12 +61,18 @@ export default function WorkflowStrip({ steps, canEdit, loading }) {
                   `hint` = CANH BAO (vd nghiem GD2 vua bi huy). Hai muc do khac
                   nhau nen mau khac nhau, khong gop lam mot. */}
               {s.note && (
-                <span className="text-muted-foreground mt-0.5 block text-[11px] leading-snug">
+                <span className={cn(
+                  "mt-0.5 block text-[11px] leading-snug",
+                  problem ? "font-bold text-black" : "text-muted-foreground",
+                )}>
                   {s.note}
                 </span>
               )}
               {s.hint && (
-                <span className="mt-0.5 block text-[11px] leading-snug text-amber-700">
+                <span className={cn(
+                  "mt-0.5 block text-[11px] leading-snug",
+                  problem ? "font-bold text-black" : "text-amber-700",
+                )}>
                   {s.hint}
                 </span>
               )}

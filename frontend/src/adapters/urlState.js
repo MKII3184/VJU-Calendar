@@ -8,6 +8,7 @@
 import { DEFAULT_FILTER } from "./scheduleView";
 
 const BOOL_KEYS = ["guest", "resident", "onlyProblems", "chiXemPhamVi"];
+const LIST_KEYS = ["programs", "khoas"];
 
 export function readUrlState() {
   const raw = window.location.hash.replace(/^#/, "");
@@ -19,18 +20,15 @@ export function readUrlState() {
   for (const [k, v] of q.entries()) {
     if (k === "p" || k === "s") continue;
     if (!(k in filter)) continue;
-    filter[k] = BOOL_KEYS.includes(k) ? v === "1" : v;
+    filter[k] = BOOL_KEYS.includes(k) ? v === "1" : LIST_KEYS.includes(k) ? v.split(",").filter(Boolean) : v;
   }
 
-  // LINK CU: hoi "Theo khoá" con la mot scope rieng (#p=schedule&scope=cohort&
-  // scopeValue=VJU2024). Nay Khoá la mot o loc ghep duoc voi chuong trinh (xem
-  // adapters/scheduleView.js) - chuyen thang sang o do thay vi de link cu mo ra
-  // mot man khong loc gi va nguoi gui link tuong nguoi nhan dang nhin cung thu.
-  if (q.get("scope") === "cohort") {
-    filter.scope = DEFAULT_FILTER.scope;
-    filter.scopeValue = "";
-    filter.khoa = q.get("scopeValue") || "";
-  }
+  // LINK CU: #scope=program|cohort&scopeValue=X, hoac khoa=X - chuyen sang cac o
+  // loc da lua chon (programs / khoas) de link cu khong mo ra mot man khong loc gi.
+  const legacy = q.get("scopeValue");
+  if (legacy && q.get("scope") === "program") filter.programs = [legacy];
+  if (legacy && q.get("scope") === "cohort") filter.khoas = [legacy];
+  if (q.get("khoa") && !q.get("khoas")) filter.khoas = [q.get("khoa")];
   return { page, sub, filter };
 }
 
@@ -43,6 +41,10 @@ export function writeUrlState({ page, sub, filter }) {
   for (const [k, def] of Object.entries(DEFAULT_FILTER)) {
     const v = filter?.[k];
     if (v === undefined || v === def) continue;
+    if (LIST_KEYS.includes(k)) {
+      if (v.length) q.set(k, v.join(","));
+      continue;
+    }
     q.set(k, BOOL_KEYS.includes(k) ? (v ? "1" : "0") : String(v));
   }
 

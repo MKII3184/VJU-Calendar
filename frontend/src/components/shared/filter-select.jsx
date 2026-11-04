@@ -31,6 +31,9 @@ export function FilterSelect({
   searchable = false,
   full = false,
   modal = true,
+  id,
+  emptyLabel = 'Tất cả',
+  searchPlaceholder = 'Tìm…',
 }) {
   const items = options.map(normalize);
   const selectedLabel = items.find((o) => o.value === value)?.label ?? label;
@@ -45,6 +48,7 @@ export function FilterSelect({
   return (
     <DropdownMenu modal={modal} onOpenChange={(o) => !o && setTerm('')}>
       <DropdownMenuTrigger
+        id={id}
         className={cn(
           'glass-control border-input hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring/50 inline-flex h-9 items-center gap-1.5 rounded-md border px-3 text-sm transition-colors focus-visible:ring-[3px] focus-visible:outline-none',
           value && 'border-primary/40',
@@ -65,7 +69,13 @@ export function FilterSelect({
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
-        className="max-h-80 min-w-48 max-w-[calc(100vw-1.5rem)] overflow-y-auto"
+        onWheel={modal ? undefined : (event) => {
+          event.currentTarget.scrollTop += event.deltaY;
+        }}
+        className={cn(
+          'max-h-80 min-w-48 max-w-[calc(100vw-1.5rem)] overflow-y-auto',
+          full && 'w-[var(--radix-dropdown-menu-trigger-width)]',
+        )}
       >
         {searchable && (
           <div className="sticky top-0 z-10 p-1.5 pb-1">
@@ -75,7 +85,7 @@ export function FilterSelect({
                 value={term}
                 onChange={(e) => setTerm(e.target.value)}
                 onKeyDown={(e) => e.stopPropagation()}
-                placeholder="Tìm…"
+                placeholder={searchPlaceholder}
                 autoFocus
                 className="placeholder:text-muted-foreground h-7 w-full bg-transparent text-sm outline-none"
               />
@@ -83,7 +93,7 @@ export function FilterSelect({
           </div>
         )}
         <DropdownMenuItem onSelect={() => onChange(null)}>
-          <span className="flex-1 break-words whitespace-normal">Tất cả</span>
+          <span className="flex-1 break-words whitespace-normal">{emptyLabel}</span>
           {value === null && <Check className="size-4 shrink-0" />}
         </DropdownMenuItem>
         {filtered.map((opt) => (

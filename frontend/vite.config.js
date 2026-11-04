@@ -5,7 +5,9 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
-export const CONFIG_PATH = resolve(dirname(fileURLToPath(import.meta.url)), '../config/frontend.json')
+export const FRONTEND_DIR = dirname(fileURLToPath(import.meta.url))
+export const TEST_DIR = fileURLToPath(new URL('../test', import.meta.url)).replace(/\\/g, '/') + '/'
+export const CONFIG_PATH = resolve(FRONTEND_DIR, '../config/frontend.json')
 
 export function loadFrontendConfig(configPath = CONFIG_PATH) {
   let contents
@@ -50,7 +52,24 @@ export function loadFrontendConfig(configPath = CONFIG_PATH) {
 export function createViteConfig(configPath = CONFIG_PATH) {
   const { path, target, changeOrigin } = loadFrontendConfig(configPath).devServer.apiProxy
   return defineConfig({
-    plugins: [react(), tailwindcss()],
+    plugins: [
+      react(),
+      tailwindcss(),
+      {
+        name: 'vju-test-deps-resolution',
+        enforce: 'pre',
+        // Bo test o <repo>/test/ nam ngoai frontend/ nen node_modules walk
+        // di len tu file test khong bao gio cham toi frontend/node_modules.
+        // Moi import tu file trong test/ duoc resolve lai nhu the xuat phat
+        // tu frontend/package.json.
+        resolveId(source, importer) {
+          if (!importer) return null
+          const cleanImporter = importer.split('?')[0].replace(/\\/g, '/')
+          if (!cleanImporter.startsWith(TEST_DIR)) return null
+          return this.resolve(source, resolve(FRONTEND_DIR, 'package.json'), { skipSelf: true })
+        },
+      },
+    ],
     resolve: {
       // Alias "@" giong reference (BE_Enrollment) de cac component port sang giu
       // nguyen duong dan import "@/components/ui/...".
@@ -59,6 +78,9 @@ export function createViteConfig(configPath = CONFIG_PATH) {
       },
     },
     server: {
+      // Cho phep serve file ngoai root (../test/**) - can thiet vi bo test
+      // da gom ve <repo>/test/; neu khong Vite chan loai /@fs/.../test/*.jsx.
+      fs: { allow: ['..'] },
       proxy: {
         [path]: { target, changeOrigin },
       },
@@ -67,8 +89,11 @@ export function createViteConfig(configPath = CONFIG_PATH) {
     // rieng) de khong bi lech alias "@" voi Vite luc build/dev.
     test: {
       environment: 'jsdom',
-      setupFiles: ['./src/test/setup.js'],
+      setupFiles: ['../test/setup.js'],
       globals: true,
+      // File test da gom ve <repo>/test/ (nam ngoai root cua Vite) nen phai
+      // chi ro include; alias "@" van tro dung toi frontend/src.
+      include: ['../test/**/*.test.{js,jsx,ts,tsx}'],
     },
   })
 }

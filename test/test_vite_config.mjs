@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { afterEach, test } from 'node:test'
 import { fileURLToPath } from 'node:url'
-import { CONFIG_PATH, createViteConfig, loadFrontendConfig } from './vite.config.js'
+import { CONFIG_PATH, createViteConfig, loadFrontendConfig } from '../frontend/vite.config.js'
 
 const directories = []
 const valid = { devServer: { apiProxy: { path: '/api', target: 'http://127.0.0.1:5055', changeOrigin: true } } }

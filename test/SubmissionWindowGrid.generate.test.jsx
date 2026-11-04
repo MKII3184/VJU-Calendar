@@ -4,7 +4,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import SubmissionWindowGrid from "./SubmissionWindowGrid";
+import SubmissionWindowGrid from "@/presentation/submissions/SubmissionWindowGrid";
 
 const baseProps = { numDays: 6, slotsPerDay: 12, initialSlots: [], teachingSlots: [] };
 

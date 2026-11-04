@@ -1,18 +1,103 @@
 import { useEffect, useState } from "react";
-import { CopyPlus, Lock, Plus, TriangleAlert, Trash2, X } from "lucide-react";
+import { ChevronDown, CopyPlus, Plus, TriangleAlert, Trash2, X } from "lucide-react";
 import { useAppData } from "../../context/AppDataContext";
 import ClassTimeSlotPicker from "./ClassTimeSlotPicker";
+import { FilterSelect } from "@/components/shared/filter-select";
 import { FormRow } from "@/components/shared/form-row";
 import { Notice } from "@/components/shared/notice";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Drawer, DrawerBody, DrawerSection } from "@/components/ui/drawer";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DrawerBody, DrawerSection } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 
 const LOCATION_OPTIONS = ["Hòa Lạc", "Mỹ Đình", "Khác"];
 const TEACHING_MODE_OPTIONS = ["Trực tiếp", "Trực tuyến", "LMS"];
+const PROGRAM_OPTIONS = ["BCSE", "BICA", "BJS", "Chung", "ECE", "ESAS", "ESCT", "FTH", "MJM"];
+const DURATION_OPTIONS = [1, 2, 3, 4];
+const MAX_STUDENTS = 200;
+const MAX_TEACHING_HOURS = 50;
+
+const joinPair = (parts) => parts.filter(Boolean).join("+");
+const splitCohorts = (value) => [...new Set((value || "").split(/[+,;/]/).map((part) => part.trim()).filter(Boolean))];
+const splitPrograms = (value) => {
+  const raw = value || "";
+  const parts = [];
+  let start = 0;
+  let depth = 0;
+  for (let i = 0; i < raw.length; i++) {
+    if (raw[i] === "(") depth++;
+    else if (raw[i] === ")") depth = Math.max(0, depth - 1);
+    else if (depth === 0 && (raw[i] === "+" || raw[i] === ".")) {
+      parts.push(raw.slice(start, i).trim());
+      start = i + 1;
+    }
+  }
+  parts.push(raw.slice(start).trim());
+  return [...new Set(parts.filter(Boolean))];
+};
+const programForSave = (value) => joinPair(splitPrograms(value));
+
+function MultiValueSelect({ id, label, parts, options, onToggle }) {
+  const display = joinPair(parts);
+  return (
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger
+        id={id}
+        aria-label={label}
+        className="glass-control border-input hover:bg-accent focus-visible:ring-ring/50 flex h-9 w-full min-w-0 items-center justify-between gap-2 rounded-md border px-3 text-sm focus-visible:ring-[3px] focus-visible:outline-none"
+      >
+        <span className="truncate" title={display || undefined}>{display || "— Không —"}</span>
+        <ChevronDown className="text-muted-foreground size-3.5 shrink-0" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="start"
+        className="grid max-h-[min(16rem,calc(100dvh-2rem))] w-[min(20rem,calc(100vw-2rem))] grid-cols-3 gap-1 overflow-y-auto"
+        onWheel={(event) => { event.currentTarget.scrollTop += event.deltaY; }}
+      >
+        {options.length === 0 && <span className="text-muted-foreground col-span-3 px-2 py-1.5 text-sm">Chưa có lựa chọn</span>}
+        {options.map((option) => (
+          <DropdownMenuCheckboxItem
+            key={option}
+            checked={parts.includes(option)}
+            className={option.length > 8 ? "col-span-3" : ""}
+            onCheckedChange={(checked) => onToggle(option, checked)}
+            onSelect={(event) => event.preventDefault()}
+          >
+            {option}
+          </DropdownMenuCheckboxItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+const isBlank = (v) => v === "" || v == null;
+const validInt = (v, max) => /^\d+$/.test(String(v).trim()) && Number(v) <= max;
+const validNumber = (v, max) => /^\d+(\.\d+)?$/.test(String(v).trim()) && Number(v) <= max;
+
+// Gioi han CHI ap cho thao tac luu tay (khop webapp/domain/sections.py:
+// kiem_tra_gioi_han_nhap_tay) - du lieu cu tu Excel vuot gioi han van duoc XEM,
+// nhung bam Luu / "Them buoi khac" thi phai sua lai.
+function validateLimits(form, section) {
+  const errors = {};
+  if (!DURATION_OPTIONS.includes(Number(form.duration))) {
+    errors.duration = section?.sectionChot
+      ? "Số tiết cũ vượt giới hạn 1–4 và lớp đang chốt: cần bỏ chốt lớp trước khi sửa và lưu."
+      : "Số tiết / buổi phải là 1, 2, 3 hoặc 4 — hãy chọn lại.";
+  }
+  if (!isBlank(form.expectedStudents) && !validInt(form.expectedStudents, MAX_STUDENTS)) {
+    errors.expectedStudents = `Số SV dự kiến phải là số nguyên từ 0 đến ${MAX_STUDENTS} hoặc để trống.`;
+  }
+  if ((!isBlank(form.teachingHoursLt) && !validNumber(form.teachingHoursLt, MAX_TEACHING_HOURS))
+    || (!isBlank(form.teachingHoursTh) && !validNumber(form.teachingHoursTh, MAX_TEACHING_HOURS))) {
+    errors.teachingHours = `Mỗi ô Số giờ dạy (LT / TH) phải từ 0 đến ${MAX_TEACHING_HOURS} hoặc để trống.`;
+  }
+  return errors;
+}
 
 function suggestTeacherType(org) {
   const t = (org || "").toLowerCase();
@@ -23,7 +108,7 @@ function emptyForm() {
   return {
     teacherIds: [""], courseId: "", classCode: "", program: "",
     ltCredits: "", thCredits: "", cohort: "", expectedStudents: "",
-    duration: "2", autoSchedule: true, day: null, periodStart: null, periodEnd: null,
+    duration: "2", autoSchedule: true, timeSource: "auto", day: null, periodStart: null, periodEnd: null,
     location: "", teachingMode: "", language: "", otherRequirements: "", notes: "",
     coordinatorOverride: "", prevTeacherName: "", prevTeacherOrg: "",
     teachingHoursLt: "", teachingHoursTh: "",
@@ -38,7 +123,9 @@ function formFromClass(c) {
     classCode: c.classCode || "", program: c.programName || "",
     ltCredits: c.ltCredits ?? "", thCredits: c.thCredits ?? "",
     cohort: c.cohort || "", expectedStudents: c.expectedStudents ?? "",
-    duration: String(c.duration ?? "2"), autoSchedule: c.timeAssumed,
+    duration: String(c.duration ?? "2"),
+    autoSchedule: c.timeSource === "auto" || c.timeAssumed,
+    timeSource: c.timeSource || (c.timeAssumed ? "auto" : "fixed"),
     day: c.day, periodStart: c.periodStart, periodEnd: c.periodEnd,
     location: c.location || "", teachingMode: c.teachingMode || "",
     language: c.language || "", otherRequirements: c.otherRequirements || "", notes: c.notes || "",
@@ -50,21 +137,20 @@ function formFromClass(c) {
 
 // Side-panel: tao lop moi (section=null) hoac sua lop da co (section=1 dong tu
 // data.classes). Tu goi useAppData() truc tiep (khong qua props tu trang cha) vi
-// day la 1 "man con" kha doc lap voi nhieu hanh dong rieng (them GV/hoc phan
-// nhanh, luu, xoa) - giam prop-drilling qua ManualEntryPage.
+// day la 1 "man con" kha doc lap voi nhieu hanh dong rieng (them GV nhanh,
+// luu, xoa) - giam prop-drilling qua ManualEntryPage.
 // onOpenTeacher: mo ngan cua MOT giang vien trong lop (de sua thong tin/khai gio
 // co the day) - trang cha giu state ngan nao dang mo nen phai di qua props.
 export default function SectionEditDrawer({ data, section, onClose, onDuplicated, onOpenTeacher }) {
-  const { loading, addManualTeacher, addManualCourse, addManualSection, updateManualSection, deleteManualSection, doBoQua } = useAppData();
+  const { loading, addManualTeacher, addManualSection, updateManualSection, deleteManualSection, doBoQua } = useAppData();
   const [form, setForm] = useState(section ? formFromClass(section) : emptyForm());
   const [error, setError] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
   const [showAddTeacher, setShowAddTeacher] = useState(false);
-  const [showAddCourse, setShowAddCourse] = useState(false);
   const [newTeacher, setNewTeacher] = useState({ name: "", org: "", teacherType: "GUEST" });
-  const [newCourse, setNewCourse] = useState({ code: "", name: "", credits: "" });
 
   // Khoa theo sectionId (so nguyen on dinh), KHONG khoa theo object 'section':
-  // moi lan them nhanh GV/hoc phan (+ Giang vien moi/+ Hoc phan moi) lam setData()
+  // moi lan them nhanh GV (+ Giang vien moi) lam setData()
   // thay THE CA data -> selectedSection ben ManualEntryPage la object MOI du cung
   // sectionId, neu dependency la object se reset mat sach cac o khac dang go nua
   // chung. Chi reset khi THUC SU chuyen sang sua 1 lop khac (hoac dong/mo lai).
@@ -72,17 +158,73 @@ export default function SectionEditDrawer({ data, section, onClose, onDuplicated
   useEffect(() => {
     setForm(section ? formFromClass(section) : emptyForm());
     setError(null);
+    setFieldErrors({});
     setShowAddTeacher(false);
-    setShowAddCourse(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionKey]);
 
   const teachers = data?.teachers || [];
+  const programParts = splitPrograms(form.program);
+  const cohortParts = splitCohorts(form.cohort);
+  const programOptions = [...new Set([...PROGRAM_OPTIONS, ...programParts.filter(Boolean)])];
+  const cohortOptions = [...new Set((data?.classes || [])
+    .flatMap((c) => c.cohortParts?.length ? c.cohortParts : (c.cohort || "").split(/[+,;/]/))
+    .map((part) => part.trim()).filter(Boolean))]
+    .sort().reverse();
+  for (const part of cohortParts) if (part && !cohortOptions.includes(part)) cohortOptions.push(part);
+  const togglePart = (key, split) => (part, checked) => setForm((current) => {
+    const parts = split(current[key]);
+    return { ...current, [key]: joinPair(checked ? [...parts, part] : parts.filter((p) => p !== part)) };
+  });
   const courses = data?.courses || [];
   const numDays = data?.numDays ?? 7;
   const slotsPerDay = data?.slotsPerDay ?? 12;
+  const teacherTypeFor = (ids) => ids.some((id) => teachers.find((t) => String(t.id) === String(id))?.type === "GUEST")
+    ? "GUEST"
+    : "RESIDENT";
+  const maxDayFor = (ids) => Math.min(numDays - 1, teacherTypeFor(ids) === "GUEST" ? 5 : 4);
+  const maxDayIndex = maxDayFor(form.teacherIds.filter(Boolean));
+  const timeLocked = Boolean(section?.sectionChot || section?.hocChungLockedBy);
+  const hasDisplayedTime = form.day != null && form.periodStart != null && form.periodEnd != null;
 
-  const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+  const clearFieldError = (key) => setFieldErrors((errs) => {
+    if (!errs[key]) return errs;
+    const { [key]: _removed, ...rest } = errs;
+    return rest;
+  });
+  const set = (key) => (e) => {
+    clearFieldError(key === "teachingHoursLt" || key === "teachingHoursTh" ? "teachingHours" : key);
+    setForm((f) => ({ ...f, [key]: e.target.value }));
+  };
+  const setDuration = (e) => {
+    const duration = e.target.value;
+    clearFieldError("duration");
+    setForm((f) => {
+      if (section?.sectionChot || f.day == null) return { ...f, duration };
+      const selectedLength = f.periodEnd - f.periodStart + 1;
+      return selectedLength === Number(duration)
+        ? { ...f, duration }
+        : { ...f, duration, day: null, periodStart: null, periodEnd: null };
+    });
+  };
+  const setTeacherAt = (index, teacherId) => setForm((f) => {
+    const teacherIds = f.teacherIds.map((id, i) => (i === index ? teacherId : id));
+    const invalidDay = !section?.sectionChot && f.day != null && f.day > maxDayFor(teacherIds.filter(Boolean));
+    return {
+      ...f,
+      teacherIds,
+      ...(invalidDay ? { day: null, periodStart: null, periodEnd: null } : {}),
+    };
+  });
+  const removeTeacherAt = (index) => setForm((f) => {
+    const teacherIds = f.teacherIds.filter((_, i) => i !== index);
+    const invalidDay = !section?.sectionChot && f.day != null && f.day > maxDayFor(teacherIds.filter(Boolean));
+    return {
+      ...f,
+      teacherIds,
+      ...(invalidDay ? { day: null, periodStart: null, periodEnd: null } : {}),
+    };
+  });
 
   const submitNewTeacher = async (e) => {
     e.preventDefault();
@@ -103,36 +245,51 @@ export default function SectionEditDrawer({ data, section, onClose, onDuplicated
     setShowAddTeacher(false);
   };
 
-  const submitNewCourse = async (e) => {
-    e.preventDefault();
-    if (!newCourse.name.trim()) return;
-    const res = await addManualCourse({
-      code: newCourse.code.trim(), name: newCourse.name.trim(),
-      credits: newCourse.credits === "" ? null : Number(newCourse.credits),
-    });
-    const created = res.courses[res.courses.length - 1];
-    setForm((f) => ({ ...f, courseId: String(created.id) }));
-    setNewCourse({ code: "", name: "", credits: "" });
-    setShowAddCourse(false);
-  };
-
   const handleSave = async (e) => {
     e.preventDefault();
     setError(null);
     if (!form.teacherIds.filter(Boolean).length) return setError("Chưa chọn giảng viên.");
     if (!form.courseId) return setError("Chưa chọn học phần.");
-    if (!form.duration || Number(form.duration) <= 0) return setError("Số tiết mỗi buổi dạy phải > 0.");
-    if (!form.autoSchedule && (form.day == null || form.periodStart == null)) {
-      return setError("Chưa chọn giờ — bấm chọn Thứ/Tiết, hoặc tick \"Để hệ thống tự xếp\".");
+    const limitErrors = validateLimits(form, section);
+    setFieldErrors(limitErrors);
+    if (Object.keys(limitErrors).length) return setError("Có ô nhập chưa hợp lệ — xem thông báo đỏ dưới từng ô.");
+    const duration = Number(form.duration);
+    if (duration > slotsPerDay) {
+      return setError(`Số tiết mỗi buổi dạy phải là số nguyên từ 1 đến ${slotsPerDay}.`);
+    }
+    if (!form.autoSchedule && (form.day == null || form.periodStart == null || form.periodEnd == null)) {
+      return setError("Chưa chọn giờ — bấm một ô trong bảng tuần, hoặc chọn \"Để hệ thống tự xếp giờ\".");
+    }
+    const originalTimeUnchanged = section
+      && form.day === section.day
+      && form.periodStart === section.periodStart
+      && form.periodEnd === section.periodEnd;
+    if (section?.sectionChot && !form.autoSchedule) {
+      const teacherIdsUnchanged = form.teacherIds.filter(Boolean).map(Number).join(",")
+        === (section.teacherIds?.length ? section.teacherIds : [section.teacherId]).map(Number).join(",");
+      if (!teacherIdsUnchanged && form.day > maxDayIndex) {
+        return setError("Nhóm giảng viên mới không được chọn ngày đang khóa. Hãy bỏ chốt lớp trước khi đổi giảng viên.");
+      }
+      if (duration !== Number(section.duration)
+        && form.periodEnd - form.periodStart + 1 !== duration) {
+        return setError("Không thể đổi Số tiết / buổi làm lệch giờ đang khóa. Hãy bỏ chốt lớp trước.");
+      }
+    }
+    if (!form.autoSchedule && !section?.sectionChot && !originalTimeUnchanged) {
+      if (form.day < 0 || form.day >= numDays || form.day > maxDayIndex
+        || form.periodStart < 1 || form.periodEnd > slotsPerDay
+        || form.periodEnd - form.periodStart + 1 !== duration) {
+        return setError("Giờ đã chọn không còn hợp lệ với số tiết hoặc nhóm giảng viên. Vui lòng chọn lại.");
+      }
     }
 
     const payload = {
       teacherIds: form.teacherIds.filter(Boolean).map(Number),
       courseId: Number(form.courseId),
-      classCode: form.classCode.trim(), program: form.program.trim(),
+      classCode: form.classCode.trim(), program: programForSave(form.program),
       ltCredits: form.ltCredits === "" ? 0 : Number(form.ltCredits),
       thCredits: form.thCredits === "" ? 0 : Number(form.thCredits),
-      cohort: form.cohort.trim(),
+      cohort: joinPair(splitCohorts(form.cohort)),
       expectedStudents: form.expectedStudents === "" ? null : Number(form.expectedStudents),
       duration: Number(form.duration),
       location: form.location, teachingMode: form.teachingMode,
@@ -142,12 +299,14 @@ export default function SectionEditDrawer({ data, section, onClose, onDuplicated
       teachingHoursLt: form.teachingHoursLt === "" ? null : Number(form.teachingHoursLt),
       teachingHoursTh: form.teachingHoursTh === "" ? null : Number(form.teachingHoursTh),
     };
-    if (form.autoSchedule) {
+    if (form.autoSchedule && (!hasDisplayedTime || section?.timeAssumed || section?.timePreview)) {
       payload.autoSchedule = true;
+      payload.timeSource = "auto";
     } else {
       payload.day = form.day;
       payload.periodStart = form.periodStart;
       payload.periodEnd = form.periodEnd;
+      payload.timeSource = form.autoSchedule ? "auto" : "manual";
     }
 
     try {
@@ -175,15 +334,18 @@ export default function SectionEditDrawer({ data, section, onClose, onDuplicated
     if (!form.teacherIds.filter(Boolean).length || !form.courseId) {
       return setError("Cần chọn học phần và giảng viên trước khi nhân bản.");
     }
+    const limitErrors = validateLimits(form, section);
+    setFieldErrors(limitErrors);
+    if (Object.keys(limitErrors).length) return setError("Có ô nhập chưa hợp lệ — xem thông báo đỏ dưới từng ô.");
     const payload = {
       teacherIds: form.teacherIds.filter(Boolean).map(Number),
       courseId: Number(form.courseId),
-      classCode: form.classCode.trim(), program: form.program.trim(),
+      classCode: form.classCode.trim(), program: programForSave(form.program),
       ltCredits: form.ltCredits === "" ? 0 : Number(form.ltCredits),
       thCredits: form.thCredits === "" ? 0 : Number(form.thCredits),
-      cohort: form.cohort.trim(),
+      cohort: joinPair(splitCohorts(form.cohort)),
       expectedStudents: form.expectedStudents === "" ? null : Number(form.expectedStudents),
-      duration: Number(form.duration) || 2,
+      duration: Number(form.duration),
       location: form.location, teachingMode: form.teachingMode,
       language: form.language.trim(), otherRequirements: form.otherRequirements.trim(),
       notes: form.notes.trim(), coordinatorOverride: form.coordinatorOverride.trim(),
@@ -202,118 +364,64 @@ export default function SectionEditDrawer({ data, section, onClose, onDuplicated
   };
 
   return (
-    <Drawer
-      open
-      onOpenChange={(o) => !o && onClose()}
-      title={section ? `Sửa lớp ${section.classCode || `#${section.sectionId}`}` : "Thêm lớp mới"}
-      description={section?.courseName || undefined}
-      eyebrow="Chuẩn bị dữ liệu / Lớp"
-      className="manual-edit-glass edit-drawer-glass"
-      overlayClassName="bg-slate-950/20"
-      footer={
-        <>
-          {section && (
-            <Button
-              type="button"
-              variant="outline"
-              className="text-destructive mr-auto"
-              disabled={loading}
-              onClick={handleDelete}
-            >
-              <Trash2 className="size-4" />
-              Xóa lớp
-            </Button>
-          )}
-          {section && (
-            <Button type="button" variant="outline" disabled={loading} onClick={handleDuplicate}>
-              <CopyPlus className="size-4" />
-              Thêm buổi khác
-            </Button>
-          )}
-          {/* "Hủy" ro rang canh "Lưu" - dua vao dau X goc tren hoac Esc de
-              thoat la bat nguoi dung phai DOAN rang bo di thi khong ghi gi. */}
-          <Button type="button" variant="outline" disabled={loading} onClick={onClose}>
-            Hủy
-          </Button>
-          <Button type="submit" form="section-form" disabled={loading}>
-            {loading ? "Đang lưu…" : "Lưu"}
-          </Button>
-        </>
-      }
-    >
-      <form id="section-form" onSubmit={handleSave} className="flex min-h-0 flex-1 flex-col">
-        <DrawerBody>
-          {error && (
-            <Notice tone="red" icon={TriangleAlert}>
-              {error}
-            </Notice>
-          )}
-
-          {/* Lop DA CHOT LICH: backend tu choi thay doi gio (409), nen noi truoc
-              chu khong de nguoi dung go xong ca form roi moi bao. */}
-          {section?.sectionChot && (
-            <Notice tone="amber" icon={Lock}>
-              Lớp này <strong>đã chốt lịch</strong> ({section.sectionChot.by},{" "}
-              {(section.sectionChot.at || "").slice(0, 16).replace("T", " ")}
-              {section.sectionChot.note ? ` — ${section.sectionChot.note}` : ""}). Không sửa được
-              giờ cho tới khi <strong>bỏ chốt</strong> lớp ở bảng “Dữ liệu học phần”.
-            </Notice>
-          )}
+    <Dialog open onOpenChange={(o) => !o && onClose()}>
+      <DialogContent
+        showCloseButton={false}
+        className="teacher-edit-dialog manual-edit-glass flex h-[min(750px,calc(100dvh-2rem))] w-[min(1500px,calc(100vw-2rem))] max-w-none flex-col gap-0 overflow-hidden p-0"
+      >
+        <DialogHeader className="flex shrink-0 flex-row items-center justify-between gap-3 border-b px-5 py-3">
+          <DialogTitle className="text-xl tracking-tight">
+            {section ? `Sửa lớp ${section.classCode || `#${section.sectionId}`}` : "Thêm lớp mới"}
+          </DialogTitle>
+          <DialogDescription className="sr-only">Chỉnh sửa thông tin lớp học phần.</DialogDescription>
+          <DialogClose className="text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-ring/50 inline-flex size-8 shrink-0 items-center justify-center rounded-md transition-colors focus-visible:ring-[3px] focus-visible:outline-none">
+            <X className="size-4" />
+            <span className="sr-only">Đóng</span>
+          </DialogClose>
+        </DialogHeader>
+        <form id="section-form" onSubmit={handleSave} className="flex min-h-0 flex-1 flex-col">
+          <DrawerBody className="grid grid-cols-1 !space-y-0 !overflow-y-auto !p-0 min-[1100px]:grid-cols-3 min-[1100px]:!overflow-hidden">
+            <div className="min-h-0 min-w-0 space-y-5 px-5 py-4 min-[1100px]:overflow-y-auto">
+              {error && (
+                <Notice tone="red" icon={TriangleAlert}>
+                  {error}
+                </Notice>
+              )}
 
           <DrawerSection title="Học phần">
             <FormRow label="Học phần" required>
               {(id) => (
-                <NativeSelect id={id} className="w-full" value={form.courseId} onChange={set("courseId")}>
-                  <option value="">— Chọn học phần —</option>
-                  {courses.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.code ? `${c.code} — ${c.name}` : c.name}
-                    </option>
-                  ))}
-                </NativeSelect>
+                <FilterSelect
+                  id={id}
+                  label="— Chọn học phần —"
+                  emptyLabel="— Chọn học phần —"
+                  searchPlaceholder="Tìm mã hoặc tên học phần…"
+                  searchable
+                  full
+                  modal={false}
+                  value={form.courseId || null}
+                  options={courses.map((c) => ({
+                    value: String(c.id),
+                    label: c.code ? `${c.code} — ${c.name}` : c.name,
+                  }))}
+                  onChange={(courseId) => setForm((f) => ({ ...f, courseId: courseId ?? "" }))}
+                />
               )}
             </FormRow>
-            {!showAddCourse ? (
-              <Button type="button" variant="ghost" size="sm" onClick={() => setShowAddCourse(true)}>
-                <Plus className="size-4" />
-                Học phần mới
-              </Button>
-            ) : (
-              <div className="bg-muted/40 flex flex-wrap items-center gap-2 rounded-lg border p-2.5">
-                <Input
-                  className="w-32"
-                  placeholder="Mã HP"
-                  value={newCourse.code}
-                  onChange={(e) => setNewCourse((f) => ({ ...f, code: e.target.value }))}
-                />
-                <Input
-                  className="min-w-40 flex-1"
-                  placeholder="Tên học phần"
-                  value={newCourse.name}
-                  onChange={(e) => setNewCourse((f) => ({ ...f, name: e.target.value }))}
-                />
-                <Input
-                  className="w-20"
-                  placeholder="Số TC"
-                  type="number"
-                  min={0}
-                  value={newCourse.credits}
-                  onChange={(e) => setNewCourse((f) => ({ ...f, credits: e.target.value }))}
-                />
-                <Button type="button" size="sm" onClick={submitNewCourse}>Thêm</Button>
-                <Button type="button" variant="outline" size="sm" onClick={() => setShowAddCourse(false)}>
-                  Hủy
-                </Button>
-              </div>
-            )}
           </DrawerSection>
 
           <DrawerSection title="Lớp học phần">
             <FormRow label="Mã lớp">
-              {(id) => <Input id={id} value={form.classCode} onChange={set("classCode")} placeholder="IT101.1" />}
+              {(id) => <Input id={id} value={form.classCode} onChange={set("classCode")} placeholder="IT101.1" readOnly={Boolean(section)} />}
             </FormRow>
             <FormRow label="Chương trình (CTĐT)">
-              {(id) => <Input id={id} value={form.program} onChange={set("program")} placeholder="BCSE" />}
+              {(id) => (
+                <MultiValueSelect
+                  id={id} label="Chương trình (CTĐT)"
+                  parts={programParts} options={programOptions}
+                  onToggle={togglePart("program", splitPrograms)}
+                />
+              )}
             </FormRow>
             <FormRow label="Phân bổ TC (LT / TH)">
               <div className="flex gap-2">
@@ -322,54 +430,71 @@ export default function SectionEditDrawer({ data, section, onClose, onDuplicated
               </div>
             </FormRow>
             <FormRow label="Khóa">
-              {(id) => <Input id={id} value={form.cohort} onChange={set("cohort")} placeholder="K68" />}
+              {(id) => (
+                <MultiValueSelect
+                  id={id} label="Khóa"
+                  parts={cohortParts} options={cohortOptions}
+                  onToggle={togglePart("cohort", splitCohorts)}
+                />
+              )}
             </FormRow>
-            <FormRow label="Số SV dự kiến">
-              {(id) => <Input id={id} type="number" min={0} value={form.expectedStudents} onChange={set("expectedStudents")} />}
+            <FormRow label="Số SV dự kiến" error={fieldErrors.expectedStudents}>
+              {(id) => (
+                <Input
+                  id={id}
+                  type="number"
+                  value={form.expectedStudents}
+                  onChange={set("expectedStudents")}
+                  aria-invalid={Boolean(fieldErrors.expectedStudents)}
+                />
+              )}
             </FormRow>
-            {/* durationAssumed: file không ghi giờ nên không đọc được mỗi buổi
-                mấy tiết — hệ thống suy ra (webapp/domain/excel_rows.doan_so_tiet).
-                Phải nói ra ở ĐÚNG ô này: đoán sai thì sửa được, nhưng đoán âm
-                thầm thì không ai biết mà sửa. Lưu lại lớp là cờ tự mất. */}
-            <FormRow
-              label="Số tiết / buổi"
-              required
-              hint={section?.durationAssumed
-                ? "Hệ thống tạm suy ra vì file không ghi giờ — kiểm lại rồi lưu để xác nhận."
-                : undefined}
-            >
-              {(id) => <Input id={id} type="number" min={1} max={12} required value={form.duration} onChange={set("duration")} />}
+            <FormRow label="Số tiết / buổi" required error={fieldErrors.duration}>
+              {(id) => (
+                <NativeSelect
+                  id={id}
+                  containerClassName="w-full"
+                  value={form.duration}
+                  onChange={setDuration}
+                  aria-invalid={Boolean(fieldErrors.duration)}
+                >
+                  {!DURATION_OPTIONS.includes(Number(form.duration)) && (
+                    <option value={form.duration}>{form.duration} — vượt giới hạn, hãy chọn lại</option>
+                  )}
+                  {DURATION_OPTIONS.map((d) => <option key={d} value={d}>{d}</option>)}
+                </NativeSelect>
+              )}
             </FormRow>
           </DrawerSection>
 
-          <DrawerSection title="Thời gian">
-            <Label htmlFor="sed-auto" className="text-sm font-normal">
-              <Checkbox
-                id="sed-auto"
-                checked={form.autoSchedule}
-                onCheckedChange={(v) =>
-                  setForm((f) => ({
-                    ...f,
-                    autoSchedule: v === true,
-                    day: null, periodStart: null, periodEnd: null,
-                  }))
-                }
-              />
-              Để hệ thống tự xếp giờ
-            </Label>
-            {!form.autoSchedule && (
-              <ClassTimeSlotPicker
-                numDays={numDays} slotsPerDay={slotsPerDay}
-                value={form.day != null ? { day: form.day, periodStart: form.periodStart, periodEnd: form.periodEnd } : null}
-                onChange={(v) => setForm((f) => ({ ...f, day: v?.day ?? null, periodStart: v?.periodStart ?? null, periodEnd: v?.periodEnd ?? null }))}
-              />
-            )}
+          <DrawerSection title="Giờ dạy & hình thức">
+            <FormRow label="Số giờ dạy (LT / TH)" error={fieldErrors.teachingHours}>
+              <div className="flex gap-2">
+                <Input type="number" step="any" value={form.teachingHoursLt} onChange={set("teachingHoursLt")} placeholder="Lý thuyết" aria-label="Số giờ dạy lý thuyết" />
+                <Input type="number" step="any" value={form.teachingHoursTh} onChange={set("teachingHoursTh")} placeholder="Thực hành" aria-label="Số giờ dạy thực hành" />
+              </div>
+            </FormRow>
+            <FormRow label="Địa điểm giảng dạy">
+              {(id) => (
+                <NativeSelect id={id} className="w-full" value={form.location} onChange={set("location")}>
+                  <option value="">— Không rõ —</option>
+                  {LOCATION_OPTIONS.map((l) => <option key={l} value={l}>{l}</option>)}
+                </NativeSelect>
+              )}
+            </FormRow>
+            <FormRow label="Hình thức giảng dạy">
+              {(id) => (
+                <NativeSelect id={id} className="w-full" value={form.teachingMode} onChange={set("teachingMode")}>
+                  <option value="">— Không rõ —</option>
+                  {TEACHING_MODE_OPTIONS.map((m) => <option key={m} value={m}>{m}</option>)}
+                </NativeSelect>
+              )}
+            </FormRow>
           </DrawerSection>
+            </div>
 
-          <DrawerSection
-            title="Giảng viên kỳ này"
-            hint="Nhiều người cùng dạy thì thêm đủ — MỌI NGƯỜI VAI TRÒ NGANG NHAU, không có ai là “giảng viên chính”. Lớp chỉ xếp được vào giờ tất cả đều rảnh, và ai trong nhóm cũng bị tính trùng lịch."
-          >
+            <div className="min-h-0 min-w-0 space-y-5 border-white/70 px-5 py-4 min-[1100px]:overflow-y-auto min-[1100px]:border-l">
+          <DrawerSection title="Giảng viên kỳ này">
             {/* DANH SACH ngang hang, khong phai "1 GV chinh + tick dong giang".
                 Ban tick cu khong theo doi duoc: nguoi thu 2 tro di nam trong mot
                 hop tick dai, khong thay email/SDT/don vi cua ho, va nhin khong ra
@@ -379,23 +504,20 @@ export default function SectionEditDrawer({ data, section, onClose, onDuplicated
               const gv = teachers.find((t) => String(t.id) === String(tid));
               return (
                 <div key={`${tid}-${i}`} className="flex items-start gap-2">
-                  <NativeSelect
-                    className="w-full"
-                    value={tid}
-                    onChange={(e) =>
-                      setForm((f) => ({
-                        ...f,
-                        teacherIds: f.teacherIds.map((x, k) => (k === i ? e.target.value : x)),
-                      }))
-                    }
-                  >
-                    <option value="">— Chọn giảng viên —</option>
-                    {teachers.map((t) => (
-                      <option key={t.id} value={t.id}>
-                        {t.name} · {t.type === "GUEST" ? "Thỉnh giảng" : "Cơ hữu"}
-                      </option>
-                    ))}
-                  </NativeSelect>
+                  <FilterSelect
+                    label="— Chọn giảng viên —"
+                    emptyLabel="— Chọn giảng viên —"
+                    searchPlaceholder="Tìm tên giảng viên…"
+                    searchable
+                    full
+                    modal={false}
+                    value={tid || null}
+                    options={teachers.map((t) => ({
+                      value: String(t.id),
+                      label: `${t.name} · ${t.type === "GUEST" ? "Thỉnh giảng" : "Cơ hữu"}`,
+                    }))}
+                    onChange={(teacherId) => setTeacherAt(i, teacherId ?? "")}
+                  />
                   {gv && onOpenTeacher && (
                     <Button
                       type="button"
@@ -413,23 +535,13 @@ export default function SectionEditDrawer({ data, section, onClose, onDuplicated
                     size="sm"
                     disabled={form.teacherIds.length <= 1}
                     title={form.teacherIds.length <= 1 ? "Lớp phải có ít nhất một giảng viên" : "Bỏ người này khỏi lớp"}
-                    onClick={() =>
-                      setForm((f) => ({ ...f, teacherIds: f.teacherIds.filter((_, k) => k !== i) }))
-                    }
+                    onClick={() => removeTeacherAt(i)}
                   >
                     <X className="size-4" />
                   </Button>
                 </div>
               );
             })}
-            {form.teacherIds.map((tid) => teachers.find((t) => String(t.id) === String(tid))).map((gv, i) =>
-              gv ? (
-                <p key={`meta-${gv.id}-${i}`} className="text-muted-foreground text-xs">
-                  {gv.name}: {gv.org || "chưa có đơn vị"} · {gv.email || "chưa có email"} ·{" "}
-                  {gv.phone || "chưa có SĐT"}
-                </p>
-              ) : null,
-            )}
             <Button
               type="button"
               variant="ghost"
@@ -475,40 +587,12 @@ export default function SectionEditDrawer({ data, section, onClose, onDuplicated
             )}
           </DrawerSection>
 
-          <DrawerSection
-            title="Giảng viên kỳ trước"
-            hint="Chỉ để đối chiếu, không dùng để xếp lịch."
-          >
+          <DrawerSection title="Giảng viên kỳ trước">
             <FormRow label="Họ tên">
               {(id) => <Input id={id} value={form.prevTeacherName} onChange={set("prevTeacherName")} placeholder="Không bắt buộc" />}
             </FormRow>
             <FormRow label="Đơn vị công tác">
               {(id) => <Input id={id} value={form.prevTeacherOrg} onChange={set("prevTeacherOrg")} placeholder="Không bắt buộc" />}
-            </FormRow>
-          </DrawerSection>
-
-          <DrawerSection title="Giờ dạy & hình thức">
-            <FormRow label="Số giờ dạy (LT / TH)">
-              <div className="flex gap-2">
-                <Input type="number" min={0} value={form.teachingHoursLt} onChange={set("teachingHoursLt")} placeholder="Lý thuyết" />
-                <Input type="number" min={0} value={form.teachingHoursTh} onChange={set("teachingHoursTh")} placeholder="Thực hành" />
-              </div>
-            </FormRow>
-            <FormRow label="Địa điểm giảng dạy">
-              {(id) => (
-                <NativeSelect id={id} className="w-full" value={form.location} onChange={set("location")}>
-                  <option value="">— Không rõ —</option>
-                  {LOCATION_OPTIONS.map((l) => <option key={l} value={l}>{l}</option>)}
-                </NativeSelect>
-              )}
-            </FormRow>
-            <FormRow label="Hình thức giảng dạy">
-              {(id) => (
-                <NativeSelect id={id} className="w-full" value={form.teachingMode} onChange={set("teachingMode")}>
-                  <option value="">— Không rõ —</option>
-                  {TEACHING_MODE_OPTIONS.map((m) => <option key={m} value={m}>{m}</option>)}
-                </NativeSelect>
-              )}
             </FormRow>
           </DrawerSection>
 
@@ -524,12 +608,7 @@ export default function SectionEditDrawer({ data, section, onClose, onDuplicated
               Bấm là ĂN NGAY, không đợi "Lưu": đây là một hành động riêng chứ
               không phải một ô của biểu mẫu, y như "Xóa lớp"/"Thêm buổi khác". */}
           {section && (
-            <DrawerSection
-              title="Có xếp lớp này không?"
-              hint={"Bỏ qua = loại lớp khỏi bài toán: không chiếm giảng viên, không chiếm phòng, "
-                + "không bị báo trùng, và không hiện trên lưới thời khóa biểu. Dữ liệu vẫn nguyên "
-                + "trong bảng và vẫn xuất Excel được — bỏ đánh dấu là hiện lại y nguyên."}
-            >
+            <DrawerSection title="Có xếp lớp này không?">
               <Label htmlFor="sec-bo-qua" className="text-sm font-normal">
                 <Checkbox
                   id="sec-bo-qua"
@@ -570,8 +649,101 @@ export default function SectionEditDrawer({ data, section, onClose, onDuplicated
               </FormRow>
             </div>
           </details>
-        </DrawerBody>
-      </form>
-    </Drawer>
+            </div>
+
+            <div className="min-h-0 min-w-0 space-y-5 border-white/70 px-5 py-4 min-[1100px]:overflow-y-auto min-[1100px]:border-l">
+              <DrawerSection title="Thời gian">
+                <Label htmlFor="sed-auto" className="text-sm font-normal">
+                  <Checkbox
+                    id="sed-auto"
+                    checked={form.autoSchedule}
+                    disabled={timeLocked}
+                    onCheckedChange={(v) =>
+                      setForm((f) => ({
+                        ...f,
+                        autoSchedule: v === true,
+                        timeSource: v === true ? "auto" : "manual",
+                        day: null, periodStart: null, periodEnd: null,
+                      }))
+                    }
+                  />
+                  Để hệ thống tự xếp giờ
+                </Label>
+                {form.autoSchedule && !hasDisplayedTime && (
+                  <Notice tone="slate">
+                    Đang chờ xếp. Lựa chọn này chỉ giao giờ cho solver; hệ thống không tự chạy khi bạn tick hoặc lưu form.
+                  </Notice>
+                )}
+                {form.autoSchedule && hasDisplayedTime && (
+                  <Notice tone={section?.timePreview ? "amber" : "emerald"}>
+                    {section?.timePreview
+                      ? "Giờ dự kiến do hệ thống xếp — chưa lưu thời khoá biểu."
+                      : "Giờ đã lưu, nguồn gốc: Để hệ thống tự xếp giờ."}
+                  </Notice>
+                )}
+                {!form.autoSchedule && section?.timeSource === "auto" && !timeLocked && (
+                  <Notice tone="amber">
+                    Chọn một dải giờ bên dưới sẽ thay giờ do hệ thống xếp bằng giờ nhập tay.
+                  </Notice>
+                )}
+                {hasDisplayedTime && (form.autoSchedule || timeLocked) && (
+                  <ClassTimeSlotPicker
+                    numDays={numDays}
+                    slotsPerDay={slotsPerDay}
+                    duration={form.duration}
+                    maxDayIndex={maxDayIndex}
+                    disabled
+                    value={{ day: form.day, periodStart: form.periodStart, periodEnd: form.periodEnd }}
+                    onChange={() => {}}
+                  />
+                )}
+                {!form.autoSchedule && !timeLocked && (
+                  <ClassTimeSlotPicker
+                    numDays={numDays}
+                    slotsPerDay={slotsPerDay}
+                    duration={form.duration}
+                    maxDayIndex={maxDayIndex}
+                    disabled={false}
+                    value={hasDisplayedTime ? { day: form.day, periodStart: form.periodStart, periodEnd: form.periodEnd } : null}
+                    onChange={(v) => setForm((f) => ({ ...f, day: v?.day ?? null, periodStart: v?.periodStart ?? null, periodEnd: v?.periodEnd ?? null }))}
+                  />
+                )}
+                {timeLocked && section?.hocChungLockedBy && (
+                  <Notice tone="slate">Giờ bị khóa vì lớp học chung đã chốt; bạn vẫn có thể sửa thông tin khác.</Notice>
+                )}
+              </DrawerSection>
+            </div>
+          </DrawerBody>
+          <DialogFooter className="shrink-0 flex-row flex-wrap items-center border-t px-5 py-3">
+            {section && (
+              <Button
+                type="button"
+                variant="outline"
+                className="text-destructive min-[640px]:mr-auto"
+                disabled={loading}
+                onClick={handleDelete}
+              >
+                <Trash2 className="size-4" />
+                Xóa lớp
+              </Button>
+            )}
+            {section && (
+              <Button type="button" variant="outline" disabled={loading} onClick={handleDuplicate}>
+                <CopyPlus className="size-4" />
+                Thêm buổi khác
+              </Button>
+            )}
+            {/* "Hủy" ro rang canh "Lưu" - dua vao dau X goc tren hoac Esc de
+                thoat la bat nguoi dung phai DOAN rang bo di thi khong ghi gi. */}
+            <Button type="button" variant="outline" disabled={loading} onClick={onClose}>
+              Hủy
+            </Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? "Đang lưu…" : "Lưu"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

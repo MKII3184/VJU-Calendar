@@ -1,0 +1,9 @@
+{
+  "devServer": {
+    "apiProxy": {
+      "path": "/api",
+      "target": "http://127.0.0.1:5055",
+      "changeOrigin": true
+    }
+  }
+}

@@ -12,9 +12,9 @@ import { cn } from '@/lib/utils';
  * phải có giá trị. Danh sách dài (chương trình, giảng viên) thì vẫn dùng
  * `FilterSelect` vì ô tìm ở đó mới có tác dụng thật.
  */
-export function NativeSelect({ className, children, ...props }) {
+export function NativeSelect({ className, containerClassName, children, ...props }) {
   return (
-    <div className="relative inline-flex min-w-0">
+    <div className={cn('relative inline-flex min-w-0', containerClassName)}>
       <select
         data-slot="native-select"
         className={cn(

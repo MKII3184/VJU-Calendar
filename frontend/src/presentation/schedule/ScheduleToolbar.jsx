@@ -1,8 +1,8 @@
-import { Download, LayoutGrid, Maximize2, Minimize2, RotateCcw, Rows3, Save } from "lucide-react";
-import { SCOPE } from "../../adapters/scheduleView";
+import { useState } from "react";
+import { Download, LayoutGrid, Maximize2, Minimize2, RotateCcw, Rows3, Save, SlidersHorizontal, X } from "lucide-react";
 import { coPhamVi, moTa as moTaPhamVi } from "../../adapters/phamVi";
 import { COLOR_BY_OPTIONS } from "../../adapters/colorGrouping";
-import { FilterSelect } from "@/components/shared/filter-select";
+import { MultiFilterSelect } from "@/components/shared/multi-filter-select";
 import { ListSearch } from "@/components/shared/list-search";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -20,130 +20,147 @@ function nhanGio(at) {
 }
 
 export default function ScheduleToolbar({ f, set, view, mode, phamVi }) {
-  return (
-    <div className="glass-panel flex flex-wrap items-center gap-2 rounded-xl border p-3">
-      <div className="flex items-center gap-2">
-        <Label htmlFor="sv-scope" className="text-muted-foreground text-xs">
-          Xem
-        </Label>
-        <NativeSelect
-          id="sv-scope"
-          value={f.scope}
-          onChange={(e) => set({ scope: e.target.value, scopeValue: "" })}
-        >
-          <option value={SCOPE.ALL}>Toàn khoa</option>
-          <option value={SCOPE.PROGRAM}>Theo chương trình</option>
-          <option value={SCOPE.TEACHER}>Theo giảng viên</option>
-        </NativeSelect>
-      </div>
+  const [extraOpen, setExtraOpen] = useState(false);
+  const setXem = (patch) => set({ ...patch, chiXemPhamVi: false });
+  const extraFilterCount = [
+    !f.guest || !f.resident,
+    f.onlyProblems,
+    f.chiXemPhamVi && coPhamVi(phamVi),
+    mode === "grid" && f.colorBy !== "status",
+  ].filter(Boolean).length;
 
-      {/* Hai danh sach nay dai (19 chuong trinh, hang chuc GV) nen dung
-          FilterSelect co o tim; scopeValue rong = khong loc, dung bang nghia
-          "Tat ca" ma FilterSelect hien cho value===null. */}
-      {f.scope === SCOPE.PROGRAM && (
-        <FilterSelect
+  return (
+    <div className={cn("glass-panel relative rounded-xl border p-2.5", extraOpen && "z-40")}>
+      <div className="flex flex-wrap items-center gap-2">
+        {/* Xem theo chuong trinh + khoa, chon nhieu. Rong = khong loc ("Tat ca").
+            "FTH · VJU2024" la mot nhom nguoi hoc that; danh sach khoa da duoc
+            buildScheduleView loc theo cac chuong trinh dang chon. */}
+        <Label className="text-muted-foreground text-xs font-medium">Xem</Label>
+        <MultiFilterSelect
           label="Tất cả chương trình"
           searchable
-          value={f.scopeValue || null}
+          values={f.programs}
           options={view.programs}
-          // Doi chuong trinh thi bo khoa dang chon neu chuong trinh moi khong co
-          // khoa do - de lai la luoi trong ma nhin van nhu dang co bo loc hop le.
-          onChange={(v) => set({
-            scopeValue: v ?? "",
-            khoa: !v || view.cohorts.includes(f.khoa) ? f.khoa : "",
-          })}
+          // Doi chuong trinh thi bo cac khoa khong con thuoc chuong trinh moi - de
+          // lai la luoi trong ma nhin van nhu dang co bo loc hop le.
+          onChange={(programs) => {
+            const hopLe = view.cohortsFor(programs);
+            setXem({ programs, khoas: f.khoas.filter((k) => hopLe.includes(k)) });
+          }}
         />
-      )}
-
-      {/* KHOA khong phai mot che do xem rieng ma la o loc THU HAI, ghep voi
-          chuong trinh: "FTH · VJU2024" moi la mot nhom nguoi hoc that: sinh vien
-          FTH khoa 2024. Danh sach khoa da duoc buildScheduleView loc theo chuong
-          trinh dang chon, y het o "Xep cho" (PhamViXepPanel).
-
-          Van hien khi dang xem "Toan khoa" - do la nghia cu cua "Theo khoá", giu
-          lai de link cu khong mat duong. An o man loc theo giang vien: khi da soi
-          MOT nguoi thi khoa khong con la cau hoi. */}
-      {f.scope !== SCOPE.TEACHER && (
-        <FilterSelect
+        <MultiFilterSelect
           label="Tất cả khoá"
           searchable
-          value={f.khoa || null}
+          values={f.khoas}
           options={view.cohorts}
-          onChange={(v) => set({ khoa: v ?? "" })}
+          onChange={(khoas) => setXem({ khoas })}
         />
-      )}
 
-      {f.scope === SCOPE.TEACHER && (
-        <FilterSelect
-          label="Tất cả giảng viên"
-          searchable
-          value={f.scopeValue ? String(f.scopeValue) : null}
-          options={view.teachers.map((t) => ({ value: String(t.id), label: t.name }))}
-          onChange={(v) => set({ scopeValue: v ?? "" })}
+        <ListSearch
+          value={f.search}
+          onChange={(v) => setXem({ search: v })}
+          placeholder="Tìm môn, giảng viên, #id"
+          className="w-full min-w-48 flex-1 lg:max-w-md"
         />
-      )}
 
-      <div className="flex items-center gap-3">
-        <span className="text-muted-foreground text-xs">Lớp</span>
-        <Label htmlFor="sv-guest" className="text-sm font-normal">
-          <Checkbox
-            id="sv-guest"
-            checked={f.guest}
-            onCheckedChange={(v) => set({ guest: v === true })}
-          />
-          Thỉnh giảng
-        </Label>
-        <Label htmlFor="sv-resident" className="text-sm font-normal">
-          <Checkbox
-            id="sv-resident"
-            checked={f.resident}
-            onCheckedChange={(v) => set({ resident: v === true })}
-          />
-          Cơ hữu
-        </Label>
+        <div className="relative w-full sm:w-auto">
+          <Button
+            type="button"
+            variant={extraOpen ? "secondary" : "outline"}
+            size="sm"
+            className="w-full sm:w-auto"
+            onClick={() => setExtraOpen((open) => !open)}
+            aria-expanded={extraOpen}
+            aria-controls="schedule-extra-filters"
+          >
+            <SlidersHorizontal className="size-4" aria-hidden="true" />
+            Bộ lọc thêm
+            {extraFilterCount > 0 && (
+              <span className="bg-primary/10 text-primary rounded-full px-1.5 text-xs tabular-nums">
+                {extraFilterCount}
+              </span>
+            )}
+          </Button>
+          {extraOpen && (
+            <div
+              id="schedule-extra-filters"
+              className="glass-popover schedule-filter-popover absolute top-full right-0 z-50 mt-2 flex max-h-[min(70vh,24rem)] w-[min(46rem,calc(100vw-2rem))] flex-col gap-3 overflow-y-auto rounded-xl border p-3 shadow-xl"
+            >
+              <div className="flex items-center justify-between gap-3 border-b pb-2">
+                <div>
+                  <div className="text-sm font-semibold">Bộ lọc hiển thị</div>
+                  <div className="text-muted-foreground text-xs">Các lựa chọn này chỉ thay đổi nội dung đang xem.</div>
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setExtraOpen(false)}
+                  aria-label="Đóng bộ lọc thêm"
+                >
+                  <X className="size-4" aria-hidden="true" />
+                </Button>
+              </div>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+                <div className="flex items-center gap-3">
+                  <span className="text-muted-foreground text-xs">Lớp</span>
+                  <Label htmlFor="sv-guest" className="text-sm font-normal">
+                    <Checkbox
+                      id="sv-guest"
+                      checked={f.guest}
+                      onCheckedChange={(v) => setXem({ guest: v === true })}
+                    />
+                    Thỉnh giảng
+                  </Label>
+                  <Label htmlFor="sv-resident" className="text-sm font-normal">
+                    <Checkbox
+                      id="sv-resident"
+                      checked={f.resident}
+                      onCheckedChange={(v) => setXem({ resident: v === true })}
+                    />
+                    Cơ hữu
+                  </Label>
+                </div>
+
+                <Label htmlFor="sv-problems" className="text-sm font-normal">
+                  <Checkbox
+                    id="sv-problems"
+                    checked={f.onlyProblems}
+                    onCheckedChange={(v) => setXem({ onlyProblems: v === true })}
+                  />
+                  Chỉ buổi có vấn đề
+                </Label>
+
+                {/* Chi hien khi DANG xep cho mot chuong trinh - khong co pham vi thi o tick
+                    nay khong co nghia gi. Vua xep xong thi bam mot cai la thay dung phan
+                    minh vua xep, khong phai tu do lai bo loc "Xem" o dau thanh. */}
+                {coPhamVi(phamVi) && (
+                  <Label htmlFor="sv-phamvi" className="text-sm font-normal">
+                    <Checkbox
+                      id="sv-phamvi"
+                      checked={f.chiXemPhamVi}
+                      onCheckedChange={(v) => set({ chiXemPhamVi: v === true })}
+                    />
+                    Chỉ phạm vi đang xếp ({moTaPhamVi(phamVi)})
+                  </Label>
+                )}
+
+                {mode === "grid" && (
+                  <NativeSelect
+                    aria-label="Cách tô màu"
+                    value={f.colorBy}
+                    onChange={(e) => set({ colorBy: e.target.value })}
+                  >
+                    {COLOR_BY_OPTIONS.map((o) => (
+                      <option key={o.key} value={o.key}>Tô màu: {o.label}</option>
+                    ))}
+                  </NativeSelect>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-
-      <ListSearch
-        value={f.search}
-        onChange={(v) => set({ search: v })}
-        placeholder="Tìm môn, giảng viên, #id"
-        className="w-full sm:min-w-48 sm:flex-1"
-      />
-
-      <Label htmlFor="sv-problems" className="text-sm font-normal">
-        <Checkbox
-          id="sv-problems"
-          checked={f.onlyProblems}
-          onCheckedChange={(v) => set({ onlyProblems: v === true })}
-        />
-        Chỉ buổi có vấn đề
-      </Label>
-
-      {/* Chi hien khi DANG xep cho mot chuong trinh - khong co pham vi thi o tick
-          nay khong co nghia gi. Vua xep xong thi bam mot cai la thay dung phan
-          minh vua xep, khong phai tu do lai bo loc "Xem" o dau thanh. */}
-      {coPhamVi(phamVi) && (
-        <Label htmlFor="sv-phamvi" className="text-sm font-normal">
-          <Checkbox
-            id="sv-phamvi"
-            checked={f.chiXemPhamVi}
-            onCheckedChange={(v) => set({ chiXemPhamVi: v === true })}
-          />
-          Chỉ phạm vi đang xếp ({moTaPhamVi(phamVi)})
-        </Label>
-      )}
-
-      {mode === "grid" && (
-        <NativeSelect
-          value={f.colorBy}
-          onChange={(e) => set({ colorBy: e.target.value })}
-        >
-          {COLOR_BY_OPTIONS.map((o) => (
-            <option key={o.key} value={o.key}>Tô màu: {o.label}</option>
-          ))}
-        </NativeSelect>
-      )}
-
     </div>
   );
 }

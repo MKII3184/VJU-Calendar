@@ -8,7 +8,7 @@ from domain.chot import khoa_vi_da_chot
 from domain.hoc_chung import don_nhom_hong, kiem_tra_sua_lop
 from domain.luoi import dong_bo_ket_qua
 from domain.pinning import ghim_theo_gio_form, lan_gio_sang_nhom
-from domain.sections import don_ma_lop_sau_xoa, id_moi, validate_section_body
+from domain.sections import don_ma_lop_sau_xoa, id_moi, kiem_tra_gioi_han_nhap_tay, validate_section_body
 from domain.time_rules import apply_section_time
 from snapshot import save_snapshot
 from state import STATE
@@ -28,6 +28,9 @@ def api_manual_add_section(data):
       xep theo khung gio ranh da khai bao, chua ai khai thi tu do ca tuan."""
     body = request.get_json(force=True)
 
+    err = kiem_tra_gioi_han_nhap_tay(body)
+    if err:
+        return loi(err)
     fields, teacher, duration, time_info, err = validate_section_body(data, body)
     if err:
         return loi(err)
@@ -35,6 +38,7 @@ def api_manual_add_section(data):
     sid = id_moi(data["sections"])
     data["sections"][sid] = {"id": sid, **fields}
     apply_section_time(data, sid, teacher, duration, time_info)
+    data["sections"][sid]["time_source"] = "auto" if time_info is None else "manual"
     ghim_theo_gio_form(data, sid, time_info)
 
     # Lop moi co gio co dinh phai hien tren luoi Thoi khoa bieu NGAY - khong thi
@@ -56,8 +60,29 @@ def api_manual_update_section(data, section_id):
     if section_id not in data["sections"]:
         return loi(f"Không tìm thấy lớp id={section_id}.")
     body = request.get_json(force=True)
+    err = kiem_tra_gioi_han_nhap_tay(body)
+    if err:
+        return loi(err)
+    current = data["sections"][section_id]
+    try:
+        raw_teacher_ids = body.get("teacherIds")
+        if raw_teacher_ids is None:
+            raw_teacher_ids = ([body["teacherId"]] if "teacherId" in body else []) + list(body.get("coTeacherIds") or [])
+        incoming_teacher_ids = [int(t) for t in raw_teacher_ids]
+        unchanged_legacy_time = (
+            not body.get("autoSchedule")
+            and int(body.get("day")) == current.get("day")
+            and int(body.get("periodStart")) == current.get("period_start")
+            and int(body.get("periodEnd")) == current.get("period_end")
+            and int(body.get("duration")) == current.get("duration")
+            and incoming_teacher_ids == (current.get("teacher_ids") or [current.get("teacher_id")])
+        )
+    except (TypeError, ValueError):
+        unchanged_legacy_time = False
 
-    fields, teacher, duration, time_info, err = validate_section_body(data, body)
+    fields, teacher, duration, time_info, err = validate_section_body(
+        data, body, enforce_day_cap=not unchanged_legacy_time,
+    )
     if err:
         return loi(err)
 
@@ -74,15 +99,32 @@ def api_manual_update_section(data, section_id):
     if khoa:
         return loi(khoa, 409, locked=True)
 
+    auto_time_unchanged = bool(
+        body.get("autoSchedule")
+        and current.get("time_assumed")
+        and incoming_teacher_ids == (current.get("teacher_ids") or [current.get("teacher_id")])
+        and duration == current.get("duration")
+        and fields["room_type"] == current.get("room_type")
+        and fields["program_ids"] == current.get("program_ids")
+        and fields["cohort"] == current.get("cohort")
+        and fields["teaching_mode"] == (current.get("teaching_mode") or "")
+        and fields["location"] == (current.get("location") or "")
+    )
     data["sections"][section_id].update(fields)
     apply_section_time(data, section_id, teacher, duration, time_info)
+    if time_info is None:
+        data["sections"][section_id]["time_source"] = "auto"
+    else:
+        data["sections"][section_id]["time_source"] = (
+            "auto" if body.get("timeSource") == "auto" else "manual")
     ghim_theo_gio_form(data, section_id, time_info)
     # HOC CHUNG la MOT buoi -> cac lop cung nhom phai sang dung gio moi.
     cung_nhom = lan_gio_sang_nhom(data, section_id, time_info)
 
-    # Gio/GV/hoc phan cua lop vua doi -> luoi Thoi khoa bieu phai theo. Truyen
-    # section_id vao bo_vi_tri_cu: gio vua go tay thang vi tri cu tren luoi.
-    dong_bo_ket_qua(data, [section_id, *cung_nhom])
+    # Gio/GV/hoc phan cua lop vua doi -> luoi Thoi khoa bieu phai theo. Khi lop
+    # van dang cho solver va form chi sua metadata, giu vi tri du kien dang co.
+    bo_vi_tri_cu = cung_nhom if auto_time_unchanged else [section_id, *cung_nhom]
+    dong_bo_ket_qua(data, bo_vi_tri_cu)
     save_snapshot()
     return tra_du_lieu(data)
 

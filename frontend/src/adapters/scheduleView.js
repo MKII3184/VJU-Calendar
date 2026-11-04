@@ -10,19 +10,13 @@
 import { lessonToTimetableItem, mergeGuestAndResidentLessons } from "./lessonAdapter";
 import { buoiThuoc, coPhamVi, moTa as moTaPhamVi } from "./phamVi";
 
-// KHÓA KHÔNG PHẢI MỘT SCOPE. Trước đây "Theo chương trình" và "Theo khoá" là hai
-// chế độ LOẠI TRỪ nhau, nên không ai xem được "FTH khoá 2024" — mà đó mới là một
-// nhóm người học có thật; còn "khoá 2024" một mình thì gộp sinh viên của 8 chương
-// trình khác nhau vào một lưới, đọc ra toàn vụ trùng không có thật (xem
-// adapters/nhomSinhVien.js). Nay Khoá là một ô lọc RIÊNG, ghép được với chương
-// trình, và danh sách khoá đi theo chương trình đang chọn.
-export const SCOPE = { ALL: "all", PROGRAM: "program", TEACHER: "teacher" };
-
+// Chương trình và Khoá là hai ô lọc ĐA LỰA CHỌN, ghép (AND) với nhau - "FTH khoá
+// 2024" là một nhóm người học có thật (xem adapters/nhomSinhVien.js). Trong mỗi ô
+// các giá trị đã chọn là HỢP (OR). Mảng rỗng = không lọc. Danh sách khoá đi theo
+// các chương trình đang chọn.
 export const DEFAULT_FILTER = {
-  scope: SCOPE.ALL,
-  scopeValue: "",
-  // Khoá (VJU2026...) - ghép ĐƯỢC với scope, không thay thế nó.
-  khoa: "",
+  programs: [],
+  khoas: [],
   guest: true,
   resident: true,
   search: "",
@@ -90,6 +84,13 @@ export function buildScheduleView({ data, guestResult, residentResult, inbox, fi
   const programPartsById = new Map((data?.classes ?? []).map((c) => [c.sectionId, c.programParts ?? []]));
   // Si so - the HOC CHUNG cong don de biet phong phai chua bao nhieu nguoi.
   const sinhVienById = new Map((data?.classes ?? []).map((c) => [c.sectionId, c.expectedStudents]));
+  // "O giang vien la mot DON VI dieu phoi" (Phong Dao tao, JLE...) - khac boQua:
+  // boQua la co giao vu DA bam bo qua, con donViDieuPhoi chi la nhan dien du lieu.
+  // Lop ung vien chua bam bo qua van hien "Phong Dao tao dieu phoi" o cot GV nen
+  // bang TKB khong duoc ghi loai "Thinh giang" cho no (xem LessonTable).
+  const donViDieuPhoiById = new Map(
+    (data?.classes ?? []).map((c) => [c.sectionId, !!c.donViDieuPhoi]),
+  );
 
   const withFlags = all.map((l) => {
     const ovMap = l.teacherType === "RESIDENT" ? residentOverrides : guestOverrides;
@@ -97,6 +98,7 @@ export function buildScheduleView({ data, guestResult, residentResult, inbox, fi
     return {
       ...l,
       classCode: classCodeById.get(l.id) || null,
+      donViDieuPhoi: donViDieuPhoiById.get(l.id) ?? false,
       cohortParts: cohortById.get(l.id) ?? [],
       programParts: programPartsById.get(l.id) ?? [],
       problems: problemMap.get(l.id) ?? [],
@@ -159,45 +161,40 @@ export function buildScheduleView({ data, guestResult, residentResult, inbox, fi
   const daGop = gopHocChung(withFlags);
 
   const q = f.search.trim().toLowerCase();
-  const lessons = daGop.filter((l) => {
+  const gridLessons = daGop.filter((l) => {
     if (l.teacherType === "GUEST" && !f.guest) return false;
     if (l.teacherType === "RESIDENT" && !f.resident) return false;
-    if (f.scope === SCOPE.PROGRAM && f.scopeValue && !l.programParts.includes(f.scopeValue)) return false;
-    // Loc theo GV xet CA NHOM (dong giang + hoc chung), khong chi GV chinh -
-    // cung ly le voi lessonAdapter.teacherLookupBuild.
-    if (f.scope === SCOPE.TEACHER && f.scopeValue) {
-      const tids = l.teacherIds?.length ? l.teacherIds : [l.teacherId];
-      if (!tids.some((t) => String(t) === String(f.scopeValue))) return false;
-    }
-    // Khoá lọc ĐỘC LẬP với scope nên "FTH" + "VJU2024" giao nhau đúng một nhóm
-    // người học; link cũ #scope=cohort được urlState chuyển về đúng ô này.
-    if (f.khoa && !l.cohortParts.includes(f.khoa)) return false;
+    if (f.programs.length && !f.programs.some((p) => l.programParts.includes(p))) return false;
+    if (f.khoas.length && !f.khoas.some((k) => l.cohortParts.includes(k))) return false;
     // PHAM VI XEP - doc lap voi bo loc "Xem" o tren: mot ben la "toi dang xep cho
     // ai", mot ben la "toi dang muon nhin gi". Ket hop duoc ca hai (vd dang xep
     // FTH nhung muon soi rieng mot GV cua FTH).
     if (f.chiXemPhamVi && coPhamVi(phamVi) && !buoiThuoc(l, phamVi)) return false;
     if (f.onlyProblems && !l.hasProblem) return false;
-    if (!q) return true;
-    return (
-      String(l.id) === q ||
-      (l.courseName ?? "").toLowerCase().includes(q) ||
-      (l.teacherName ?? "").toLowerCase().includes(q) ||
-      (l.programLabel ?? "").toLowerCase().includes(q) ||
-      l.cohortParts.some((k) => k.toLowerCase().includes(q)) ||
-      // The gop: tim duoc qua ten/ma lop cua BAT KY mon cung hoc chung
-      (l.hocChung?.members ?? []).some(
-        (m) => (m.courseName ?? "").toLowerCase().includes(q)
-          || (m.classCode ?? "").toLowerCase().includes(q),
-      )
-    );
+    return true;
   });
+  const matchesSearch = (l) => !q || (
+    String(l.id) === q ||
+    (l.classCode ?? "").toLowerCase().includes(q) ||
+    (l.courseName ?? "").toLowerCase().includes(q) ||
+    (l.teacherName ?? "").toLowerCase().includes(q) ||
+    (l.programLabel ?? "").toLowerCase().includes(q) ||
+    l.cohortParts.some((k) => k.toLowerCase().includes(q)) ||
+    (l.hocChung?.members ?? []).some(
+      (m) => String(m.id) === q
+        || (m.courseName ?? "").toLowerCase().includes(q)
+        || (m.classCode ?? "").toLowerCase().includes(q),
+    )
+  );
+  const lessons = q ? gridLessons.filter(matchesSearch) : gridLessons;
+  const searchMatchIds = new Set(q ? lessons.map((lesson) => lesson.id) : []);
 
   // --- Bang mat do: moi o = so buoi DANG HIEN dang dien ra o thoi diem do ---
   const grid = Array.from({ length: numDays }, () => new Array(slotsPerDay).fill(0));
   const idsAt = Array.from({ length: numDays }, () =>
     Array.from({ length: slotsPerDay }, () => []),
   );
-  for (const l of lessons) {
+  for (const l of gridLessons) {
     if (l.day == null || l.period == null) continue;
     for (let k = 0; k < (l.duration || 1); k++) {
       const p = l.period + k;
@@ -214,42 +211,39 @@ export function buildScheduleView({ data, guestResult, residentResult, inbox, fi
   const programs = [...new Set(withFlags.flatMap((l) => l.programParts))].sort((a, b) =>
     a.localeCompare(b),
   );
-  const teachers = [
-    ...new Map(withFlags.map((l) => [l.teacherId, l.teacherName])).entries(),
-  ]
-    .map(([id, name]) => ({ id, name }))
-    .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""));
   // Khoa moi nhat len dau (VJU2026 truoc VJU2023) - giao vu hay xem khoa moi.
   //
   // LOC THEO CHUONG TRINH dang chon: xem FTH thi o Khoa chi nen liet ke khoa FTH
   // thuc su co lop, khong phai ca 8 khoa cua toan khoa roi chon nham mot khoa
   // khong co lop nao va tuong luoi hong. Cung luat voi PhamViXepPanel (o "Xep
   // cho") - hai cho hoi cung mot cau thi phai ra cung mot danh sach.
-  const cohorts = [
+  const cohortsFor = (progs) => [
     ...new Set(
       withFlags
-        .filter((l) => !(f.scope === SCOPE.PROGRAM && f.scopeValue)
-          || l.programParts.includes(f.scopeValue))
+        .filter((l) => !progs.length || progs.some((p) => l.programParts.includes(p)))
         .flatMap((l) => l.cohortParts),
     ),
   ].sort().reverse();
+  const cohorts = cohortsFor(f.programs);
 
   return {
     lessons,
+    gridLessons,
+    searchMatchIds,
     totalLessons: withFlags.length,
     // Dem lop CUA KHOA: buoi cua don vi khac dieu phoi (boQua) co mat tren luoi
     // de khong ai xep de vao, nhung no khong phai phan viec cua khoa nen khong
     // duoc cong vao con so tien do.
-    guestCount: lessons.filter((l) => l.teacherType === "GUEST" && !l.boQua).length,
-    residentCount: lessons.filter((l) => l.teacherType === "RESIDENT" && !l.boQua).length,
-    donViKhacCount: lessons.filter((l) => l.boQua).length,
-    problemCount: lessons.filter((l) => l.hasProblem).length,
+    guestCount: gridLessons.filter((l) => l.teacherType === "GUEST" && !l.boQua).length,
+    residentCount: gridLessons.filter((l) => l.teacherType === "RESIDENT" && !l.boQua).length,
+    donViKhacCount: gridLessons.filter((l) => l.boQua).length,
+    problemCount: gridLessons.filter((l) => l.hasProblem).length,
     grid,
     idsAt,
     maxDensity,
     programs,
-    teachers,
     cohorts,
+    cohortsFor,
     numDays,
     slotsPerDay,
     filter: f,
@@ -263,15 +257,9 @@ export function scopeLabel(view, data) {
   const f = view.filter;
   // Dang xem dung phan minh xep: goi thang ten pham vi, khong bao "Toan khoa".
   if (f.chiXemPhamVi && coPhamVi(view.phamVi)) return moTaPhamVi(view.phamVi);
-  const khoa = f.khoa ? `Khoá ${f.khoa}` : "";
   // "FTH · Khoá VJU2024" - dung mot nhom nguoi hoc, doc la biet ngay dang nhin ai.
-  if (f.scope === SCOPE.PROGRAM && f.scopeValue) {
-    return [f.scopeValue, khoa].filter(Boolean).join(" · ");
-  }
-  if (f.scope === SCOPE.TEACHER && f.scopeValue) {
-    const t = view.teachers.find((x) => String(x.id) === String(f.scopeValue));
-    return [t?.name ?? `GV #${f.scopeValue}`, khoa].filter(Boolean).join(" · ");
-  }
-  if (khoa) return `Toàn khoa · ${khoa}`;
+  const ten = [f.programs.join(", "), f.khoas.length ? `Khoá ${f.khoas.join(", ")}` : ""]
+    .filter(Boolean).join(" · ");
+  if (ten) return f.programs.length ? ten : `Toàn khoa · ${ten}`;
   return `Toàn khoa · ${data?.numPrograms ?? "?"} chương trình`;
 }

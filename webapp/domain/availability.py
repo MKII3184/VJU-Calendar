@@ -46,6 +46,25 @@ def gio_ranh_chung(data, teacher_ids):
     return sorted(set.intersection(*da_khai)), len(da_khai)
 
 
+def loi_gio_ranh_trung_gio_day(data, teacher_id, slots):
+    """Giờ đang dạy (lớp đã chốt giờ) không phải giờ rảnh: trả về thông báo lỗi
+    nếu `slots` chứa ô GV đang dạy, ngược lại None."""
+    from domain.teachers import teaching_slots_of
+
+    trung = sorted(set(slots) & teaching_slots_of(data, teacher_id))
+    if not trung:
+        return None
+    slots_per_day = data["params"]["slotsPerDay"]
+    ten = ", ".join(
+        f"{DAY_LABELS[s // slots_per_day]} tiết {s % slots_per_day + 1}" for s in trung[:5]
+    )
+    them = f" và {len(trung) - 5} ô khác" if len(trung) > 5 else ""
+    return f"Không thể khai giờ rảnh trùng giờ đang dạy: {ten}{them}."
+
+
+DAY_LABELS = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"]
+
+
 def parse_availability_slots(data, body):
     """Doc 'availability' tu body: danh sach SO NGUYEN slot. Tra ve
     (slots, error) - slots la list da sap xep, error la str neu co gia tri

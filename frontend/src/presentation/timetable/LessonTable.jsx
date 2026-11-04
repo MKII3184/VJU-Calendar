@@ -23,11 +23,21 @@ const COLUMNS = [
   {
     key: "teacherType",
     label: "Loại",
-    get: (l) => (l.teacherType === "GUEST" ? "Thỉnh giảng" : "Cơ hữu"),
+    // Lop do DON VI KHAC dieu phoi ("Phong Dao tao dieu phoi", JLE...) khong co
+    // "loai giang vien": o GV la mot don vi, khong phai nguoi. Ghi "Thinh
+    // giang"/"Co huu" tren dong do la gan nham hai khai niem - tach thanh nhan
+    // rieng, khop badge "DON VI KHAC" tren luoi/popup. Bat ca hai co: boQua (da
+    // bam bo qua) lan donViDieuPhoi (chi moi la ung vien, chua bam).
+    get: (l) =>
+      l.boQua || l.donViDieuPhoi
+        ? "Đơn vị khác"
+        : l.teacherType === "GUEST" ? "Thỉnh giảng" : "Cơ hữu",
     // Thinh giang = xanh duong (khop STATUS_COLORS trong colorGrouping), co huu
     // = xanh la. Khong dung do: do la mau thuong hieu va danh cho buoi co van de.
     render: (l) =>
-      l.teacherType === "GUEST" ? (
+      l.boQua || l.donViDieuPhoi ? (
+        <Pill tone="slate">Đơn vị khác</Pill>
+      ) : l.teacherType === "GUEST" ? (
         <Pill tone="blue">Thỉnh giảng</Pill>
       ) : (
         <Pill tone="emerald">Cơ hữu</Pill>

@@ -5,6 +5,7 @@ import {
   PanelLeftOpen,
   Repeat,
 } from 'lucide-react';
+import { ThemeSwitcher } from '@/components/layout/theme-switcher';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -65,6 +66,8 @@ export function AppTopbar({ collapsed, onToggleSidebar, role, onChangeRole }) {
         </div>
       </div>
 
+      <div className="flex shrink-0 items-center gap-2">
+      <ThemeSwitcher />
       {/* Vai trò · đổi vai trò */}
       <DropdownMenu>
         <DropdownMenuTrigger className="hover:bg-muted focus-visible:ring-ring/50 flex shrink-0 items-center gap-2 rounded-md p-1 pr-2 focus-visible:ring-[3px] focus-visible:outline-none">
@@ -90,6 +93,7 @@ export function AppTopbar({ collapsed, onToggleSidebar, role, onChangeRole }) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      </div>
     </header>
   );
 }

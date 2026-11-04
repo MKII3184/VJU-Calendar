@@ -10,6 +10,7 @@ const EXTERNAL_UNIT_COLOR = {
   GUEST: { bg: "#dbeafe", border: "#2563eb", text: "#1d4ed8" },
   RESIDENT: { bg: "#ccfbf1", border: "#0d9488", text: "#115e59" },
 };
+const POPOVER_SPACE = 322;
 
 // Theo yeu cau: thay the day-chu-luon-hien bang 1 THANH MAU gon (toi uu dien
 // tich) - chi hien CHI TIET DAY DU khi di chuot vao, qua popup dinh vi
@@ -21,8 +22,8 @@ const EXTERNAL_UNIT_COLOR = {
 // mau = phan loai (groupColor tu LessonGridBoard), vien do khi highlighted =
 // canh bao, luon de len tren khong doi mau nen.
 const LessonCard = memo(function LessonCard({
-  lesson, isHighlighted, onClearOverride, onTachHocChung, groupColor, onPickProblem, detailed = false,
-  canDrag = false, onDragStart, onDragEnd,
+  lesson, isHighlighted, onClearOverride, onTachHocChung, groupColor, onPickProblem, onOpenManual, detailed = false,
+  canDrag = false, onDragStart, onDragEnd, suppressPopover = false,
 }) {
   const problems = lesson.problems ?? [];
   const barRef = useRef(null);
@@ -30,6 +31,7 @@ const LessonCard = memo(function LessonCard({
   const [locked, setLocked] = useState(false);
   const [rect, setRect] = useState(null);
   const [flipLeft, setFlipLeft] = useState(false);
+  const flipLeftRef = useRef(false);
 
   // Ma lop hoc phan (vd "CSE3003-1") de nhan dien lop - de hon "#<id noi bo>"
   // von khong noi len gi voi giao vu. Fallback ve #id khi lop nao do khong tra
@@ -41,7 +43,7 @@ const LessonCard = memo(function LessonCard({
     ? EXTERNAL_UNIT_COLOR[teacherType]
     : groupColor || FALLBACK_COLOR[teacherType];
 
-  const measure = () => {
+  const measure = (pointerX = null) => {
     if (!barRef.current) return;
     const r = barRef.current.getBoundingClientRect();
     // Neu thanh da cuon ra ngoai man hinh hoan toan, dong popup luon - de no
@@ -51,17 +53,27 @@ const LessonCard = memo(function LessonCard({
       setLocked(false);
       return;
     }
+    const leftSpace = r.left;
+    const rightSpace = window.innerWidth - r.right;
+    let nextFlip = pointerX == null
+      ? flipLeftRef.current
+      : pointerX > r.left + r.width / 2;
+    if (nextFlip && leftSpace < POPOVER_SPACE && rightSpace > leftSpace) nextFlip = false;
+    if (!nextFlip && rightSpace < POPOVER_SPACE && leftSpace > rightSpace) nextFlip = true;
+    flipLeftRef.current = nextFlip;
     setRect(r);
-    setFlipLeft(window.innerWidth - r.right < 340);
+    setFlipLeft(nextFlip);
   };
-  const showPopover = () => { measure(); setHover(true); };
+  const showPopover = (e) => { if (suppressPopover) return; measure(e.clientX); setHover(true); };
+  const keepPopover = () => { measure(); setHover(true); };
   const hidePopover = () => setHover(false);
   const toggleLock = () => {
+    if (suppressPopover) return;
     measure();
     setLocked((l) => !l);
   };
 
-  const visible = hover || locked;
+  const visible = !suppressPopover && (hover || locked);
 
   // Dong popover NGAY khi bat dau keo - neu khong, popup mo tu truoc (do hover
   // hoac da bam giu) se troi lai giua man hinh trong luc the dang duoc keo di,
@@ -120,6 +132,21 @@ const LessonCard = memo(function LessonCard({
     color: color.text,
   };
 
+  // Chu thich day du cua thanh - dung chung cho title (tooltip he thong) va
+  // aria-label (nguoi dung ban phim/doc man hinh nghe duoc dung noi dung nay).
+  const nhanThe =
+    (lesson.boQua ? "[Đơn vị khác điều phối — khoa không xếp] " : "")
+    + (lesson.hocChung
+      ? `HỌC CHUNG ${lesson.hocChung.count} môn: `
+        + lesson.hocChung.members
+            .map((m) => `${m.classCode || `#${m.id}`} ${m.courseName}`)
+            .join(" + ")
+        + (lesson.hocChung.tongSV ? ` — tổng ${lesson.hocChung.tongSV} SV` : "")
+      : `${label} ${lesson.courseName}`)
+    + (problems.length > 0
+      ? ` — ${problems.map((p) => PROBLEM_META[p.type].label).join(", ")}`
+      : "");
+
   return (
     <>
       <div
@@ -132,22 +159,28 @@ const LessonCard = memo(function LessonCard({
         onDragEnd={canDrag ? onDragEnd : undefined}
         // Tooltip he thong: doc duoc ngay ca truoc khi popover kip hien, va la
         // duong doc du phong khi khong dung duoc chuot.
-        title={
-          (lesson.boQua ? "[Đơn vị khác điều phối — khoa không xếp] " : "")
-          + (lesson.hocChung
-            ? `HỌC CHUNG ${lesson.hocChung.count} môn: `
-              + lesson.hocChung.members
-                  .map((m) => `${m.classCode || `#${m.id}`} ${m.courseName}`)
-                  .join(" + ")
-              + (lesson.hocChung.tongSV ? ` — tổng ${lesson.hocChung.tongSV} SV` : "")
-            : `${label} ${lesson.courseName}`)
-          + (problems.length > 0
-            ? ` — ${problems.map((p) => PROBLEM_META[p.type].label).join(", ")}`
-            : "")
-        }
+        title={nhanThe}
+        // BAN PHIM: thanh la div nen tu no khong focus duoc. Tab den -> popover
+        // hien nhu hover; Enter/Space -> "giu" popup mo (nhu click); Esc -> dong.
+        role="button"
+        tabIndex={0}
+        aria-label={nhanThe}
+        aria-expanded={locked}
+        onFocus={() => { if (!suppressPopover) { measure(); setHover(true); } }}
+        onBlur={() => setHover(false)}
+        onKeyDown={(e) => {
+          if (suppressPopover) return;
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault(); // Space mac dinh cuon trang
+            toggleLock();
+          } else if (e.key === "Escape" && locked) {
+            setLocked(false);
+          }
+        }}
         onMouseEnter={showPopover}
         onMouseLeave={hidePopover}
         onClick={toggleLock}
+        onDoubleClick={() => onOpenManual?.(lesson)}
       >
         {detailed && (
           <span className="lb-body">
@@ -183,14 +216,14 @@ const LessonCard = memo(function LessonCard({
       </div>
       {visible && rect && createPortal(
         <div
-          className={`lesson-popover ${flipLeft ? "flip-left" : ""}`}
+          className={`lesson-popover ${flipLeft ? "flip-left" : ""} ${locked ? "interactive" : "pass-through"}`}
           style={{
             top: rect.top + rect.height / 2,
             left: flipLeft ? undefined : rect.right + 10,
             right: flipLeft ? window.innerWidth - rect.left + 10 : undefined,
             transform: "translateY(-50%)",
           }}
-          onMouseEnter={showPopover}
+          onMouseEnter={keepPopover}
           onMouseLeave={hidePopover}
         >
           {locked && (

@@ -34,6 +34,23 @@ const ketQua = (res) =>
 // file xong buoc 2/3 hien "done" ma chua ai bam Giai.
 const daGiai = (res) => Boolean(res && !res.initial);
 
+const cungDanhSach = (a = [], b = []) =>
+  a.length === b.length && [...a].sort().every((value, index) => value === [...b].sort()[index]);
+
+const dungPhamVi = (res, phamVi) => {
+  if (!daGiai(res)) return false;
+  if (!phamVi) return !res.phamVi;
+  return Boolean(
+    res.phamVi
+    && cungDanhSach(res.phamVi.programs, phamVi.programs)
+    && cungDanhSach(res.phamVi.cohorts, phamVi.cohorts),
+  );
+};
+
+const coLopChuaXep = (res) => Boolean(
+  res?.unplaced?.length || res?.phamVi?.khongXepDuoc,
+);
+
 export function buildSteps({
   data,
   guestResult,
@@ -49,6 +66,8 @@ export function buildSteps({
   const sq = data ? analyzeSubmissions(data, phamVi) : null;
   const dem = demTheoPha(data, phamVi);
   const trongPhamVi = coPhamVi(phamVi);
+  const guestDaChay = dungPhamVi(guestResult, phamVi);
+  const residentDaChay = dungPhamVi(residentResult, phamVi);
   const chuaGiai = (pha) =>
     `${dem[pha].daChot} lớp đã chốt giờ · ${dem[pha].chua} chưa có giờ`;
 
@@ -76,12 +95,12 @@ export function buildSteps({
       note: trongPhamVi
         ? `Chỉ đếm lớp của ${moTaPhamVi(phamVi)} — lớp của chương trình khác không chặn bước này.`
         : undefined,
-      state: sq && sq.queue.length === 0 ? "done" : "todo",
+      state: sq && sq.queue.length === 0 ? "done" : "blocked",
     },
     {
       key: "guest",
       label: "Xếp thỉnh giảng",
-      value: daGiai(guestResult) ? ketQuaPha(guestResult) : chuaGiai("GUEST"),
+      value: guestDaChay ? ketQuaPha(guestResult) : chuaGiai("GUEST"),
       // Con lop thinh giang CHUA SAN SANG (buoc 1 chua xong - thieu GV THAT
       // hoac thieu gio) thi khong cho giai: solver se gan cho trong hoac lay
       // tam "ranh ca tuan" cho nhung lop do, ra mot lich khong dung dieu kien
@@ -94,16 +113,22 @@ export function buildSteps({
               ? ` (${sq.unassigned.length} chưa có GV)`
               : "") +
             ` — hoàn tất bước "Chuẩn bị dữ liệu" ở trên trước khi xếp.`
-          : daGiai(guestResult)
-            ? undefined
+          : guestDaChay
+            ? coLopChuaXep(guestResult)
+              ? "Đã chạy nhưng còn lớp không xếp được; bạn vẫn có thể tiếp tục ghép cơ hữu."
+              : undefined
             : trongPhamVi
               ? `Chỉ xếp lớp của ${moTaPhamVi(phamVi)}; lớp của chương trình khác giữ nguyên giờ.`
               : "Xếp giờ cho các lớp chưa có giờ; lớp đã chốt giữ nguyên chỗ.",
-      state: daGiai(guestResult) ? "done" : "todo",
+      state: sq && sq.queue.length > 0
+        ? "blocked"
+        : guestDaChay
+          ? coLopChuaXep(guestResult) ? "partial" : "done"
+          : "todo",
       action: solveGuest,
       disabled: Boolean(sq && sq.queue.length > 0),
       // Nut ghi thang VIEC no lam, khong phai chu "Giai" chung chung.
-      actionLabel: daGiai(guestResult)
+      actionLabel: guestDaChay
         ? "Xếp lại"
         : dem.GUEST.chua > 0
           ? `Xếp ${dem.GUEST.chua} lớp chưa có giờ`
@@ -114,17 +139,23 @@ export function buildSteps({
     {
       key: "resident",
       label: "Ghép cơ hữu",
-      value: daGiai(residentResult)
+      value: residentDaChay
         ? ketQuaPha(residentResult)
         : chuaGiai("RESIDENT"),
       // Nut buoc 3 bi mo khi chua chay buoc 2 - phai noi VI SAO, khong de nguoi
       // dung bam mai khong duoc ma khong hieu.
-      note: !daGiai(guestResult)
-        ? "Cần xếp thỉnh giảng (bước 2) trước — cơ hữu ghép vào chỗ còn lại."
-        : daGiai(residentResult)
-          ? undefined
+      note: !guestDaChay
+        ? "Cần xếp thỉnh giảng (bước 2) cho đúng phạm vi này trước — cơ hữu ghép vào chỗ còn lại."
+        : residentDaChay
+          ? coLopChuaXep(residentResult)
+            ? "Đã ghép nhưng vẫn còn lớp không xếp được."
+            : undefined
           : "Ghép các lớp chưa có giờ vào chỗ thỉnh giảng chưa chiếm.",
-      state: daGiai(residentResult) ? "done" : "todo",
+      state: !guestDaChay
+        ? "blocked"
+        : residentDaChay
+          ? coLopChuaXep(residentResult) ? "partial" : "done"
+          : "todo",
       // Nghiem GD2 vua bi huy vi buoc 2 chay lai - noi ro, khong de con so lang
       // le tu "158/163" ve "108 buoi chot tu file" (xem gd2HetHieuLuc).
       hint: gd2HetHieuLuc
@@ -135,13 +166,13 @@ export function buildSteps({
             "các buổi đang hiện là giờ đã chốt sẵn. Chạy lại bước này."
         : undefined,
       action: solveResident,
-      actionLabel: daGiai(residentResult)
+      actionLabel: residentDaChay
         ? "Ghép lại"
         : dem.RESIDENT.chua > 0
           ? `Ghép ${dem.RESIDENT.chua} lớp chưa có giờ`
           : "Ghép lại",
       // Lich ban dau khong tinh la "da chay Giai doan 1" (backend cung chan).
-      disabled: !daGiai(guestResult),
+      disabled: !guestDaChay,
     },
   ];
 }

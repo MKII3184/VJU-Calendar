@@ -71,7 +71,7 @@ function clampPageForRole(page, role) {
 const BLEED_PAGES = new Set(["manual"]);
 
 // Trang TU LO cuon doc thay vi de <main> cuon ca trang (xem `fullHeight` trong
-// AppLayout). "Du lieu hoc phan" can dieu nay de DONG BANG hang tieu de 3 tang +
+// AppLayout). "Du lieu hoc phan" can dieu nay de DONG BANG hang tieu de 2 tang +
 // 5 cot dau cua bang: sticky chi bam duoc vao khung cuon gan nhat, nen chinh
 // khung cuon cua bang phai la thu cuon doc.
 const FULL_HEIGHT_PAGES = new Set(["manual"]);
@@ -86,6 +86,8 @@ function AppShell() {
   const [activePage, setActivePage] = useState(initial.page || "data");
   const [sub, setSub] = useState(initial.sub);
   const [filter, setFilter] = useState(initial.filter);
+  const [manualViewState, setManualViewState] = useState();
+  const [manualFocusRequest, setManualFocusRequest] = useState(null);
 
   // Ghi lai SAFE PAGE (sau kep), khong ghi activePage tho - neu khong URL co the
   // noi "p=data" trong luc noi dung dang hien thuc te la "schedule" (da bi kep
@@ -124,6 +126,11 @@ function AppShell() {
     setSub(subKey ?? firstSubKey(pageKey));
   };
 
+  const openManualSections = (targets) => {
+    setManualFocusRequest((current) => ({ targets, seq: (current?.seq ?? 0) + 1 }));
+    goto("manual");
+  };
+
   const currentSubLabel = subLabel(safePage, sub);
 
   return (
@@ -146,6 +153,11 @@ function AppShell() {
         onSubChange={setSub}
         filter={filter}
         onFilterChange={setFilter}
+        viewState={manualViewState}
+        onViewStateChange={setManualViewState}
+        focusRequest={manualFocusRequest}
+        onFocusHandled={(seq) => setManualFocusRequest((request) => request?.seq === seq ? null : request)}
+        onOpenManualSections={openManualSections}
       />
     </AppLayout>
   );

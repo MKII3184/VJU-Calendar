@@ -229,6 +229,8 @@ def api_solve_resident(data):
         return loi("Cần chạy Giai đoạn 1 (thỉnh giảng) trước.")
 
     pham_vi = _doc_pham_vi()
+    if pham_vi != STATE.get("pham_vi"):
+        return loi("Phạm vi xếp đã đổi — cần chạy lại bước Xếp thỉnh giảng cho phạm vi này trước.")
     trong, gio_truoc = _bo_du_lieu_cua_pham_vi(data, pham_vi)
 
     with tam_bo_ghim(data):

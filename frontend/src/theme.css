@@ -1,0 +1,686 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Giao diện: Sáng / Tối × Kính bật / tắt  (4 tổ hợp)
+
+   - Sáng/Tối: class `.dark` trên <html> (xem lib/theme.js).
+   - Kính: `html[data-glass='on'|'off']`. Tắt kính = bỏ backdrop-filter và
+     trả mọi bề mặt dùng chung về nền đặc.
+   - File này nạp từ app.css, SAU styles.css (layer legacy) nên các rule
+     `.dark ...` ở layer components thắng CSS legacy hard-code.
+   ═══════════════════════════════════════════════════════════════════ */
+
+@layer components {
+  /* ── Bảng màu Tailwind trong dark: chữ đậm (600-800) → sáng; nền nhạt → tối.
+        Chỉ đổi biến, không đụng utility — mọi `text-red-700`, `bg-slate-200`...
+        trong JSX tự đọc được ở nền tối. ── */
+  .dark {
+    --color-red-600: oklch(0.704 0.191 22.216);
+    --color-red-700: oklch(0.808 0.114 19.571);
+    --color-red-800: oklch(0.808 0.114 19.571);
+    --color-amber-600: oklch(0.828 0.189 84.429);
+    --color-amber-700: oklch(0.879 0.169 91.605);
+    --color-amber-800: oklch(0.879 0.169 91.605);
+    --color-emerald-600: oklch(0.765 0.177 163.223);
+    --color-emerald-700: oklch(0.845 0.143 164.978);
+    --color-emerald-800: oklch(0.845 0.143 164.978);
+    --color-blue-700: oklch(0.809 0.105 251.813);
+    --color-orange-700: oklch(0.837 0.128 66.29);
+    --color-violet-700: oklch(0.811 0.111 293.571);
+    --color-slate-200: oklch(0.372 0.044 257.287);
+    --color-emerald-50: color-mix(in oklch, oklch(0.696 0.17 162.48) 20%, var(--card));
+
+    /* Biến của styles.css (legacy) */
+    --bg: var(--background);
+    --ink2: #cbd5e1;
+    --line-light: var(--border);
+    --green-bg: rgb(16 185 129 / 18%);
+    --red-bg: rgb(239 68 68 / 18%);
+    --orange-bg: rgb(245 158 11 / 16%);
+    --accent-bg: color-mix(in oklch, var(--primary) 18%, var(--card));
+    --shadow: 0 1px 3px rgb(0 0 0 / 40%);
+  }
+
+  .dark .text-black {
+    color: var(--foreground);
+  }
+
+  .dark .border-white\/70 {
+    border-color: var(--border);
+  }
+
+  .dark .bg-white\/35 {
+    background-color: rgb(var(--g-w) / 35%);
+  }
+
+  /* ── Lưới thời khoá biểu & thẻ buổi học ── */
+  .dark .schedv2-grid-table,
+  .dark .lesson-card,
+  .dark .schedv2-grid-cell.body {
+    background: var(--card);
+  }
+
+  .dark .schedv2-grid-cell {
+    border-color: var(--border);
+    color: var(--foreground);
+  }
+
+  .dark .schedv2-grid-cell.time,
+  .dark .schedv2-grid-cell.day,
+  .dark .schedv2-grid-table.detailed > .schedv2-grid-cell.day,
+  .dark .schedv2-grid-table.detailed > .schedv2-grid-cell.time {
+    background: var(--muted);
+    color: var(--foreground);
+    border-color: var(--border);
+  }
+
+  .dark .schedv2-grid-cell.time span {
+    color: var(--muted-foreground);
+  }
+
+  .dark .schedv2-grid-table.detailed .schedv2-grid-cell.body,
+  .dark .schedv2-grid-table.detailed .schedv2-grid-cell.day {
+    border-right-color: oklch(1 0 0 / 16%);
+    border-bottom-color: oklch(1 0 0 / 8%);
+  }
+
+  .dark .schedv2-grid-cell.sat {
+    background: color-mix(in oklch, #f59e0b 10%, var(--card));
+  }
+
+  .dark .schedv2-grid-cell.body.occupied-target {
+    background: var(--muted);
+  }
+
+  .dark .schedv2-grid-cell.body.drop-target,
+  .dark .schedv2-grid-cell.body.drop-target.occupied-target {
+    background: color-mix(in oklch, var(--primary) 22%, var(--card)) !important;
+  }
+
+  .dark .panel-list.drop-target,
+  .dark .schedv2-panel.pending-panel.drop-target {
+    background: color-mix(in oklch, #f59e0b 16%, var(--card));
+  }
+
+  .dark .lesson-card.grid,
+  .dark .lesson-card.required,
+  .dark .lesson-card.elective,
+  .dark .lesson-card.pending {
+    background: var(--card);
+  }
+
+  .dark .lesson-card h4,
+  .dark .lesson-card.grid strong {
+    color: var(--foreground);
+  }
+
+  .dark .lesson-card p,
+  .dark .lesson-card.grid .lesson-teacher {
+    color: var(--muted-foreground);
+  }
+
+  .dark .lesson-card .lesson-remove {
+    background: var(--muted);
+    color: var(--muted-foreground);
+  }
+
+  /* Thanh buổi học: màu phân loại giữ nguyên (dữ liệu), nền hạ sáng, chữ sáng. */
+  .dark .lesson-bar {
+    color: #f1f5f9 !important;
+    border-color: color-mix(in srgb, var(--lesson-color) 70%, transparent);
+    background-color: color-mix(in srgb, var(--lesson-color) 34%, var(--card));
+    background-image:
+      radial-gradient(ellipse at 25% 6%, rgb(255 255 255 / 14%), transparent 54%),
+      linear-gradient(145deg, color-mix(in srgb, var(--lesson-color) 30%, transparent), transparent 70%);
+    box-shadow: inset 1px 1px 1px rgb(255 255 255 / 18%), 0 3px 9px rgb(0 0 0 / 35%);
+  }
+
+  .dark .lesson-bar::before {
+    background: radial-gradient(ellipse at top, rgb(255 255 255 / 16%), transparent 72%);
+  }
+
+  /* ── Popover thẻ buổi học & các khối bên trong ── */
+  .dark .lesson-popover {
+    color: var(--foreground);
+  }
+
+  .dark .tt-major {
+    background: rgb(59 130 246 / 22%);
+    color: #bfdbfe;
+  }
+
+  .dark .tt-problem.clash,
+  .dark .tt-pin-box.warn,
+  .dark .tt-problem.unplaced {
+    border-color: rgb(248 113 113 / 35%);
+  }
+
+  .dark .tt-problem.unplaced,
+  .dark .tt-pin-box.warn {
+    border-color: rgb(251 146 60 / 35%);
+  }
+
+  .dark .tt-problem.duplicate {
+    background: rgb(139 92 246 / 16%);
+    border-color: rgb(167 139 250 / 35%);
+  }
+
+  .dark .tt-problem.missing,
+  .dark .tt-pin-box,
+  .dark .tt-dvk {
+    background: var(--muted);
+    border-color: var(--border);
+  }
+
+  .dark .tt-pin-box.warn {
+    background: var(--orange-bg);
+  }
+
+  .dark .tt-problem.clash .tt-problem-hd,
+  .dark .pi-group.clash .pi-group-hd,
+  .dark .manual-toolbar-note.warn {
+    color: #fca5a5;
+  }
+
+  .dark .tt-problem.duplicate .tt-problem-hd,
+  .dark .pi-group.duplicate .pi-group-hd,
+  .dark .tt-hc-btn,
+  .dark .tt-hc-tong,
+  .dark .xls-hc-badge,
+  .dark .lesson-hc-badge {
+    color: #d8b4fe;
+  }
+
+  .dark .lesson-hc-badge {
+    background: rgb(168 85 247 / 25%);
+  }
+
+  .dark .tt-problem.unplaced .tt-problem-hd,
+  .dark .pi-group.unplaced .pi-group-hd,
+  .dark .tt-pin-failed,
+  .dark .tt-pin-conflict,
+  .dark .tt-unpin-btn,
+  .dark .sq-state.warn {
+    color: #fdba74;
+  }
+
+  .dark .tt-problem.missing .tt-problem-hd,
+  .dark .pi-group.missing .pi-group-hd,
+  .dark .lesson-dvk-badge,
+  .dark .tt-dvk {
+    color: #cbd5e1;
+  }
+
+  .dark .lesson-dvk-badge {
+    background: var(--muted);
+  }
+
+  .dark .sq-chip.clash,
+  .dark .score-pill.warn {
+    background: var(--red-bg);
+    color: #fca5a5;
+    border-color: rgb(248 113 113 / 35%);
+  }
+
+  .dark .score-box.warn {
+    background: var(--red-bg);
+    border-color: rgb(248 113 113 / 35%);
+  }
+
+  /* ── Bảng nhiệt ── */
+  .dark .wkgrid,
+  .dark .wkgrid-legend {
+    --d0: #2a3448;
+  }
+
+  .dark .xc-strip-cell.d0 {
+    background: #2a3448;
+  }
+
+  .dark .nav-density-grid td.picked {
+    outline-color: #f1f5f9;
+  }
+
+  /* ── Bảng dữ liệu chung ── */
+  .dark .data-table th {
+    background: var(--muted);
+    color: var(--muted-foreground);
+  }
+
+  .dark .data-table th,
+  .dark .data-table td {
+    border-bottom-color: var(--border);
+  }
+
+  .dark .data-table tr.daysep td {
+    background: var(--muted);
+    color: var(--foreground);
+  }
+
+  /* ── Bảng "Dữ liệu học phần" ── */
+  .dark .xls-table {
+    --xls-z-course: color-mix(in srgb, #94a3b8 11%, var(--card));
+    --xls-z-teacher: color-mix(in srgb, #7e22ce 14%, var(--card));
+    --xls-cell: var(--card);
+    --xls-line: oklch(1 0 0 / 14%);
+    --xls-line-strong: oklch(1 0 0 / 38%);
+    --xls-hover-zone: color-mix(in srgb, #d82827 8%, var(--card));
+    --xls-hover-row: color-mix(in srgb, #d82827 18%, var(--card));
+    --xls-hover-course: color-mix(in srgb, #d82827 12%, var(--card));
+    --xls-gv-hover: color-mix(in srgb, #a855f7 28%, var(--card));
+    --xls-gv-line: oklch(1 0 0 / 18%);
+    --xls-venh: #fca5a5;
+    --xls-ref: #fca5a5;
+    --xls-doan: #fcd34d;
+    --xls-chot-ok: #6ee7b7;
+    --xls-chot-bg: color-mix(in srgb, #10b981 12%, var(--card));
+    --xls-hd-main: #991b1b;
+    --xls-hd-sub-red: #b02a2a;
+    --xls-hd-purple: #6b21a8;
+  }
+
+  /* `.dark .data-table th` ở trên đổi mọi tiêu đề bảng thành nền muted + chữ
+     muted-foreground — trên nền đỏ/tím của bảng này chỉ còn ~2,7:1. Trả lại
+     bảng màu tiêu đề riêng (biến --xls-hd-* dark ở trên) và chữ trắng; các
+     rule kính bên dưới vẫn đè nền bán trong suốt như cũ. */
+  .dark .xls-table thead th {
+    background: var(--xls-hd-main);
+    color: #fff;
+  }
+
+  .dark .xls-table thead tr:nth-child(2) > th {
+    background: var(--xls-hd-purple);
+  }
+
+  .dark .xls-table thead tr:nth-child(2) > th.xls-z-teacher {
+    background: var(--xls-hd-sub-red);
+  }
+
+  .dark .xls-swatch {
+    border-color: var(--border);
+  }
+
+  .dark .xls-chot-btn-mo {
+    color: #6ee7b7;
+  }
+
+  .dark .xls-scroll[data-sx='1'] .xls-table th.xls-chot-head,
+  .dark .xls-scroll[data-sx='1'] .xls-table td.xls-chot {
+    box-shadow: 4px 0 5px -3px rgb(0 0 0 / 70%);
+  }
+
+  /* Màn hẹp: thu cột tên để vùng đóng băng không chiếm hết bề ngang. */
+  @media (max-width: 1000px) {
+    .xls-table th.xls-c-ten,
+    .xls-table td.xls-c-ten {
+      width: 13rem;
+      max-width: 13rem;
+    }
+  }
+
+  /* Kính bật: tiêu đề bảng là kính nhuộm đỏ / tím. Độ phủ 92-94% + blur để chữ
+     phía sau không xuyên qua hàng tiêu đề cố định. */
+  html[data-glass='on'] .xls-table thead th {
+    background:
+      linear-gradient(160deg, rgb(255 255 255 / 24%), transparent 55%),
+      rgb(185 28 28 / 93%);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 35%), inset 0 -1px 0 rgb(0 0 0 / 14%);
+    -webkit-backdrop-filter: blur(10px) saturate(150%);
+    backdrop-filter: blur(10px) saturate(150%);
+  }
+
+  html[data-glass='on'] .xls-table thead tr:nth-child(2) > th {
+    background:
+      linear-gradient(160deg, rgb(255 255 255 / 22%), transparent 55%),
+      rgb(126 34 206 / 93%);
+  }
+
+  html[data-glass='on'] .xls-table thead tr:nth-child(2) > th.xls-z-teacher {
+    background:
+      linear-gradient(160deg, rgb(255 255 255 / 24%), transparent 55%),
+      rgb(198 40 40 / 93%);
+  }
+
+  html[data-glass='on'].dark .xls-table thead th {
+    background:
+      linear-gradient(160deg, rgb(255 255 255 / 14%), transparent 55%),
+      rgb(153 27 27 / 94%);
+  }
+
+  html[data-glass='on'].dark .xls-table thead tr:nth-child(2) > th {
+    background:
+      linear-gradient(160deg, rgb(255 255 255 / 12%), transparent 55%),
+      rgb(107 33 168 / 94%);
+  }
+
+  html[data-glass='on'].dark .xls-table thead tr:nth-child(2) > th.xls-z-teacher {
+    background:
+      linear-gradient(160deg, rgb(255 255 255 / 14%), transparent 55%),
+      rgb(176 42 42 / 94%);
+  }
+
+  /* Tên học phần bấm được (màn Học phần). */
+  .course-name-link {
+    cursor: pointer;
+    text-align: left;
+    text-decoration: underline dotted;
+    text-decoration-color: color-mix(in oklch, var(--muted-foreground) 70%, transparent);
+    text-underline-offset: 4px;
+  }
+
+  .course-name-link:hover {
+    color: var(--primary);
+    text-decoration-style: solid;
+    text-decoration-color: var(--primary);
+  }
+}
+
+@layer utilities {
+  /* ── Nút chọn giao diện ── */
+  html .theme-switch {
+    border-color: var(--border);
+    background: color-mix(in oklch, var(--card) 70%, transparent);
+  }
+
+  html .theme-switch-btn-active {
+    background: color-mix(in oklch, var(--primary) 14%, var(--card));
+    box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--primary) 50%, transparent);
+  }
+
+  /* ── Tab đang chọn: nổi bật liên tục ở cả 4 tổ hợp, bám aria-selected ── */
+  html .glass-segmented [role='tab'][aria-selected='true'],
+  html .teacher-type-tab-active {
+    background: color-mix(in oklch, var(--primary) 14%, var(--card));
+    box-shadow:
+      inset 0 0 0 1px color-mix(in oklch, var(--primary) 45%, transparent),
+      inset 0 -2px 0 var(--primary);
+    color: var(--foreground);
+    font-weight: 600;
+  }
+
+  html .glass-segmented [role='tab'][aria-selected='false'] {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .dark [data-slot='dropdown-menu-item'][data-highlighted],
+  .dark [data-slot='dropdown-menu-checkbox-item'][data-highlighted],
+  .dark select[data-slot='native-select'] option:hover,
+  .dark select[data-slot='native-select'] option:checked {
+    background: rgb(255 255 255 / 10%);
+  }
+
+  .dark [data-slot='dropdown-menu-content'] > .sticky {
+    background: var(--popover);
+  }
+
+  .dark select[data-slot='native-select'] option {
+    color: var(--foreground);
+  }
+
+  /* Sidebar đang trượt ở Thời khóa biểu: bỏ blur ở vùng nội dung trong ~260ms
+     (xem app-layout.jsx). Nền kính bán trong suốt giữ nguyên nên không nhảy bố cục. */
+  html[data-glass='on'] [data-sidebar-moving='true'] main,
+  html[data-glass='on'] [data-sidebar-moving='true'] main * {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* ══════════ KÍNH TẮT ══════════ */
+  html[data-glass='off'] *,
+  html[data-glass='off'] *::before,
+  html[data-glass='off'] *::after {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  html[data-glass='off'] .liquid-canvas,
+  html[data-glass='off'] .liquid-role-canvas {
+    background-image: none;
+    background-color: var(--surface-subtle);
+  }
+
+  html[data-glass='off'] .glass-topbar,
+  html[data-glass='off'] .glass-sidebar,
+  html[data-glass='off'] .glass-page-header,
+  html[data-glass='off'] .glass-toolbar,
+  html[data-glass='off'] .glass-panel,
+  html[data-glass='off'] .glass-popover,
+  html[data-glass='off'] .glass-dialog,
+  html[data-glass='off'] .glass-drawer,
+  html[data-glass='off'] .glass-hero-card,
+  html[data-glass='off'] .schedule-workspace .glass-panel,
+  html[data-glass='off'] .schedule-filter-popover,
+  html[data-glass='off'] .lesson-popover,
+  html[data-glass='off'] .manual-edit-glass,
+  html[data-glass='off'] .schedule-workflow-glass,
+  html[data-glass='off'] .edit-drawer-glass,
+  html[data-glass='off'] .teacher-edit-dialog,
+  html[data-glass='off'] [data-slot='dropdown-menu-content'] {
+    border-color: var(--border);
+    background: var(--surface-solid);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+  }
+
+  html[data-glass='off'] .glass-topbar,
+  html[data-glass='off'] .glass-sidebar,
+  html[data-glass='off'] .glass-page-header,
+  html[data-glass='off'] .glass-toolbar {
+    box-shadow: none;
+  }
+
+  html[data-glass='off'] .glass-dialog,
+  html[data-glass='off'] .manual-edit-glass,
+  html[data-glass='off'] .schedule-workflow-glass,
+  html[data-glass='off'] .edit-drawer-glass,
+  html[data-glass='off'] .teacher-edit-dialog,
+  html[data-glass='off'] .glass-popover,
+  html[data-glass='off'] .lesson-popover,
+  html[data-glass='off'] [data-slot='dropdown-menu-content'] {
+    box-shadow: 0 16px 40px rgb(0 0 0 / 22%);
+  }
+
+  html[data-glass='off'] .glass-dialog > [data-slot='dialog-header'],
+  html[data-glass='off'] .manual-edit-glass > div:first-child,
+  html[data-glass='off'] .edit-drawer-glass > div:first-child,
+  html[data-glass='off'] .manual-edit-glass > div:nth-child(2) {
+    background: transparent;
+    border-color: var(--border);
+  }
+
+  html[data-glass='off'] .schedule-workflow-glass .glass-panel,
+  html[data-glass='off'] .schedule-workflow-inbox > .glass-panel {
+    border-color: var(--border);
+    background: var(--surface-subtle);
+    box-shadow: none;
+  }
+
+  html[data-glass='off'] .lesson-popover::before {
+    background: var(--surface-solid);
+    border-color: var(--border);
+    box-shadow: none;
+  }
+
+  html[data-glass='off'] [data-slot='dropdown-menu-content'] > .sticky {
+    background: var(--surface-solid);
+  }
+
+  html[data-glass='off'] .glass-nav-active,
+  html[data-glass='off'] [data-slot='button'][data-variant='ghost'].glass-nav-active {
+    border-color: color-mix(in oklch, var(--primary) 25%, transparent);
+    background: color-mix(in oklch, var(--primary) 10%, var(--surface-solid));
+    box-shadow: inset 3px 0 0 var(--primary);
+  }
+
+  html[data-glass='off'] .glass-brand-mark {
+    background: var(--primary);
+    box-shadow: none;
+  }
+
+  /* Lưới / bảng kính → nền đặc */
+  html[data-glass='off'] .liquid-data-grid,
+  html[data-glass='off'] .availability-glass-grid {
+    --liquid-grid-line: var(--border);
+    --liquid-grid-header: var(--muted);
+    --liquid-grid-cell: var(--surface-solid);
+    border-color: var(--border);
+    background: var(--surface-solid);
+    box-shadow: none;
+  }
+
+  html[data-glass='off'] .liquid-data-grid .schedv2-grid-cell.body,
+  html[data-glass='off'] .liquid-data-grid .availability-glass-cell:not(.availability-glass-available):not(.availability-glass-teaching),
+  html[data-glass='off'] .liquid-data-grid [data-slot='table-row'] {
+    background: var(--surface-solid);
+    box-shadow: none;
+  }
+
+  html[data-glass='off'] .liquid-data-grid .schedv2-grid-cell.day,
+  html[data-glass='off'] .liquid-data-grid .schedv2-grid-cell.time,
+  html[data-glass='off'] .liquid-data-grid .availability-glass-header,
+  html[data-glass='off'] .liquid-data-grid [data-slot='table-header'],
+  html[data-glass='off'] .availability-glass-header {
+    background: var(--muted);
+    border-color: var(--border);
+    box-shadow: none;
+  }
+
+  html[data-glass='off'] .availability-glass-cell {
+    border-color: var(--border);
+    background: var(--surface-solid);
+    box-shadow: none;
+  }
+
+  html[data-glass='off'] .availability-glass-available,
+  html[data-glass='off'] .manual-edit-glass .availability-glass-available {
+    border-color: rgb(16 185 129 / 55%);
+    background: color-mix(in srgb, #10b981 30%, var(--surface-solid));
+    box-shadow: none;
+  }
+
+  html[data-glass='off'] .availability-glass-teaching,
+  html[data-glass='off'] .manual-edit-glass .availability-glass-teaching {
+    border-color: rgb(59 130 246 / 55%);
+    background: color-mix(in srgb, #3b82f6 30%, var(--surface-solid));
+    box-shadow: none;
+  }
+
+  /* Thanh buổi học: phẳng, không bóng kính */
+  html[data-glass='off'] .lesson-bar {
+    background-image: none;
+    background-color: color-mix(in srgb, var(--lesson-color) 22%, var(--surface-solid));
+    border-color: var(--lesson-color);
+    box-shadow: none;
+  }
+
+  html[data-glass='off'] .lesson-bar::before {
+    display: none;
+  }
+
+  /* Điều khiển */
+  html[data-glass='off'] .glass-control,
+  html[data-glass='off'] .glass-input,
+  html[data-glass='off'] [data-slot='input']:not([type='file']),
+  html[data-glass='off'] [data-slot='input-shell'],
+  html[data-glass='off'] [data-slot='native-select'],
+  html[data-glass='off'] [data-slot='dropdown-menu-trigger'],
+  html[data-glass='off'] select[data-slot='native-select'],
+  html[data-glass='off'] [data-slot='checkbox'] {
+    border-color: var(--input);
+    background: var(--surface-solid);
+    box-shadow: none;
+  }
+
+  html[data-glass='off'] [data-slot='dropdown-menu-trigger']:hover,
+  html[data-glass='off'] [data-slot='dropdown-menu-trigger'][data-state='open'],
+  html[data-glass='off'] select[data-slot='native-select']:hover {
+    background: var(--muted);
+  }
+
+  html[data-glass='off'] [data-slot='checkbox'][data-state='checked'],
+  html[data-glass='off'] [data-slot='checkbox'][data-state='indeterminate'] {
+    border-color: var(--primary);
+    background: color-mix(in oklch, var(--primary) 16%, var(--surface-solid));
+    box-shadow: none;
+  }
+
+  html[data-glass='off'] .glass-segmented,
+  html[data-glass='off'] .schedule-glass-inset {
+    border-color: var(--border);
+    background: var(--muted);
+    box-shadow: none;
+  }
+
+  html[data-glass='off'] .glass-segmented-active {
+    background: var(--surface-solid);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 12%);
+  }
+
+  html[data-glass='off'] .glass-segmented [role='tab'][aria-selected='true'],
+  html[data-glass='off'] .teacher-type-tab-active {
+    background: color-mix(in oklch, var(--primary) 14%, var(--surface-solid));
+    box-shadow:
+      inset 0 0 0 1px color-mix(in oklch, var(--primary) 45%, transparent),
+      inset 0 -2px 0 var(--primary);
+  }
+
+  html[data-glass='off'] [data-slot='button']:not([data-variant='link']) {
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  html[data-glass='off'] [data-slot='button'][data-variant='default'] {
+    background: var(--primary);
+  }
+
+  html[data-glass='off'] [data-slot='button'][data-variant='default']:hover:not(:disabled) {
+    background: color-mix(in oklch, var(--primary) 88%, black);
+  }
+
+  html[data-glass='off'] [data-slot='button'][data-variant='destructive'] {
+    background: var(--destructive);
+  }
+
+  html[data-glass='off'] [data-slot='button'][data-variant='destructive']:hover:not(:disabled) {
+    background: color-mix(in oklch, var(--destructive) 88%, black);
+  }
+
+  html[data-glass='off'] [data-slot='button'][data-variant='success'] {
+    background: #059669;
+  }
+
+  html[data-glass='off'] [data-slot='button'][data-variant='success']:hover:not(:disabled) {
+    background: #047857;
+  }
+
+  html[data-glass='off'] [data-slot='button'][data-variant='warning'] {
+    background: #d97706;
+  }
+
+  html[data-glass='off'] [data-slot='button'][data-variant='warning']:hover:not(:disabled) {
+    background: #b45309;
+  }
+
+  html[data-glass='off'] [data-slot='button'][data-variant='outline'],
+  html[data-glass='off'] [data-slot='button'][data-variant='secondary'] {
+    border-color: var(--border);
+    background: var(--surface-solid);
+  }
+
+  html[data-glass='off'] [data-slot='button'][data-variant='outline']:hover:not(:disabled),
+  html[data-glass='off'] [data-slot='button'][data-variant='secondary']:hover:not(:disabled),
+  html[data-glass='off'] [data-slot='button'][data-variant='ghost']:hover:not(:disabled) {
+    background: var(--muted);
+    box-shadow: none;
+  }
+
+  html[data-glass='off'] [data-slot='button'][data-variant='ghost'] {
+    background: transparent;
+  }
+
+  html[data-glass='off'] [data-slot='button']:focus-visible {
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--primary) 25%, transparent);
+  }
+
+  html[data-glass='off'] select[data-slot='native-select']::picker(select) {
+    background: var(--surface-solid);
+  }
+}

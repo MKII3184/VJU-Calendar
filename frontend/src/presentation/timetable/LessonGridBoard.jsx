@@ -29,9 +29,12 @@ const AUTOSCROLL_MAX_SPEED = 22; // px/frame toi da, giam dan khi cang gan mep v
 // khong the dung px co dinh cho be rong thanh nua.
 export default function LessonGridBoard({
   lessons = [], numDays, slotsPerDay, highlightedIds, colorBy, onPickProblem, detailed = false,
+  // searchState: "match" = dang tim va co buoi khop (the mo khong hien popup);
+  // "none" = dang tim ma khong khop buoi nao (mo toan bo luoi); null = khong tim.
+  searchState = null,
   // scrollTarget: { id, seq } - seq de bam LAI dung vu do van cuon lai duoc
   // (neu chi truyen id thi lan bam thu hai khong doi gia tri, effect khong chay).
-  onMoveLesson, onClearOverride, onTachHocChung, scrollTarget = null,
+  onMoveLesson, onClearOverride, onTachHocChung, onOpenManual, scrollTarget = null,
 }) {
   // Keo-tha CHI mo o che do chi tiet (toan man hinh): the ~180px la muc tieu tha
   // du lon de nham chinh xac; o che do thanh mau thuong (12-20px, co ngay tram
@@ -205,7 +208,7 @@ export default function LessonGridBoard({
           buoi do khong nam trong ket qua loc thi bat lam moi thu chim het ma khong
           co gi noi len. */}
       <div
-        className={`schedv2-grid-table liquid-data-grid ${hasVisibleHighlight ? "has-highlight" : ""} ${
+        className={`schedv2-grid-table liquid-data-grid ${hasVisibleHighlight ? "has-highlight" : ""} ${searchState === "none" ? "search-nomatch" : ""} ${
           detailed ? "detailed" : ""
         }`}
         style={{
@@ -337,7 +340,12 @@ export default function LessonGridBoard({
                     <LessonCard
                       lesson={lesson}
                       isHighlighted={highlightedIds?.has(lesson.id)}
+                      suppressPopover={
+                        searchState === "none"
+                        || (searchState === "match" && !highlightedIds?.has(lesson.id))
+                      }
                       onPickProblem={onPickProblem}
+                      onOpenManual={onOpenManual}
                       onClearOverride={onClearOverride}
                       onTachHocChung={onTachHocChung}
                       detailed={detailed}

@@ -373,7 +373,9 @@ export function AppDataProvider({ children }) {
     () => scheduler.updateManualCourse(courseId, payload),
     {
       onSuccess: apDungPhanHoi,
-      messageFn: () => `Đã sửa học phần #${courseId}.`,
+      messageFn: (res) => `Đã sửa học phần #${courseId}.`
+        + (res?.classCodesRenamed ? ` Đã đánh lại mã ${res.classCodesRenamed} lớp.` : "")
+        + (res?.classCodesKept?.length ? ` Giữ nguyên mã lớp không theo mẫu: ${res.classCodesKept.join(", ")}.` : ""),
       errorPrefix: "Sửa học phần thất bại",
     },
   ), [runAction, apDungPhanHoi]);

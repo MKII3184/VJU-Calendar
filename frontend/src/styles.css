@@ -711,7 +711,7 @@ select:focus-visible {
 }
 .tt-hc-btn:hover { background: color-mix(in srgb, #7e22ce 10%, transparent); }
 
-/* Badge HOC CHUNG trong bang 29 cot - bam duoc de tach nhom. */
+/* Badge HOC CHUNG trong bang 17 cot - bam duoc de tach nhom. */
 .xls-hc-badge {
   display: inline-flex;
   align-items: center;
@@ -722,7 +722,7 @@ select:focus-visible {
   padding: 0 0.25rem;
   background: color-mix(in srgb, #7e22ce 10%, transparent);
   color: #6b21a8;
-  font-size: 0.66rem;
+  font-size: 0.72rem;
   font-weight: 700;
   white-space: nowrap;
   cursor: pointer;
@@ -830,6 +830,27 @@ select:focus-visible {
     0 6px 16px color-mix(in srgb, var(--lesson-color) 30%, transparent);
 }
 
+/* Tab den bang ban phim cung can mot dau hieu nhu hover - thanh 10px thi khong
+   co vien focus la mat huong di chuyen hoan toan. outline chu khong box-shadow
+   de khong tran vao tin hieu "highlighted" (vien do) va "pending-save". */
+.lesson-bar:focus-visible {
+  outline: 2px solid var(--foreground, #1e293b);
+  outline-offset: 1px;
+  z-index: 20;
+}
+
+.lesson-bar:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Focus bang ban phim trong luc dang "chim nen" cung phai ro lai nhu hover,
+   neu khong nguoi dung Tab toi mot thanh mo .2 ma khong doc duoc popover cua no
+   la buoi nao. */
+.schedv2-grid-table.has-highlight .lesson-bar:not(.highlighted):focus-visible {
+  opacity: .75;
+  filter: saturate(.85) brightness(1.05);
+}
+
 .lesson-bar.highlighted {
   outline: 3px solid #dc2626;
   outline-offset: 1px;
@@ -853,6 +874,12 @@ select:focus-visible {
 
 .schedv2-grid-table.has-highlight .lesson-bar.highlighted {
   box-shadow: 0 3px 12px rgba(220, 38, 38, .35);
+}
+
+/* Tim khong ra buoi nao: mo toan bo luoi, khong cho hover "ro lai". */
+.schedv2-grid-table.search-nomatch .lesson-bar {
+  opacity: .2;
+  filter: saturate(.3);
 }
 
 .lesson-bar.dimmed {
@@ -1730,7 +1757,7 @@ textarea:focus-visible {
 .xls-scroll {
   /* Cuon CA HAI CHIEU, va la khung cuon DUY NHAT cua trang "Du lieu hoc phan".
 
-     Bang mirror 29 cot rong hon man hinh nen luon can overflow-x. Cuon DOC thi
+     Bang mirror 17 cot rong hon man hinh nen luon can overflow-x. Cuon DOC thi
      truoc day de <main> lo (o day chi co overflow-x) - nhung `position: sticky`
      bao gio cung bam vao KHUNG CUON GAN NHAT, ma dat overflow-x da bien chinh
      div nay thanh khung cuon roi (CSS: mot truc khac `visible` thi truc kia tu
@@ -1765,7 +1792,8 @@ textarea:focus-visible {
      collapse cu: moi vach 1px. */
   border-collapse: separate;
   border-spacing: 0;
-  font-size: 10px;
+  font-size: 0.8125rem;
+  line-height: 1.35;
   white-space: nowrap;
   width: max-content;
   min-width: 100%;
@@ -1774,10 +1802,10 @@ textarea:focus-visible {
 .xls-table th,
 .xls-table td {
   border: 0;
-  border-right: 1px solid #d5dbe3;
-  border-bottom: 1px solid #d5dbe3;
-  padding: 2px 5px;
-  text-align: left;
+  border-right: 1px solid var(--xls-line);
+  border-bottom: 1px solid var(--xls-line);
+  padding: 3px 6px;
+  text-align: center;
   vertical-align: middle;
 }
 
@@ -1786,21 +1814,37 @@ textarea:focus-visible {
    cuon di la mat, con o thi dinh theo. Cot dau tien la o merge cao ca nhom hoc
    phan nen moi dong deu duoc ganh vien trai. */
 .xls-table thead tr:first-child > th {
-  border-top: 1px solid #d5dbe3;
+  border-top: 1px solid var(--xls-line);
 }
 
 .xls-table th.xls-c-tt,
 .xls-table td.xls-c-tt {
-  border-left: 1px solid #d5dbe3;
+  border-left: 1px solid var(--xls-line);
 }
 
 .xls-table thead th {
-  background: #eef1f6;
-  color: #334155;
+  background: var(--xls-hd-main);
+  color: #fff;
+  font-size: 0.78rem;
   font-weight: 600;
   text-align: center;
   white-space: normal;
-  min-width: 56px;
+  min-width: 3.5rem;
+}
+
+/* Tầng tiêu đề thứ hai: "Thứ", "Tiết giảng dạy" nền tím; hai ô con của nhóm
+   giảng viên theo tông đỏ nhạt hơn tầng một để vẫn thấy rõ hai tầng. */
+.xls-table thead tr:nth-child(2) > th {
+  background: var(--xls-hd-purple);
+}
+
+.xls-table thead tr:nth-child(2) > th.xls-z-teacher {
+  background: var(--xls-hd-sub-red);
+}
+
+/* Nền ô thân bảng đặc (ô đóng băng trượt đè lên phần đang cuộn bên dưới). */
+.xls-table tbody td {
+  background: var(--xls-cell);
 }
 
 .xls-table tbody tr.xls-row {
@@ -1819,11 +1863,11 @@ textarea:focus-visible {
    cao 7 dong (chung thuoc ve dong DAU nhom), tao vet mau hinh chu L khong
    doc duoc dang tro vao dau. */
 .xls-table tbody:hover td {
-  background: #fdf5f5;
+  background: var(--xls-hover-zone);
 }
 
 .xls-table tbody tr.xls-row:hover td:not(.xls-course) {
-  background: #f9e3e3;
+  background: var(--xls-hover-row);
 }
 
 /* Vach tach hai NHOM HOC PHAN ke nhau - doc duoc ranh gioi ca khi khong hover.
@@ -1840,7 +1884,7 @@ textarea:focus-visible {
    TC/Chot lich) thuoc ve dong DAU nhung day cua chung moi la day cua ca nhom. */
 .xls-table tbody:has(+ tbody) > tr:last-child > td,
 .xls-table tbody:has(+ tbody) > tr:first-child > td.xls-course {
-  border-bottom-color: #94a3b8;
+  border-bottom-color: var(--xls-line-strong);
 }
 
 /* ─── Chia bang theo FORM bang NEN ───────────────────────────────────
@@ -1850,14 +1894,30 @@ textarea:focus-visible {
 
    Ban dau dung vach doc 2px. Bo, vi vien bi RANG CUA khi nguoi dung zoom le:
    chieu cao moi o ra so thap phan, tung o lam tron mot kieu nen vach trong nhu
-   dut khuc. Ma bang 29 cot thi zoom nho lai chinh la phan xa tu nhien. Nen thi
+   dut khuc. Ma bang 17 cot thi zoom nho lai chinh la phan xa tu nhien. Nen thi
    khong co vien de lam tron -> dung vung o moi muc zoom.
 
    Vung "Lop hoc phan" CO Y de tran: no chiem da so cot, to nen ca thi bang
    thanh nang va mat tac dung phan biet. */
 .xls-table {
-  --xls-z-course: #eef3f8; /* Hoc phan - lam slate */
-  --xls-z-teacher: #f5f1fa; /* Giang vien - lam tim nhat */
+  --xls-z-course: #f1f3f5; /* Hoc phan - xam trung tinh */
+  --xls-z-teacher: #f6f2fa; /* Giang vien - tim rat nhat */
+  --xls-cell: #ffffff;
+  --xls-line: #d5dbe3;
+  --xls-line-strong: #94a3b8;
+  --xls-hover-zone: #fdf5f5;
+  --xls-hover-row: #f9e3e3;
+  --xls-hover-course: #fbeaea;
+  --xls-gv-hover: #e7dff5;
+  --xls-gv-line: #cfd6e0;
+  --xls-venh: #b3261e;
+  --xls-ref: #b91c1c;
+  --xls-doan: #a16207;
+  --xls-chot-ok: #047857;
+  --xls-chot-bg: color-mix(in srgb, #10b981 7%, #fff);
+  --xls-hd-main: #b91c1c;
+  --xls-hd-sub-red: #c62828;
+  --xls-hd-purple: #7e22ce;
 }
 
 .xls-table tbody .xls-z-course {
@@ -1869,25 +1929,27 @@ textarea:focus-visible {
 }
 
 /* MOT LOP CO NHIEU GIANG VIEN -> moi nguoi mot dong trong o, dung nhu file Excel
-   goc. Cac o cua khoi giang vien (hoc ham / ho ten / don vi / email / SDT) deu
-   sinh cung so dong theo cung thu tu, nen doc ngang la ra dung bo thong tin cua
-   mot nguoi. Truoc day chi hien nguoi dau danh sach nen email/SDT cua nhung
-   nguoi con lai khong doc duoc o dau tren giao dien. */
+   goc. Hai o cua khoi giang vien (hoc ham / ho ten) deu sinh cung so dong theo
+   cung thu tu, nen doc ngang la ra dung bo thong tin cua mot nguoi. Cac thong tin
+   con lai duoc xem va sua trong popup cua tung giang vien. */
 .xls-table td.xls-gv-cell {
   padding: 0;
   vertical-align: top;
+  max-width: 16rem;
 }
 
 .xls-table td.xls-gv-cell .xls-gv-line {
   display: block;
   width: 100%;
   padding: 2px 5px;
-  text-align: left;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
   font: inherit;
   color: inherit;
   background: none;
   border: 0;
-  border-top: 1px dashed #cfd6e0;
+  border-top: 1px dashed var(--xls-gv-line);
   cursor: pointer;
 }
 
@@ -1897,7 +1959,7 @@ textarea:focus-visible {
 }
 
 .xls-table td.xls-gv-cell .xls-gv-line:hover {
-  background: #e7dff5;
+  background: var(--xls-gv-hover);
   text-decoration: underline;
 }
 
@@ -1906,19 +1968,12 @@ textarea:focus-visible {
    phai loi cua thuat toan - nhung la cho VENH giua hai nguon do NGUOI nhap, phai
    nhin ra duoc. */
 .xls-table td.xls-gv-cell .xls-gv-venh {
-  color: #b3261e;
-  text-decoration: underline dotted #b3261e;
+  color: var(--xls-venh);
+  text-decoration: underline dotted var(--xls-venh);
 }
 
 /* Header dam hon than bang mot bac - de nhin hang tieu de la doc duoc ngay
    bang chia lam may vung, khong phai doi luot mat xuong du lieu. */
-.xls-table thead .xls-z-course {
-  background: #dde8f2;
-}
-
-.xls-table thead .xls-z-teacher {
-  background: #e9e1f6;
-}
 
 /* O mau trong chu giai - dung CHUNG bien mau voi bang, doi mau vung la chu
    giai tu doi theo, khong lech nhau. */
@@ -1949,7 +2004,7 @@ textarea:focus-visible {
 }
 
 .xls-table tbody:hover td.xls-course {
-  background: #fbeaea;
+  background: var(--xls-hover-course);
 }
 
 /* Cot "GV ky truoc (de doi chieu)" - to mau do nhat nhu file Excel goc, danh
@@ -1957,7 +2012,7 @@ textarea:focus-visible {
 
 .xls-table td.xls-ref,
 .xls-table th.xls-ref-head {
-  color: #b91c1c;
+  color: var(--xls-ref);
 }
 
 /* SO TIET do he thong tam suy ra (file bo trong ca gio hoc lan o "Số tiết").
@@ -1965,7 +2020,7 @@ textarea:focus-visible {
    hai nguon khac han nhau, khong noi ra thi giao vu tuong ca cot deu la du lieu
    that. Khong to do: day khong phai loi, chi la chua duoc xac nhan. */
 .xls-table td.xls-doan {
-  color: #a16207;
+  color: var(--xls-doan);
 }
 
 .xls-table td.xls-doan .xls-doan-dau {
@@ -1991,7 +2046,7 @@ textarea:focus-visible {
 
    Truoc day cot nay in san ca 4 thu (badge + nguoi chot + ngay + ghi chu + nut
    "Bo chot") xep doc, lap lai o MOI hoc phan: rong ~8.5rem cung mot noi dung
-   gan nhu khong doi, trong khi bang co 29 cot va giao vu phai keo ngang de xem
+   gan nhu khong doi, trong khi bang co 17 cot va giao vu phai keo ngang de xem
    thong tin lop. Chi tiet nay khong mat - vao tooltip cua badge (xem
    nhanChot() ben ManualEntryPage.jsx). */
 /* ---- Be rong RIENG cho 4 cot vung "hoc phan" -------------------------------
@@ -1999,7 +2054,7 @@ textarea:focus-visible {
    so dat chung cho ca vung, nen cot "TT" (chi chua 1-3 chu so) va cot "So tin
    chi" (1 chu so) cung rong 130px y nhu cot "Ten hoc phan". Do thuc te truoc khi
    sua: TT 130 · Ma HP 130 · Ten HP 501 · So TC 130 = 891px, chiem gan het man
-   hinh trong khi bang co 29 cot va thong tin lop nam ben phai.
+   hinh trong khi bang co 17 cot va thong tin lop nam ben phai.
 
    min-width PHAI dat lai (khong chi `width`): min-width luon thang width, de
    nguyen 130px thi khai bao width nho hon khong co tac dung nao.
@@ -2018,14 +2073,15 @@ textarea:focus-visible {
 }
 .xls-table th.xls-c-ma,
 .xls-table td.xls-c-ma {
-  width: 5.5rem;
+  width: 6.25rem;
   min-width: 0;
 }
 .xls-table th.xls-c-ten,
 .xls-table td.xls-c-ten {
-  width: 15rem;
+  width: 19rem;
   min-width: 0;
-  max-width: 15rem;
+  max-width: 19rem;
+  text-align: left;
   /* Ten dai tu xuong dong. `overflow-wrap` de mot tu qua dai (ma lop dinh lien
      ten) khong pha be rong cot. */
   white-space: normal;
@@ -2037,16 +2093,16 @@ textarea:focus-visible {
    luon thang width. Khong go min-width thi cot ket o 130px du chi chua 1 icon. */
 .xls-table td.xls-chot,
 .xls-table thead th.xls-chot-head {
-  width: 2.6rem; min-width: 0; padding: 0.25rem 0.2rem;
+  width: 3rem; min-width: 0; padding: 0.25rem 0.2rem;
   vertical-align: middle; text-align: center;
   white-space: normal;   /* "Chốt lịch" o tieu de tu xuong 2 dong cho vua */
 }
 
 /* ---- DONG BANG hang tieu de + 5 cot dau (freeze panes kieu Excel) ----------
-   Bang co 29 cot va vai tram dong: cuon sang phai thi khong con biet dang doc
+   Bang co 17 cot va vai tram dong: cuon sang phai thi khong con biet dang doc
    lop cua mon nao, cuon xuong thi khong con biet cot nao la cot nao. Dong bang
    dung nhung o TRA LOI hai cau do:
-     · doc  - ba tang tieu de
+     · doc  - hai tang tieu de
      · ngang - TT / Ma hoc phan / Ten hoc phan / So tin chi / Chot lich
 
    Ca hai deu bam vao .xls-scroll (khung cuon duy nhat cua trang - xem ghi chu o
@@ -2079,13 +2135,13 @@ textarea:focus-visible {
    le lam moi so le di vai phan muoi px. Lech mot chut thoi la cac cot dinh
    chong len nhau hoac ho ra mot khe trang.
 
-   Gia tri du phong = cong don dung cac `width` khai bao ben tren (3 · 5.5 · 15 ·
-   3 · 2.6rem), dung cho khoanh khac truoc khi phep do dau tien chay xong. */
+   Gia tri du phong = cong don dung cac `width` khai bao ben tren (3 · 6.25 · 19 ·
+   3 · 3rem), dung cho khoanh khac truoc khi phep do dau tien chay xong. */
 .xls-table th.xls-c-tt,  .xls-table td.xls-c-tt  { left: 0; }
 .xls-table th.xls-c-ma,  .xls-table td.xls-c-ma  { left: var(--fz-1, 3rem); }
-.xls-table th.xls-c-ten, .xls-table td.xls-c-ten { left: var(--fz-2, 8.5rem); }
-.xls-table th.xls-c-tc,  .xls-table td.xls-c-tc  { left: var(--fz-3, 23.5rem); }
-.xls-table th.xls-chot-head, .xls-table td.xls-chot { left: var(--fz-4, 26.5rem); }
+.xls-table th.xls-c-ten, .xls-table td.xls-c-ten { left: var(--fz-2, 9.25rem); }
+.xls-table th.xls-c-tc,  .xls-table td.xls-c-tc  { left: var(--fz-3, 28.25rem); }
+.xls-table th.xls-chot-head, .xls-table td.xls-chot { left: var(--fz-4, 31.25rem); }
 
 /* Bong danh dau ranh gioi vung dong bang - CHI khi da cuon qua no. Bong hien
    san luc chua cuon se doc ra thanh mot vet toi vo co giua bang.
@@ -2111,10 +2167,10 @@ textarea:focus-visible {
   display: inline-flex; align-items: center; gap: 0.25rem;
   border-radius: 0.3rem; padding: 0.05rem 0.3rem;
   background: color-mix(in srgb, var(--color-emerald-500, #10b981) 15%, transparent);
-  color: #047857; font-weight: 600; white-space: nowrap;
-  font-size: 0.68rem;
+  color: var(--xls-chot-ok); font-weight: 600; white-space: nowrap;
+  font-size: 0.72rem;
 }
-.xls-chot-meta { color: var(--muted-foreground); font-size: 0.68rem; white-space: nowrap; }
+.xls-chot-meta { color: var(--muted-foreground); font-size: 0.72rem; white-space: nowrap; }
 .xls-chot-btn {
   display: inline-flex; align-items: center; justify-content: center;
   border: 1px solid var(--border); border-radius: 0.3rem;
@@ -2130,7 +2186,7 @@ textarea:focus-visible {
    cua thu vien, doi phien ban la vo am tham. */
 .xls-chot-btn.xls-chot-btn-mo {
   border-color: color-mix(in srgb, #10b981 35%, var(--border));
-  color: #047857;
+  color: var(--xls-chot-ok);
 }
 /* Ca vung hoc phan DA CHOT: nen xanh rat nhat, de luot mat la thay ngay mon nao
    xong - khong phai doc tung o "Chot lich".
@@ -2139,4 +2195,239 @@ textarea:focus-visible {
    o DONG BANG (freeze panes), chung truot de len phan bang dang cuon ben duoi.
    Nen chi can hoi trong suot mot chut la doc thay chu cua cot khac chay xuyen
    qua. Ben duoi chung von la nen trang cua trang nen #fff giu nguyen mau cu. */
-tbody:has(.xls-chot-badge) .xls-course { background: color-mix(in srgb, #10b981 7%, #fff); }
+tbody:has(.xls-chot-badge) .xls-course { background: var(--xls-chot-bg); }
+
+
+/* ---- Bang chuong trinh (toan man hinh, ProgramSheetBoard) ----------------
+   Bo cuc "sheet giay": hang = (Ngay | Tiet | Gio), cot = chuong trinh gom
+   theo khoa. Ba cot trai + hai hang tieu de dinh (sticky) nhu freeze panes;
+   mot buoi nhieu tiet gop DOC qua rowspan (adapters/programSheet.js).
+   Mau the buoi hoc chi la ACCENT (vien trai + nen pha nhat) - bang giu nen
+   --card nhu sheet giay, khong son dac nhu thanh tren luoi; doc duoc trong
+   ca hai theme vi chi dung bien. */
+
+.prog-sheet-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  position: relative; /* neo cho sticky ben trong */
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+}
+
+.prog-sheet {
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  width: max-content;
+  min-width: 100%;
+  font-size: 11px;
+  color: var(--foreground);
+}
+
+/* Cot chuong trinh rong co dinh - 3 cot dau dinh bang <colgroup> trong JSX */
+.prog-sheet col:not(:nth-child(-n + 3)) { width: 168px; }
+
+.prog-sheet th,
+.prog-sheet td {
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  padding: 0;
+}
+
+/* Hai hang tieu de dinh tren; goc tren-trai dinh ca hai chieu */
+.prog-sheet .stick-t { position: sticky; top: 0; z-index: 12; background: var(--card); }
+.prog-sheet thead tr:last-child .prog { top: 28px; }
+/* Goc tren-trai dinh CA HAI chieu (khong co left:0 thi chi dinh doc, cuon ngang
+   la troi va header chuong trinh tran len vung cot nhan). Can specificity cao
+   hon .stick-l/.stick-t (z 10-12) vi no nam tren ca hai truc. */
+.prog-sheet .stick-l.corner { left: 0; z-index: 16; }
+
+.prog-sheet thead th {
+  height: 28px;
+  font-weight: 600;
+  font-size: 11px;
+  text-align: center;
+  vertical-align: middle;
+  color: var(--foreground);
+  background: color-mix(in oklch, var(--muted) 55%, var(--card));
+}
+.prog-sheet thead .cohort {
+  font-size: 11.5px;
+  letter-spacing: .02em;
+  border-bottom: 1px solid var(--border);
+}
+.prog-sheet thead .prog { font-size: 10.5px; color: var(--muted-foreground); }
+.prog-sheet thead .corner {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  text-transform: none;
+}
+
+/* Ba cot dinh trai */
+.prog-sheet .stick-l { position: sticky; z-index: 10; background: var(--card); }
+.prog-sheet .day-label { left: 0; z-index: 11; }
+.prog-sheet .tiet { left: 54px; }
+.prog-sheet .gio { left: 100px; }
+
+.prog-sheet .day-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: .05em;
+  background: color-mix(in oklch, var(--muted) 55%, var(--card));
+  border-top: 2px solid var(--border);
+}
+.prog-sheet .tiet {
+  text-align: center;
+  vertical-align: middle;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+.prog-sheet .gio {
+  text-align: center;
+  vertical-align: middle;
+  font-size: 9.5px;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* O du lieu: moi hang tiet cao co dinh de rowspan gop doc deu nhau */
+.prog-sheet td.prog-cell {
+  height: 46px;
+  vertical-align: top;
+  padding: 2px;
+}
+.prog-sheet td.prog-cell.drag-over {
+  outline: 2px dashed var(--primary);
+  outline-offset: -2px;
+  background: color-mix(in oklch, var(--primary) 12%, transparent);
+}
+
+/* O gop doc: chieu cao PHAN CHIA deu cho moi the ben trong. Truoc day the dau
+   min-height:100% khien the thu 2 tran xuong de len cac hang ben duoi (lop
+   "chia lam 2 lop" chong gio gop chung mot o). */
+.prog-cell-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: 100%;
+  min-height: 0;
+}
+/* ROOMY: cot rat rong -> xep NGANG cac the chong gio (giong sheet giay chia
+   doi cot khi trung gio) thay vi chia doi chieu cao; moi the duoc full chieu
+   cao o gop, du cho cho ten 2 dong + dong GV/phong, khong bi cat chu. */
+.prog-sheet.roomy .prog-cell-stack { flex-direction: row; }
+
+/* The buoi hoc nho trong o - accent trai theo mau nhom */
+.prog-cell-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1 1 0;
+  min-height: 0;
+  min-width: 0;
+  padding: 3px 6px 3px 7px;
+  border-left: 3px solid var(--acc, var(--border));
+  border-radius: 4px;
+  background: color-mix(in oklch, var(--acc, var(--muted)) 10%, transparent);
+  overflow: hidden;
+}
+
+.prog-cell-flags {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  display: flex;
+  gap: 2px;
+  color: var(--muted-foreground);
+}
+.prog-cell-card.has-problem .prog-cell-flags { color: #dc2626; }
+.prog-cell-card.has-problem {
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--acc) 55%, transparent);
+}
+
+.prog-cell-name {
+  font-weight: 600;
+  font-size: 10.5px;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  padding-right: 14px; /* cho cho cum co canh bao */
+}
+.prog-cell-sub {
+  font-size: 9.5px;
+  line-height: 1.25;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Lop don vi khac dieu phoi: soc cheo nhat + vien dut - biet la "khong phai
+   viec cua khoa" ma khong can doc chu */
+.prog-cell-card.bo-qua {
+  opacity: .72;
+  border-left-style: dotted;
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent 0 6px,
+    color-mix(in oklch, var(--acc) 5%, transparent) 6px 8px
+  );
+}
+
+/* Buoi dang cho luu (keo-tha chua bam Luu) - khop tin hieu pending-save tren luoi */
+.prog-cell-card.pending {
+  outline: 2px dashed var(--primary);
+  outline-offset: -2px;
+}
+
+/* Chim xuong khi dang tim kiem / to sang buoi khac */
+.prog-cell-card.dimmed { opacity: .22; }
+
+/* Focus ban phim - dau hieu ro tren the nho */
+.prog-cell-card:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 1px;
+  z-index: 5;
+}
+.prog-cell-card:focus:not(:focus-visible) { outline: none; }
+
+/* ROOMY: khi loc con <=4 cot chuong trinh, moi cot gian rat rong - day chu/hang
+   len kich co "doc nhu sheet giay cho mot nganh" thay vi mat do toan khoa. */
+.prog-sheet.roomy { font-size: 13px; }
+.prog-sheet.roomy thead th { height: 34px; }
+.prog-sheet.roomy thead tr:last-child .prog { top: 34px; }
+.prog-sheet.roomy thead .cohort { font-size: 13px; }
+.prog-sheet.roomy thead .prog { font-size: 12px; }
+.prog-sheet.roomy thead .corner { font-size: 11.5px; }
+.prog-sheet.roomy .day-label { font-size: 12.5px; letter-spacing: .08em; }
+.prog-sheet.roomy .tiet { font-size: 11px; }
+.prog-sheet.roomy .gio { font-size: 10.5px; }
+.prog-sheet.roomy td.prog-cell { height: 64px; padding: 3px; }
+.prog-sheet.roomy .prog-cell-card { padding: 5px 10px 5px 11px; gap: 2px; }
+.prog-sheet.roomy .prog-cell-name {
+  font-size: 12.5px;
+  line-height: 1.3;
+  -webkit-line-clamp: 3;
+}
+.prog-sheet.roomy .prog-cell-sub {
+  font-size: 11px;
+  line-height: 1.3;
+  /* O rong -> cho dong GV/phong xuong 3 dong thay vi cat ngang mot dong */
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+.prog-sheet.roomy .prog-cell-flags { top: 5px; right: 6px; }

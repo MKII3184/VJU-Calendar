@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Download, Eraser, Eye, EyeOff, GraduationCap, Lock, Plus, RotateCcw, TriangleAlert, Upload } from "lucide-react";
 import { useAppData } from "../../context/AppDataContext";
 import SectionEditDrawer from "../manual/SectionEditDrawer";
@@ -11,9 +11,20 @@ import { FilterSelect } from "@/components/shared/filter-select";
 import { ListSearch } from "@/components/shared/list-search";
 import { Notice } from "@/components/shared/notice";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import SectionTable, { STATUS_META } from "../manual/SectionTable";
 
 const PAGE_STEP = 25;
+
+export const DEFAULT_MANUAL_VIEW_STATE = {
+  search: "",
+  programFilter: "",
+  cohortFilter: "",
+  hienBoQua: false,
+  statusFilter: "",
+  chotFilter: "",
+  targetSectionIds: null,
+};
 
 // STATUS_META dung chung voi bang - xem manual/SectionTable.jsx.
 const STATUS_OPTIONS = Object.entries(STATUS_META).map(([value, m]) => ({
@@ -34,39 +45,77 @@ const CHOT_OPTIONS = [
 // side-panel (SectionEditDrawer) de hoan thien du lieu. Day la NGUON DUY NHAT
 // dua ca day sang "Thoi khoa bieu" thay cho tai Excel.
 //
-// BANG mirror giu nguyen CSS cu (.xls-*): day la ban sao co chu y cua file Excel
-// goc, mat do rat day (29 cot, header 3 tang, rowSpan merge-xuong). Padding
+// BANG tom tat giu nguyen CSS cu (.xls-*): cau truc dua tren file Excel goc,
+// hien 17 cot voi header 2 tang va rowSpan merge-xuong. Padding
 // px-3 py-3 cua shadcn Table se lam no phinh gap may lan va mat cong dung. Chi
 // phan khung (thanh loc, trang thai, nut) chuyen sang design system.
-export default function ManualEntryPage({ role }) {
+export default function ManualEntryPage({
+  role,
+  viewState,
+  onViewStateChange,
+  focusRequest,
+  onFocusHandled,
+}) {
   const { data, loading, initManual, doClearManualTimes, doBoChotSection,
           doBoHocChung, doBoQua } = useAppData();
   const canEdit = role !== "viewer";
+  const [localViewState, setLocalViewState] = useState(DEFAULT_MANUAL_VIEW_STATE);
+  const currentViewState = { ...DEFAULT_MANUAL_VIEW_STATE, ...(viewState ?? localViewState) };
+  const updateViewState = (patch) => {
+    const next = typeof patch === "function" ? patch(currentViewState) : { ...currentViewState, ...patch };
+    setLocalViewState(next);
+    onViewStateChange?.(next);
+  };
+  const {
+    search, programFilter, cohortFilter, hienBoQua, statusFilter, chotFilter, targetSectionIds,
+  } = currentViewState;
+  const setSearch = (searchValue) => updateViewState({ search: searchValue, targetSectionIds: null });
+  const setProgramFilter = (value) => updateViewState({ programFilter: value });
+  const setCohortFilter = (value) => updateViewState({ cohortFilter: value });
+  const setHienBoQua = (value) => updateViewState({ hienBoQua: value });
+  const setStatusFilter = (value) => updateViewState({ statusFilter: value });
+  const setChotFilter = (value) => updateViewState({ chotFilter: value });
 
   // Da BO lenh refreshData() luc mount o day: AppDataProvider nay nap du lieu
   // ngay khi mo app cho MOI trang, khong rieng trang nay. Giu lai chi lam goi
   // /api/data hai lan o lan tai dau tien.
 
-  const [search, setSearch] = useState("");
-  const [programFilter, setProgramFilter] = useState("");
-  const [cohortFilter, setCohortFilter] = useState("");
   // Lop do DON VI KHAC dieu phoi va da bam bo qua: an khoi bang - do dung la cai
   // giao vu muon. Van mo xem lai duoc de bo danh dau khi nham.
-  const [hienBoQua, setHienBoQua] = useState(false);
-  const [statusFilter, setStatusFilter] = useState("");
-  const [chotFilter, setChotFilter] = useState("");
   // Lop hoc phan dang mo hop thoai chot (null = dong).
   const [chotSection, setChotSection] = useState(null);
+  const [boChotSection, setBoChotSection] = useState(null);
   const [limit, setLimit] = useState(PAGE_STEP);
   // { type: "section"|"teacher"|"course", id: number|"new" } | null (dong) - moi
   // domain co 1 form rieng (SectionEditDrawer/TeacherEditDrawer/CourseEditDrawer),
   // mo dung form theo O nguoi dung click trong bang, khong dong tat ca vao 1 form.
   const [drawer, setDrawer] = useState(null);
+  const [teacherPopupId, setTeacherPopupId] = useState(null);
   const [importOpen, setImportOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
 
   const isManualMode = data?.sourceLabel === "Nhập liệu thủ công";
   const classes = data?.classes || [];
+  const handledFocusRef = useRef(null);
+
+  useEffect(() => {
+    if (!focusRequest || handledFocusRef.current === focusRequest.seq) return;
+    const ids = new Set(focusRequest.targets.map((target) => String(target.id)));
+    const targets = classes.filter((item) => ids.has(String(item.sectionId)));
+    if (targets.length !== ids.size) return;
+    handledFocusRef.current = focusRequest.seq;
+    updateViewState({
+      search: focusRequest.targets.map((target) => target.classCode || `#${target.id}`).join(", "),
+      targetSectionIds: focusRequest.targets.map((target) => target.id),
+      programFilter: programFilter && targets.every((item) => (item.programParts ?? []).includes(programFilter)) ? programFilter : "",
+      cohortFilter: cohortFilter && targets.every((item) => (item.cohortParts ?? []).includes(cohortFilter)) ? cohortFilter : "",
+      statusFilter: statusFilter && targets.every((item) => item.status === statusFilter) ? statusFilter : "",
+      chotFilter: chotFilter && targets.every((item) => chotFilter === "roi" ? item.sectionChot : !item.sectionChot) ? chotFilter : "",
+      hienBoQua: hienBoQua || targets.some((item) => item.boQua),
+    });
+    setLimit(Math.max(PAGE_STEP, targets.length));
+    onFocusHandled?.(focusRequest.seq);
+  }, [focusRequest?.seq, classes]);
 
   // O GHEP ("BCSE+MJM", "VJU2023+VJU2024") = lop cua CA HAI -> danh sach chon la
   // cac ma DON (backend tach san o programParts/cohortParts). Nho vay chon "BCSE"
@@ -86,18 +135,20 @@ export default function ManualEntryPage({ role }) {
 
   const visible = useMemo(() => {
     const q = search.trim().toLowerCase();
+    const targetIds = targetSectionIds ? new Set(targetSectionIds.map(String)) : null;
     return classes.filter((c) => {
+      if (targetIds && !targetIds.has(String(c.sectionId))) return false;
       if (c.boQua && !hienBoQua) return false;
       if (programFilter && !(c.programParts ?? []).includes(programFilter)) return false;
       if (cohortFilter && !(c.cohortParts ?? []).includes(cohortFilter)) return false;
       if (statusFilter && c.status !== statusFilter) return false;
       if (chotFilter === "roi" && !c.sectionChot) return false;
       if (chotFilter === "chua" && c.sectionChot) return false;
-      if (!q) return true;
+      if (targetIds || !q) return true;
       return [c.courseName, c.classCode, c.teacherName, String(c.sectionId)]
         .some((v) => (v || "").toLowerCase().includes(q));
     });
-  }, [classes, search, programFilter, cohortFilter, statusFilter, chotFilter, hienBoQua]);
+  }, [classes, search, programFilter, cohortFilter, statusFilter, chotFilter, hienBoQua, targetSectionIds]);
 
   // Hai con so cho khoi "don vi khac dieu phoi" ngay tren bang.
   const soBoQua = useMemo(() => classes.filter((c) => c.boQua).length, [classes]);
@@ -121,14 +172,19 @@ export default function ManualEntryPage({ role }) {
     return { tong, roi, con: tong - roi };
   }, [classes]);
 
-  const handleBoChot = (c) => async (e) => {
+  const handleBoChot = (c) => (e) => {
     e.stopPropagation();
-    const ok = window.confirm(
-      `Bỏ chốt lớp "${c.classCode || `#${c.sectionId}`}" của học phần "${c.courseName}"?\n\n` +
-      `Giờ của riêng lớp này sẽ trả về đúng trạng thái trước khi chốt.`,
-    );
-    if (!ok) return;
-    await doBoChotSection(c.sectionId);
+    setBoChotSection(c);
+  };
+
+  const confirmBoChot = async () => {
+    if (!boChotSection) return;
+    try {
+      await doBoChotSection(boChotSection.sectionId);
+      setBoChotSection(null);
+    } catch {
+      return;
+    }
   };
 
   const handleStart = async () => {
@@ -161,8 +217,9 @@ export default function ManualEntryPage({ role }) {
   const selectedSection = drawer?.type === "section" && drawer.id !== "new"
     ? classes.find((c) => c.sectionId === drawer.id) || null
     : null;
-  const selectedTeacher = drawer?.type === "teacher" && drawer.id !== "new"
-    ? (data?.teachers || []).find((t) => t.id === drawer.id) || null
+  const selectedTeacherId = teacherPopupId ?? (drawer?.type === "teacher" ? drawer.id : null);
+  const selectedTeacher = selectedTeacherId != null && selectedTeacherId !== "new"
+    ? (data?.teachers || []).find((t) => t.id === selectedTeacherId) || null
     : null;
   const selectedCourse = drawer?.type === "course" && drawer.id !== "new"
     ? (data?.courses || []).find((c) => c.id === drawer.id) || null
@@ -343,7 +400,7 @@ export default function ManualEntryPage({ role }) {
           </span>
           <span className="inline-flex items-center gap-1.5">
             <span className="xls-swatch xls-z-teacher" aria-hidden="true" />
-            nhóm “Kỳ này” → <strong className="text-foreground font-medium">Giảng viên</strong>
+            nhóm “Thông tin giảng viên” → <strong className="text-foreground font-medium">Giảng viên</strong>
           </span>
           <span className="inline-flex items-center gap-1.5">
             <span className="xls-swatch" aria-hidden="true" />
@@ -433,23 +490,24 @@ export default function ManualEntryPage({ role }) {
         <SectionEditDrawer
           data={data}
           section={selectedSection}
-          onClose={() => setDrawer(null)}
+          onClose={() => { setTeacherPopupId(null); setDrawer(null); }}
           onDuplicated={(newId) => setDrawer({ type: "section", id: newId })}
-          // Bam "Giờ dạy" canh mot giang vien trong lop -> chuyen sang ngan cua
-          // chinh nguoi do (co muc khai gio co the day).
-          onOpenTeacher={(id) => setDrawer({ type: "teacher", id })}
+          // Bam "Giờ dạy" canh mot giang vien trong lop -> mo popup cua
+          // chinh nguoi do (co muc khai gio co the day) tren popup Sua lop.
+          onOpenTeacher={setTeacherPopupId}
         />
       )}
-      {drawer?.type === "teacher" && (
+      {(drawer?.type === "teacher" || (drawer?.type === "section" && teacherPopupId != null)) && (
         <TeacherEditDrawer
           data={data}
           teacher={selectedTeacher}
-          onClose={() => setDrawer(null)}
+          onClose={() => { setTeacherPopupId(null); if (drawer?.type === "teacher") setDrawer(null); }}
         />
       )}
       {drawer?.type === "course" && (
         <CourseEditDrawer
           course={selectedCourse}
+          classes={classes}
           onClose={() => setDrawer(null)}
         />
       )}
@@ -464,6 +522,27 @@ export default function ManualEntryPage({ role }) {
         sectionIdsDangHien={visible.map((c) => c.sectionId)}
         tongSoLop={classes.length}
       />
+      {boChotSection && (
+        <Dialog open onOpenChange={(open) => !open && !loading && setBoChotSection(null)}>
+          <DialogContent className="manual-edit-glass">
+            <DialogHeader>
+              <DialogTitle>Bỏ chốt lớp {boChotSection.classCode || `#${boChotSection.sectionId}`}?</DialogTitle>
+              <DialogDescription>
+                Giờ của lớp đang bị khóa để giữ đúng lịch đã xác nhận. Bỏ chốt sẽ trả giờ về trạng thái
+                trước khi chốt; các lớp khác không bị thay đổi.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button type="button" variant="outline" disabled={loading} onClick={() => setBoChotSection(null)}>
+                Hủy
+              </Button>
+              <Button type="button" disabled={loading} onClick={confirmBoChot}>
+                {loading ? "Đang bỏ chốt…" : "Xác nhận bỏ chốt"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
       {chotSection && (
         <ChotSectionDialog
           open

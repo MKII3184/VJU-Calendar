@@ -6,7 +6,7 @@ from flask import Blueprint, request
 
 from api.common import can_du_lieu, loi, tra_du_lieu
 from domain.luoi import dong_bo_ket_qua
-from domain.sections import id_moi
+from domain.sections import id_moi, ke_hoach_doi_ma_lop
 from snapshot import save_snapshot
 
 bp = Blueprint("manual_course", __name__)
@@ -46,24 +46,45 @@ def api_manual_update_course(data, course_id):
         return loi(f"Không tìm thấy học phần id={course_id}.")
     body = request.get_json(force=True)
 
-    if "name" in body:
-        name = (body.get("name") or "").strip()
-        if not name:
-            return loi("Tên học phần không được để trống.")
-        course["name"] = name
-    if "code" in body:
-        course["code"] = (body.get("code") or "").strip()
     if "credits" in body:
         try:
-            course["credits"] = int(body["credits"]) if body["credits"] not in (None, "") else None
+            credits = int(body["credits"]) if body["credits"] not in (None, "") else None
         except (TypeError, ValueError):
             return loi("Số tín chỉ phải là số nguyên.")
+        if credits != course.get("credits"):
+            return loi("Không thể đổi Số tín chỉ của học phần đã tạo.")
 
+    name = (body.get("name") or "").strip() if "name" in body else course.get("name")
+    code = (body.get("code") or "").strip() if "code" in body else course.get("code") or ""
+    if not name:
+        return loi("Tên học phần không được để trống.")
+    doi_ten, doi_ma = name != course.get("name"), code != (course.get("code") or "")
+    if not doi_ten and not doi_ma:
+        return tra_du_lieu(data)
+
+    da_chot = [s for s in data["sections"].values() if s.get("course_id") == course_id and s.get("chot")]
+    if da_chot:
+        return loi(f"Không thể sửa Mã/Tên học phần vì đã có {len(da_chot)} lớp đã chốt. Hãy bỏ chốt hết các lớp trước.")
+
+    doi, giu, giu_loi = {}, [], None
+    if doi_ma:
+        if code and any(
+            c["id"] != course_id and (c.get("code") or "").strip().lower() == code.lower()
+            for c in data["courses"].values()
+        ):
+            return loi(f"Mã học phần \"{code}\" đã tồn tại.")
+        doi, giu, giu_loi = ke_hoach_doi_ma_lop(data, course_id, (course.get("code") or "").strip(), code)
+        if giu_loi:
+            return loi(giu_loi)
+
+    course["name"], course["code"] = name, code
     for s in data["sections"].values():
         if s.get("course_id") == course_id:
-            s["course_name"] = f"{course['name']} ({s['class_code']})" if s.get("class_code") else course["name"]
+            if s["id"] in doi:
+                s["class_code"] = doi[s["id"]]
+            s["course_name"] = f"{name} ({s['class_code']})" if s.get("class_code") else name
 
-    # Ten mon vua doi -> the buoi tren luoi Thoi khoa bieu phai ghi ten moi.
+    # Ten mon / ma lop vua doi -> the buoi tren luoi Thoi khoa bieu phai ghi moi.
     dong_bo_ket_qua(data)
     save_snapshot()
-    return tra_du_lieu(data)
+    return tra_du_lieu(data, classCodesRenamed=len(set(doi.values())), classCodesKept=giu)
