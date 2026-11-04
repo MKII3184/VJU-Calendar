@@ -1,0 +1,35 @@
+# Cấu hình Render Blueprint (render.yaml) để tự động triển khai 2 môi trường song song
+services:
+  # ==========================================
+  # 1. PRODUCTION ENVIRONMENT (Nhánh test2.0)
+  # ==========================================
+  - type: web
+    name: vju-calendar-production
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    region: singapore          # Khu vực gần Việt Nam nhất, tốc độ cao
+    plan: free
+    branch: test2.0
+    autoDeploy: true
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: SNAPSHOT_PATH
+        value: /app/webapp/data/manual_state_snapshot_prod.json
+
+  # ==========================================
+  # 2. SANDBOX ENVIRONMENT (Nhánh test)
+  # ==========================================
+  - type: web
+    name: vju-calendar-sandbox
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    region: singapore          # Khu vực gần Việt Nam nhất, tốc độ cao
+    plan: free
+    branch: test
+    autoDeploy: true
+    envVars:
+      - key: ENVIRONMENT
+        value: sandbox
+      - key: SNAPSHOT_PATH
+        value: /app/webapp/data/manual_state_snapshot_sandbox.json
