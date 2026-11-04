@@ -34,6 +34,7 @@ BAN DO MA NGUON - tim loi o dau:
                          that (py kiem_tra_pham_vi.py --bo-chan FTH VJU2026 ...)
 """
 
+import os
 from flask import Flask
 
 from api import register_blueprints
@@ -48,4 +49,6 @@ nap_moc()        # va diem quay ve cua nut "Huy thay doi" - xem domain/hoan_tac.
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5055, debug=False)
+    host = os.environ.get("HOST", "127.0.0.1")
+    port = int(os.environ.get("PORT", 5055))
+    app.run(host=host, port=port, debug=False)
