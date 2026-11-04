@@ -218,10 +218,10 @@ const CHECKLIST_GROUPS = [
 
 const LIMITATIONS = [
   'Không có tài khoản đăng nhập thật — vai trò chỉ là lựa chọn cục bộ, không kiểm soát bằng mật khẩu.',
-  'Không có cơ sở dữ liệu — toàn bộ trạng thái nằm trong bộ nhớ của tiến trình Flask, mất khi tắt/khởi động lại backend.',
+  'Dữ liệu nhập liệu được tự động lưu vào file JSON snapshot và CSDL MySQL (vju_calendar); không bị mất khi khởi động lại backend.',
   'Một người dùng tại một thời điểm — chưa xử lý tình huống nhiều người sửa dữ liệu cùng lúc.',
   'Đồng giảng khi nhập Excel: chỉ tự động lấy người đầu tiên làm giảng viên chính; đồng giảng còn lại phải bổ sung bằng tay.',
-  'Nhập Excel chỉ ghi đè, chưa hỗ trợ gộp thêm vào dữ liệu học phần đang có sẵn.',
+  'Nhập Excel hỗ trợ cả hai chế độ: Gộp thêm vào dữ liệu đang có (Merge) hoặc Xóa dữ liệu cũ nạp mới (Replace).',
 ];
 
 const FAQ = [
@@ -392,8 +392,8 @@ export default function GuidePage() {
                   </div>
                 </div>
                 <Notice tone="amber" icon={AlertTriangle} className="mt-3">
-                  Không có cơ sở dữ liệu — tắt terminal backend là mất hết dữ liệu
-                  đang thao tác, trừ khi đã "Lưu thời khoá biểu" hoặc xuất file.
+                  Dữ liệu lớp và giảng viên đã nhập được tự động lưu lại vào snapshot và CSDL MySQL (vju_calendar);
+                  riêng kết quả chạy xếp lịch cần chạy lại nếu chưa bấm Lưu.
                 </Notice>
               </Card>
             </>

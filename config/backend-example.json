@@ -49,7 +49,7 @@
   },
   "solver": {
     "timeLimitSeconds": 30,
-    "numSearchWorkers": 8,
+    "numSearchWorkers": 2,
     "crossProgramCombinationLimit": 5000
   },
   "legacyDataParams": {

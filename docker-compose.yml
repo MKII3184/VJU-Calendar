@@ -2,6 +2,22 @@ version: '3.8'
 
 services:
   # ==========================================
+  # 0. DATABASE SERVICE (MySQL 8.0 - Nhóm 2)
+  # ==========================================
+  db:
+    image: mysql:8.0
+    container_name: vju-calendar-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: dmcvmkii28
+      MYSQL_DATABASE: vju_calendar
+    ports:
+      - "3307:3306" # 3307 ánh xạ ngoài host để tránh xung đột cổng 3306 của MySQL cục bộ
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./config/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+
+  # ==========================================
   # 1. PRODUCTION ENVIRONMENT (Nhánh test2.0)
   # ==========================================
   production:
@@ -10,10 +26,17 @@ services:
       dockerfile: Dockerfile
     container_name: vju-calendar-production
     restart: always
+    depends_on:
+      - db
     environment:
       - HOST=0.0.0.0
       - PORT=5055
       - ENVIRONMENT=production
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=dmcvmkii28
+      - DB_NAME=vju_calendar
       - SNAPSHOT_PATH=/app/webapp/data/manual_state_snapshot_prod.json
     ports:
       - "5055:5055"
@@ -29,10 +52,17 @@ services:
       dockerfile: Dockerfile
     container_name: vju-calendar-sandbox
     restart: always
+    depends_on:
+      - db
     environment:
       - HOST=0.0.0.0
       - PORT=5056
       - ENVIRONMENT=sandbox
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=dmcvmkii28
+      - DB_NAME=vju_calendar_sandbox
       - SNAPSHOT_PATH=/app/webapp/data/manual_state_snapshot_sandbox.json
     ports:
       - "5056:5056"
@@ -42,3 +72,4 @@ services:
 volumes:
   prod_data:
   sandbox_data:
+  db_data:

@@ -145,6 +145,10 @@ export default function ManualEntryPage({
       if (chotFilter === "roi" && !c.sectionChot) return false;
       if (chotFilter === "chua" && c.sectionChot) return false;
       if (targetIds || !q) return true;
+      if (q.startsWith("#")) {
+        const idQuery = q.slice(1).trim();
+        return idQuery !== "" && String(c.sectionId) === idQuery;
+      }
       return [c.courseName, c.classCode, c.teacherName, String(c.sectionId)]
         .some((v) => (v || "").toLowerCase().includes(q));
     });
