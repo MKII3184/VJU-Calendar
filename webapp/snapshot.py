@@ -17,7 +17,10 @@ import os
 from domain.luoi import dat_lich_ban_dau
 from state import STATE
 
-SNAPSHOT_PATH = os.path.join(os.path.dirname(__file__), "manual_state_snapshot.json")
+SNAPSHOT_PATH = os.environ.get(
+    "SNAPSHOT_PATH",
+    os.path.join(os.path.dirname(__file__), "manual_state_snapshot.json")
+)
 
 # Cac dict dung INT lam key - JSON bien key thanh string nen phai chuyen lai khi
 # nap. domain/hoan_tac.py dung lai hang nay (no chup cung mot cau truc `data`).
