@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
-"""LUU / NAP LAI du lieu nhap tay xuong file JSON.
+"""LUU / NAP LAI du lieu nhap tay xuong Database va file JSON.
 
-Day la nguon du lieu CHINH cua he thong (thay Excel), khong phai cache: mat file
-nay la mat toan bo cong nhap lieu cua giao vu. Nen moi endpoint /api/manual/* co
-sua du lieu deu goi save_snapshot() truoc khi tra ve.
-
-CHI lo viec ben-vung-hoa du lieu dang lam viec. "Moc hoan tac" (nut Huy thay doi)
-la mot viec KHAC - ban chup mot thoi diem de quay ve - nam o domain/hoan_tac.py.
-Truoc day hai thu o chung mot file va de bi lan: ca hai deu "ghi trang thai xuong
-JSON" nhung mot cai chay sau MOI thao tac, cai kia chi o hai thoi diem.
+Day la nguon du lieu CHINH cua he thong (thay Excel):
+- Ghi dong thoi vao Database (MySQL/SQLite qua database.py) de luu tru ben vung tren Cloud/Docker.
+- Ghi them file JSON snapshot de du phong offline.
 """
 
 import json
+import logging
 import os
 
+from database import load_data_from_db, save_data_to_db
 from domain.luoi import dat_lich_ban_dau
 from state import STATE
+
+logger = logging.getLogger(__name__)
 
 SNAPSHOT_PATH = os.environ.get(
     "SNAPSHOT_PATH",
@@ -29,12 +28,17 @@ KHOA_INT = ("teachers", "sections", "submissions", "courses", "program_faculty",
 
 
 def save_snapshot(raise_on_error=False):
-    """Ghi STATE['data']/['extra']/['co_huu'] xuong file JSON sau moi thay doi.
-
-    Loi ghi file (vd het dung luong) khong duoc chan luong nhap lieu cua nguoi
-    dung - chi bo qua, demo local 1 nguoi dung."""
+    """Ghi STATE['data']/['extra']/['co_huu'] xuong Database va file JSON."""
     if STATE["data"] is None:
         return False
+
+    # 1. Đồng bộ vào Database quan hệ (MySQL / SQLite)
+    try:
+        save_data_to_db(STATE["data"], STATE.get("extra"), STATE.get("co_huu"))
+    except Exception as exc:
+        logger.warning(f"Lỗi khi lưu dữ liệu vào Database: {exc}")
+
+    # 2. Ghi file JSON dự phòng
     snapshot = {**STATE["data"],
                 "forced_conflict_teacher_ids": sorted(STATE["data"].get("forced_conflict_teacher_ids") or [])}
     temp_path = f"{SNAPSHOT_PATH}.tmp"
@@ -54,9 +58,32 @@ def save_snapshot(raise_on_error=False):
         return False
 
 
+def _khoi_phuc_data(data, extra, co_huu):
+    if not data:
+        return
+    STATE["co_huu"] = co_huu
+    for key in KHOA_INT:
+        if isinstance(data.get(key), dict):
+            data[key] = {int(k): v for k, v in data[key].items()}
+    data["forced_conflict_teacher_ids"] = set(data.get("forced_conflict_teacher_ids") or [])
+    STATE["data"] = data
+    STATE["extra"] = extra
+    dat_lich_ban_dau(data)
+
+
 def load_snapshot():
-    """Nap lai snapshot nhap tay khi Flask khoi dong (neu co) - dao nguoc dung
-    save_snapshot()."""
+    """Nap lai du lieu khi Flask khoi dong: Uu tien Database truoc, fallback sang JSON."""
+    # 1. Thử nạp từ Database
+    try:
+        db_data = load_data_from_db()
+        if db_data and db_data.get("data"):
+            logger.info("Đã nạp thành công dữ liệu từ Database.")
+            _khoi_phuc_data(db_data["data"], db_data.get("extra"), db_data.get("co_huu"))
+            return
+    except Exception as exc:
+        logger.warning(f"Không thể nạp dữ liệu từ Database: {exc}")
+
+    # 2. Nếu Database chưa có dữ liệu, đọc từ file snapshot JSON
     if not os.path.exists(SNAPSHOT_PATH):
         return
     try:
@@ -64,19 +91,12 @@ def load_snapshot():
             snap = json.load(f)
     except (OSError, json.JSONDecodeError):
         return
-    # Nap danh sach co huu TRUOC data: dat_lich_ban_dau() o cuoi ham doc
-    # teacher_type, ma phan loai do phu thuoc danh sach nay.
-    STATE["co_huu"] = snap.get("coHuu")
+
     data = snap.get("data")
-    if not data:
-        return
-    for key in KHOA_INT:
-        if isinstance(data.get(key), dict):
-            data[key] = {int(k): v for k, v in data[key].items()}
-    data["forced_conflict_teacher_ids"] = set(data.get("forced_conflict_teacher_ids") or [])
-    STATE["data"] = data
-    STATE["extra"] = snap.get("extra")
-    # Snapshot chi luu data/extra (ket qua giai khong luu - giai lai la ra). Nhung
-    # LICH BAN DAU tu gio da chot thi dung lai duoc ngay, khong thi mo lai app la
-    # man TKB trong tron du du lieu co day gio.
-    dat_lich_ban_dau(data)
+    if data:
+        _khoi_phuc_data(data, snap.get("extra"), snap.get("coHuu"))
+        # Tự động nạp sang Database lần đầu
+        try:
+            save_data_to_db(STATE["data"], STATE.get("extra"), STATE.get("co_huu"))
+        except Exception:
+            pass

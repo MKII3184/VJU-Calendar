@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Nhật ký trở ngại (Obstacle Log) - Nhóm 2</title>
+<style>
+@page {
+    size: A4 portrait;
+    margin: 16mm 14mm 16mm 14mm;
+    @bottom-right {
+        content: counter(page);
+    }
+}
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.5;
+    font-size: 13.5px;
+    margin: 0;
+    padding: 0;
+}
+.header-box {
+    border-bottom: 2px solid #b91c1c;
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+}
+.header-top {
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.5px;
+}
+.header-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #b91c1c;
+    margin: 4px 0;
+    text-transform: uppercase;
+}
+.header-sub {
+    font-size: 13px;
+    color: #334155;
+    font-weight: 600;
+}
+.meta-grid {
+    display: table;
+    width: 100%;
+    margin-bottom: 15px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+.meta-row {
+    display: table-row;
+}
+.meta-cell {
+    display: table-cell;
+    padding: 4px 10px;
+    font-size: 12.5px;
+}
+.meta-cell strong {
+    color: #0f172a;
+}
+h2 {
+    color: #991b1b;
+    font-size: 16px;
+    border-left: 4px solid #b91c1c;
+    padding-left: 8px;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+h3 {
+    color: #1e293b;
+    font-size: 14px;
+    margin-top: 12px;
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+p, ul, ol {
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+li {
+    margin-bottom: 4px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 16px 0;
+    font-size: 12px;
+}
+th, td {
+    border: 1px solid #cbd5e1;
+    padding: 7px 9px;
+    vertical-align: top;
+    text-align: left;
+}
+th {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    font-weight: 700;
+    border-bottom: 2px solid #94a3b8;
+}
+tr:nth-child(even) td {
+    background-color: #fafbfc;
+}
+.badge {
+    display: inline-block;
+    padding: 2px 7px;
+    font-size: 10.5px;
+    font-weight: 700;
+    border-radius: 4px;
+}
+.badge-done { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.badge-prog { background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+.badge-open { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.badge-pass { background: #e0e7ff; color: #3730a3; border: 1px solid #a5b4fc; }
+.badge-epic { background: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe; }
+.badge-sprint { background: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
+
+.callout {
+    background-color: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    padding: 8px 12px;
+    margin: 10px 0;
+    font-size: 12.5px;
+    border-radius: 0 4px 4px 0;
+}
+.callout-warning {
+    background-color: #fffbeb;
+    border-left-color: #f59e0b;
+}
+.callout-success {
+    background-color: #f0fdf4;
+    border-left-color: #22c55e;
+}
+.page-break {
+    page-break-after: always;
+    break-after: page;
+}
+.sign-box {
+    margin-top: 25px;
+    display: table;
+    width: 100%;
+}
+.sign-col {
+    display: table-cell;
+    width: 50%;
+    text-align: center;
+    font-size: 13px;
+}
+</style>
+</head>
+<body>
+<div class="header-box">
+  <div class="header-top">TRƯỜNG ĐẠI HỌC VIỆT NHẬT (VJU) • HỌC PHẦN ĐẢM BẢO CHẤT LƯỢNG PHẦN MỀM THEO HƯỚNG SCRUM</div>
+  <div class="header-title">NHẬT KÝ TRỞ NGẠI (OBSTACLE LOG) — SPRINT 2</div>
+  <div class="header-sub">Nhóm số: 2 • Tên sản phẩm: Hệ thống quản lý và tự động sắp xếp thời khóa biểu (VJU-Calendar)</div>
+</div>
+
+<div class="meta-grid">
+  <div class="meta-row">
+    <div class="meta-cell"><strong>Thời gian Sprint 2:</strong> 28/10/2026 – 04/11/2026 (1 tuần)</div>
+    <div class="meta-cell"><strong>Nơi lưu trữ file gốc:</strong> Google Drive nhóm / <code>Obstacle_Log.xlsx</code></div>
+  </div>
+  <div class="meta-row">
+    <div class="meta-cell"><strong>Giờ Scrum Hằng ngày:</strong> 21:00 – 21:15</div>
+    <div class="meta-cell"><strong>Người quản trị nhật ký:</strong> Nguyễn Hoàng Minh (ScrumMaster)</div>
+  </div>
+</div>
+
+<h2>Mục 1. Quy định ghi chép và xử lý trở ngại (Theo Phiếu Hồ sơ Buổi 3)</h2>
+<div class="callout">
+  <strong>Định nghĩa trở ngại trong Scrum:</strong>
+  <em>"Trở ngại là thứ nhóm không tự gỡ được trong ngày — việc khó thì không phải trở ngại, việc bị chặn (blockers) mới là trở ngại."</em><br>
+  Nhật ký được lập đúng theo biểu mẫu chuẩn 6 cột quy định tại <strong>Trang 8 của Phiếu Hồ sơ vai trò nhóm</strong>. Trạng thái sử dụng một trong ba giá trị: <strong>Mở · Đang xử lý · Đã xong</strong>. ScrumMaster có trách nhiệm cập nhật nhật ký ngay sau mỗi buổi Scrum Hằng ngày (21:00 - 21:15) và đôn đốc xử lý dứt điểm.
+</div>
+
+<h2>Mục 2. Bảng theo dõi trở ngại chi tiết trong Sprint 2 (Mẫu 6 cột chuẩn)</h2>
+<table>
+  <thead>
+    <tr>
+      <th style="width: 11%;">Ngày (Sprint 2)</th>
+      <th style="width: 25%;">Trở ngại</th>
+      <th style="width: 20%;">Ảnh hưởng</th>
+      <th style="width: 12%;">Người nêu</th>
+      <th style="width: 22%;">Hướng xử lý</th>
+      <th style="width: 10%; text-align: center;">Trạng thái</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Ngày 2</strong><br>(29/10/2026)</td>
+      <td>Khi gõ từ khóa tìm kiếm, URL hash cập nhật liên tục bằng <code>window.history.pushState</code> khiến lịch sử trình duyệt bị spam hàng chục mục.</td>
+      <td>Bấm nút Back của trình duyệt không quay lại được màn hình trước; trải nghiệm điều hướng bị vỡ.</td>
+      <td><strong>Trường</strong><br>(Frontend)</td>
+      <td>SM nêu ở Scrum Hằng ngày; Trường dùng <code>history.replaceState</code> cho ô tìm kiếm và thêm debounce 300ms.</td>
+      <td style="text-align: center;"><span class="badge badge-done">Đã xong</span></td>
+    </tr>
+    <tr>
+      <td><strong>Ngày 2</strong><br>(29/10/2026)</td>
+      <td>Tìm kiếm lớp học với cú pháp <code>#0</code> trả về 0 kết quả do mã nguồn JS dùng kiểm tra falsy <code>if (!id)</code>, khiến ID số 0 bị coi là rỗng.</td>
+      <td>Giáo vụ không thể tìm thấy lớp học có ID là 0 trong bảng nhập liệu thủ công.</td>
+      <td><strong>Quang Minh</strong><br>(Tester)</td>
+      <td>Quang Minh báo lỗi cho Trường; sửa logic kiểm tra chặt chẽ <code>if (id !== null && !isNaN(id))</code> và bổ sung unit test case cho ID 0.</td>
+      <td style="text-align: center;"><span class="badge badge-done">Đã xong</span></td>
+    </tr>
+    <tr>
+      <td><strong>Ngày 4</strong><br>(31/10/2026)</td>
+      <td>Khởi động container Docker MySQL 8.0 trên hệ điều hành Windows gặp lỗi xung đột port 3306 do máy tính dev đã có dịch vụ MySQL chạy ngầm.</td>
+      <td>Không thể bind cổng kết nối tới database để kiểm thử kịch bản migration và kết nối API.</td>
+      <td><strong>Đức Minh</strong><br>(Backend)</td>
+      <td>SM (Hoàng Minh) hỗ trợ đổi cổng ánh xạ sang host thành <code>3307:3306</code> trong <code>docker-compose.yml</code> và cập nhật file <code>.env</code>.</td>
+      <td style="text-align: center;"><span class="badge badge-done">Đã xong</span></td>
+    </tr>
+    <tr>
+      <td><strong>Ngày 5</strong><br>(01/11/2026)</td>
+      <td>Khi người dùng nhập URL có hash lạ không tồn tại (ví dụ: <code>#/unknown-page</code>) và ấn F5, ứng dụng bị lỗi crash trắng màn hình (blank page).</td>
+      <td>Người dùng bị mất phiên làm việc hiện tại, không thể tự phục hồi nếu gõ nhầm URL.</td>
+      <td><strong>Quang Minh</strong><br>(Tester)</td>
+      <td>SM nhắc nhở quy tắc; Trường viết hàm <code>sanitizeRoute()</code> trong <code>urlState.js</code> tự động fallback về <code>#/schedule</code> kèm Toast thông báo.</td>
+      <td style="text-align: center;"><span class="badge badge-done">Đã xong</span></td>
+    </tr>
+    <tr>
+      <td><strong>Ngày 5</strong><br>(01/11/2026)</td>
+      <td>Nội dung giải thích cơ chế lưu dữ liệu tại <code>GuidePage.jsx</code> quá dài và bị tràn khung trên màn hình laptop kích thước nhỏ (13-inch).</td>
+      <td>Giáo vụ khó đọc, khó so sánh và dễ nhầm lẫn giữa nút "Lưu thời khóa biểu" và "Xuất Excel".</td>
+      <td><strong>Đình Huy</strong><br>(Product Owner)</td>
+      <td>PO yêu cầu phân nhóm thông tin; Hoàng Minh và Trường thiết kế lại giao diện dạng Accordion (Collapsible FAQ) 3 khối riêng biệt.</td>
+      <td style="text-align: center;"><span class="badge badge-done">Đã xong</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Mục 3. Thống kê và đánh giá hiệu quả giải quyết trở ngại</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Chỉ số theo dõi</th>
+      <th>Kết quả thực tế</th>
+      <th>Nhận xét đánh giá</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Tổng số trở ngại ghi nhận</strong></td>
+      <td>05 trở ngại</td>
+      <td>Phản ánh trung thực các vấn đề phát sinh trong quá trình phát triển tính năng và dựng môi trường mới.</td>
+    </tr>
+    <tr>
+      <td><strong>Số trở ngại đã giải quyết</strong></td>
+      <td>05 / 05 (Đạt 100%)</td>
+      <td>Toàn bộ 100% các trở ngại đều được giải quyết dứt điểm trước thời điểm Code Freeze (Ngày 6).</td>
+    </tr>
+    <tr>
+      <td><strong>Thời gian xử lý trung bình</strong></td>
+      <td>Dưới 24 giờ / trở ngại</td>
+      <td>Đạt đúng cam kết hỗ trợ nhanh, không để công việc bị tắc nghẽn kéo dài sang các ngày tiếp theo.</td>
+    </tr>
+    <tr>
+      <td><strong>Số trở ngại tồn đọng sang Sprint sau</strong></td>
+      <td>0 trở ngại</td>
+      <td>Không có nợ tồn đọng kỹ thuật nào chuyển sang Sprint 3.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="sign-box">
+  <div class="sign-col">
+    <strong>NGƯỜI LẬP NHẬT KÝ (SCRUMMASTER)</strong><br><br><br>
+    <strong>Nguyễn Hoàng Minh</strong><br>
+    <em>Cập nhật ngày 03 tháng 11 năm 2026</em>
+  </div>
+  <div class="sign-col">
+    <strong>XÁC NHẬN CỦA PRODUCT OWNER</strong><br><br><br>
+    <strong>Chử Đình Huy</strong><br>
+    <em>Cập nhật ngày 03 tháng 11 năm 2026</em>
+  </div>
+</div>
+</body>
+</html>

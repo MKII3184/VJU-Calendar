@@ -1,14 +1,9 @@
-# Thu vien Python cua backend. Cai:  py -m pip install -r requirements.txt
-#
-# Dat o webapp/ chu khong o goc du an, cho khop voi frontend/package.json:
-# moi nua cua he thong giu ban ke khai thu vien cua chinh no.
-#
-# Chan duoi theo dung ban da chay that tren may giao vu, khong ghim cung ban tren
-# de con nang cap duoc; ortools la thu de vo nhat khi len ban moi (mo hinh CP-SAT
-# o scheduler_core.py dung NewOptionalFixedSizeIntervalVar/AddCumulative), nen
-# nang xong phai chay lai kiem_tra_pham_vi.py truoc khi tin.
+# Thu vien Python cua backend. Cai: py -m pip install -r requirements.txt
 
 flask>=3.1
 ortools>=9.15
 openpyxl>=3.1
 gunicorn>=22.0.0
+SQLAlchemy>=2.0.0
+pymysql>=1.1.0
+cryptography>=42.0.0
